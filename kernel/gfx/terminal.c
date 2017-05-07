@@ -1,0 +1,62 @@
+#include <gfx/gfx.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
+static uint32_t gfx_x = 0;
+static uint32_t gfx_y = 0;
+static uint32_t gfx_char_width = 8;
+static uint32_t gfx_char_height = 16;
+static uint32_t gfx_rows = 0;
+static uint32_t gfx_lines = 0;
+
+static void gfx_refresh(void) {
+	if(gfx_rows == 0 && gfx_lines == 0) {
+		gfx_rows = gfx_width / gfx_char_width;
+		gfx_lines = gfx_height / gfx_char_height;
+	}
+
+	uint32_t bytes_per_line = (gfx_pitch * gfx_char_height);
+
+	if(gfx_x >= gfx_width) {
+		gfx_x = 0;
+		gfx_y += gfx_char_height;
+	}
+
+	/* check whether we have to scroll */
+	if(gfx_y >= gfx_height - gfx_char_height) {
+		uint8_t *start = (uint8_t *) gfx_framebuffer;
+
+		for(size_t line = 0; line < gfx_lines; line++) {
+			memcpy(start, start + bytes_per_line, bytes_per_line);
+
+			start += bytes_per_line;
+		}
+
+		memset(start - bytes_per_line, 0, bytes_per_line);
+
+		gfx_y -= gfx_char_height;
+	}
+}
+
+size_t gfx_putc(char *c) {
+	if(c[0] == '\n') {
+		gfx_x = 0;
+		gfx_y += gfx_char_height;
+
+		goto exit;
+	} else if(c[0] == '\t') {
+		gfx_x = (gfx_x + (gfx_char_width << 2)) & ~((gfx_char_width << 2) - 1);
+
+		goto exit;
+	}
+
+	gfx_refresh();
+	size_t ret = gfx_draw_char(c, gfx_x, gfx_y);
+	gfx_x += gfx_char_width;
+
+	return ret;
+exit:
+	gfx_refresh();
+	return 1;
+}

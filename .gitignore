@@ -1,0 +1,10 @@
+.*
+!.git*
+!.gdbinit
+*.o
+bin/
+.tags
+*.d
+hdd/*
+third-party/*
+!third-party/Makefile

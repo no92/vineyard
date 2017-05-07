@@ -1,0 +1,66 @@
+#!/usr/bin/env php
+<?php
+	$file = $argv[1];
+
+	$bdf = explode(PHP_EOL, file_get_contents($file));
+	$line = 0;
+	$chars = 0;
+	$lookup = [];
+	$bitmaps = [];
+	$max = 0;
+	$remaining = 0;
+	$out = "#include <stdint.h>\n\n";
+
+	foreach($bdf as $line) {
+		$token = explode(' ', $line);
+
+		if($remaining > 0) {
+			$remaining--;
+			$bitmaps[$chars - 1][15 - $remaining] = $token[0];
+			continue;
+		}
+
+		switch($token[0]) {
+			case "ENCODING":
+				$lookup[$token[1]] = $chars;
+
+				if($token[1] > $max) {
+					$max = $token[1];
+				}
+
+				$chars++;
+				break;
+			case "BITMAP":
+				$remaining = 16;
+				break;
+			default:
+				break;
+		}
+	}
+
+	/* generate the font data table */
+	$out .= "const uint8_t gfx_font[] = {".PHP_EOL."\t";
+
+	foreach($bitmaps as $bitmap) {
+		foreach($bitmap as $item) {
+			$out .= "0x".$item.",";
+		}
+	}
+
+	$out .= PHP_EOL."};".PHP_EOL.PHP_EOL;
+
+	/* generate the lookup table */
+	$out .= "const uint16_t gfx_font_index[] = {".PHP_EOL."\t";
+
+	for($i = 0; $i < 9840; $i++) {
+		$out .= (isset($lookup[$i])) ? $lookup[$i]."," : "0,";
+	}
+
+	for($i = 64256; $i <= 0xFFFF; $i++) {
+		$out .= (isset($lookup[$i])) ? $lookup[$i]."," : "0,";
+	}
+
+	$out .= PHP_EOL."};";
+
+	echo $out;
+?>

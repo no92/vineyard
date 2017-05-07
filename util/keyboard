@@ -1,0 +1,16 @@
+#!/bin/bash
+kb=`setxkbmap -v | awk -F "+" '/symbols/ {print $2}'`
+
+case $kb in
+	de)
+		echo "de";
+		;;
+	us)
+		echo "en-us"
+		;;
+	*)
+		echo "en-us"
+		;;
+esac
+
+exit 0;

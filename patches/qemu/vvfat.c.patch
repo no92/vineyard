@@ -1,0 +1,13 @@
+--- block/vvfat.c	2017-04-11 00:00:05.816645363 +0200
++++ block/vvfat.c	2017-04-11 00:02:40.890137141 +0200
+@@ -1162,10 +1162,6 @@
+     s->qcow_filename = NULL;
+     s->fat2 = NULL;
+     s->downcase_short_names = 1;
+-
+-    fprintf(stderr, "vvfat %s chs %d,%d,%d\n",
+-            dirname, cyls, heads, secs);
+-
+     s->sector_count = cyls * heads * secs - (s->first_sectors_number - 1);
+
+     if (qemu_opt_get_bool(opts, "rw", false)) {
