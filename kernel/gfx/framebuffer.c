@@ -1,4 +1,5 @@
 #include <boot/multiboot.h>
+#include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -45,27 +46,38 @@ size_t gfx_draw_char(const char *c, size_t x, size_t y) {
 		/* single-byte */
 		ret = 1;
 		index = (uint32_t) c0;
+
+		uart_putc((uint8_t) c[0]);
 	} else if((c0 & 0xE0) == 0xC0) {
 		/* 2 bytes */
 		char c1 = c[1] & 0x3F;
 		ret = 2;
-
 		index = (uint32_t) (((c0 & 0x1F) << 6) | c1);
+
+		uart_putc((uint8_t) c[0]);
+		uart_putc((uint8_t) c[1]);
 	} else if((c0 & 0xF0) == 0xE0) {
 		/* 3 bytes */
 		char c1 = (c[1] & 0xFF) & 0x3F;
 		char c2 = (c[2] & 0xFF) & 0x3F;
 		ret = 3;
-
 		index = (uint32_t) (((c0 & 0x0F) << 12) | (c1 << 6) | c2);
+
+		uart_putc((uint8_t) c[0]);
+		uart_putc((uint8_t) c[1]);
+		uart_putc((uint8_t) c[2]);
 	} else if((c0 & 0xF8) == 0xF0) {
 		/* 4 bytes */
 		char c1 = (c[1] & 0xFF) & 0x3F;
 		char c2 = (c[2] & 0xFF) & 0x3F;
 		char c3 = (c[3] & 0xFF) & 0x3F;
 		ret = 4;
-
 		index = (uint32_t) (((c0 & 0x07) << 18) | (c1 << 12) | (c2 << 6) | c3);
+
+		uart_putc((uint8_t) c[0]);
+		uart_putc((uint8_t) c[1]);
+		uart_putc((uint8_t) c[2]);
+		uart_putc((uint8_t) c[3]);
 	}
 
 	if(index >= 64256) {

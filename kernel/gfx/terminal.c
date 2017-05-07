@@ -1,3 +1,4 @@
+#include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -58,5 +59,6 @@ size_t gfx_putc(char *c) {
 	return ret;
 exit:
 	gfx_refresh();
+	uart_putc((uint8_t) c[0]);
 	return 1;
 }

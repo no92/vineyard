@@ -1,3 +1,4 @@
+#include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <stdio.h>
 
