@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#define MULTIBOOT2_MAGIC 0x36D76289
+#define MB2_MAGIC 0x36D76289
 
 typedef struct {
 	uint32_t total_size;

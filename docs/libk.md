@@ -1,35 +1,37 @@
 # libk Implementation Progress #
 
-## Standard C Library (as per C11) ##
-- [ ] assert.h (Section 7.2)
-- [ ] complex.h (Section 7.3)
-- [x] ctype.h (Section 7.4)
-- [ ] errno.h (Section 7.5)
-- [ ] fenv.h (Section 7.6)
-- [ ] float.h (Section 7.7)
-- [ ] inttypes.h (Section 7.8)
-- [x] iso646.h (Section 7.9)
-- [ ] limits.h (Section 7.10)
-- [ ] locale.h (Section 7.11)
-- [ ] math.h (Section 7.12)
-- [ ] setjmp.h (Section 7.13)
-- [ ] signal.h (Section 7.14)
-- [x] stdalign.h (Section 7.15)
-- [x] stdarg.h (Section 7.16)
-- [ ] stdatomic.h (Section 7.17)
-- [x] stdbool.h (Section 7.18)
-- [x] stddef.h (Section 7.19)
-- [ ] stdint.h (Section 7.20)
-- [ ] stdio.h (Section 7.21)
-- [ ] stdlib.h (Section 7.22)
-- [x] stdnoreturn.h (Section 7.23)
-- [ ] string.h (Section 7.24)
-- [ ] tgmath.h (Section 7.25)
-- [ ] threads.h (Section 7.26)
-- [ ] time.h (Section 7.27)
-- [ ] uchar.h (Section 7.28)
-- [ ] wchar.h (Section 7.29)
-- [ ] wctype.h (Section 7.30)
+## Standard C Library ##
+| Header			| Section	| C11 Status	| POSIX Status	| Overall		|
+|-------------------|-----------|---------------|---------------|---------------|
+| **assert.h**		| C11 7.2	| complete		| complete		| complete		|
+| **complex.h**		| C11 7.3	| missing		| missing		| missing		|
+| **ctype.h**		| C11 7.4	| complete		| incomplete	| incomplete	|
+| **errno.h**		| C11 7.5	| missing		| missing		| missing		|
+| **fenv.h**		| C11 7.6	| missing		| missing		| missing		|
+| **float.h**		| C11 7.7	| missing		| missing		| missing		|
+| **inttypes.h**	| C11 7.8	| missing		| missing		| missing		|
+| **iso646.h**		| C11 7.9	| complete		| complete		| complete		|
+| **limits.h**		| C11 7.10	| missing		| missing		| missing		|
+| **locale.h**		| C11 7.11	| missing		| missing		| missing		|
+| **math.h**		| C11 7.12	| missing		| missing		| missing		|
+| **setjmp.h**		| C11 7.13	| missing		| missing		| missing		|
+| **signal.h**		| C11 7.14	| missing		| missing		| missing		|
+| **stdalign.h**	| C11 7.15	| complete		| not in spec	| complete		|
+| **stdarg.h**		| C11 7.16	| complete		| complete		| complete		|
+| **stdatomic.h**	| C11 7.17	| missing		| missing		| missing		|
+| **stdbool.h**		| C11 7.18	| complete		| complete		| complete		|
+| **stddef.h**		| C11 7.19	| complete		| complete		| complete		|
+| **stdint.h**		| C11 7.20	| incomplete	| incomplete	| incomplete	|
+| **stdio.h**		| C11 7.21	| incomplete	| incomplete	| incomplete	|
+| **stdlib.h**		| C11 7.22	| incomplete	| incomplete	| incomplete	|
+| **stdnoreturn.h**	| C11 7.23	| complete		| not in spec	| complete		|
+| **string.h**		| C11 7.24	| incomplete	| incomplete	| incomplete	|
+| **tgmath.h**		| C11 7.25	| missing		| missing		| missing		|
+| **threads.h**		| C11 7.26	| missing		| missing		| missing		|
+| **time.h**		| C11 7.27	| missing		| missing		| missing		|
+| **uchar.h**		| C11 7.28	| missing		| missing		| missing		|
+| **wchar.h**		| C11 7.29	| missing		| missing		| missing		|
+| **wctype.h**		| C11 7.30	| missing		| missing		| missing		|
 
 ## vineyard extensions ##
 - [ ] utf8.h
