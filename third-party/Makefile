@@ -9,8 +9,8 @@ YASM			:= $(YASM_DIR)/yasm
 
 GCC_DIR			:= $(shell pwd)/third-party/gcc
 GCC_TARGET		:= i686-elf
-GCC_URL			:= ftp://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
-BINUTILS_URL	:= ftp://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.gz
+GCC_URL			:= https://ftp.gnu.org/gnu/gcc/gcc-7.1.0/gcc-7.1.0.tar.gz
+BINUTILS_URL	:= https://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.gz
 CROSS_GCC		:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
 CROSS_LD		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ld
 CROSS_AR		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ar
@@ -91,4 +91,4 @@ $(UNI-VGA):
 uni-vga-clean:
 	@$(RM) -R $(UNI-VGA_DIR)
 
-.PHONY: third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean
