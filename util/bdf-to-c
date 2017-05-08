@@ -79,7 +79,7 @@
 		$out .= (isset($lookup[$i])) ? $lookup[$i]."," : "0,";
 	}
 
-	$out .= PHP_EOL."};";
+	$out .= PHP_EOL."};".PHP_EOL;
 
 	echo $out;
 ?>

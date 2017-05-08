@@ -9,8 +9,9 @@ YASM			:= $(YASM_DIR)/yasm
 
 GCC_DIR			:= $(shell pwd)/third-party/gcc
 GCC_TARGET		:= i686-elf
-GCC_URL			:= https://ftp.gnu.org/gnu/gcc/gcc-7.1.0/gcc-7.1.0.tar.gz
-BINUTILS_URL	:= https://ftp.gnu.org/gnu/binutils/binutils-2.28.tar.gz
+GCC_VER			:= 7.1.0
+BINUTILS_VER	:= 2.28
+GCC_SCRIPT		:= third-party/scripts/gcc
 CROSS_GCC		:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
 CROSS_LD		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ld
 CROSS_AR		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ar
@@ -50,20 +51,7 @@ yasm-clean:
 	@$(RM) -R $(YASM_DIR)
 
 $(CROSS_GCC):
-	@$(INFO) "MAKE" "downloading gcc"
-	@mkdir -p $(GCC_DIR)/gcc
-	@$(WGET) -O $(GCC_DIR)/gcc.tar.gz $(GCC_URL)
-	@$(INFO) "MAKE" "downloading binutils"
-	@mkdir -p $(GCC_DIR)/binutils
-	@$(WGET) -O $(GCC_DIR)/binutils.tar.gz $(BINUTILS_URL)
-	@$(INFO) "MAKE" "building gcc & binutils"
-	@tar xzf $(GCC_DIR)/gcc.tar.gz --strip-components=1 -C $(GCC_DIR)/gcc
-	@tar xzf $(GCC_DIR)/binutils.tar.gz --strip-components=1 -C $(GCC_DIR)/binutils
-	@bash -c 'cd $(GCC_DIR)/gcc; ./contrib/download_prerequisites' $(MUTE)
-	@mkdir -p $(GCC_DIR)/binutils-build
-	@bash -c 'cd $(GCC_DIR)/binutils-build; ../binutils/configure --quiet --target=$(GCC_TARGET) --prefix="$(GCC_DIR)" --with-sysroot --disable-nls --disable-werror; make -s; make install -s; make clean -s'
-	@mkdir -p $(GCC_DIR)/gcc-build
-	@bash -c 'cd $(GCC_DIR)/gcc-build; ../gcc/configure --quiet --target=$(GCC_TARGET) --prefix="$(GCC_DIR)" --disable-nls --enable-languages=c --without-headers; make -j4 all-gcc -s; make -j4 all-target-libgcc -s; make install-gcc -s; make install-target-libgcc -s; make clean -s'
+	@$(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
 
 gcc-clean:
 	@$(RM) -R $(GCC_DIR)
