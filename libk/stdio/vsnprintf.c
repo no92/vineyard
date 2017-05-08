@@ -36,6 +36,39 @@ static char *utoa(uint32_t value, char *str, uint8_t base) {
 	return str;
 }
 
+static char *itoa(int32_t value, char *str, uint8_t base) {
+	if(base < 1 || base > 36) {
+		return 0;
+	}
+
+	uint32_t val = (uint32_t) ((value < 0) ? -value : value);
+	int pos = 0;
+
+	do {
+		str[pos] = (char) (val % base + '0');
+
+		if(str[pos] > '9') {
+			str[pos] = (char) (str[pos] + 7);
+		}
+
+		pos++;
+	} while((val /= base) > 0);
+
+	if(value < 0) {
+		str[pos++] = '-';
+	}
+
+	for(int i = 0, j = pos - 1; i < j; i++, j--) {
+		char tmp = str[i];
+		str[i] = str[j];
+		str[j] = tmp;
+	}
+
+	str[pos] = '\0';
+
+	return str;
+}
+
 int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list arg) {
 	int flags = 0;
 	size_t length_orig = n;
@@ -75,6 +108,11 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 
 					break;
 				}
+				case 'p': {
+					/* fall through */
+					flags |= FLAG_HASH;
+					__attribute__((fallthrough));
+				}
 				case 'X':
 				case 'x': {
 					if(flags & FLAG_HASH) {
@@ -110,6 +148,38 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 					char buf[11];
 					uint32_t val = va_arg(arg, uint32_t);
 					utoa(val, buf, 10);
+					size_t len = strlen(buf);
+					len = MIN(len, n - 1);
+
+					strncpy(s, buf, len);
+					s += len;
+					n -= len;
+
+					break;
+				}
+				case 'd':
+				case 'i': {
+					char buf[12];
+					int32_t val = va_arg(arg, int32_t);
+					itoa(val, buf, 10);
+					size_t len = strlen(buf);
+					len = MIN(len, n - 1);
+
+					strncpy(s, buf, len);
+					s += len;
+					n -= len;
+
+					break;
+				}
+				case 'o': {
+					if(flags & FLAG_HASH) {
+						*s++ = '0';
+						n--;
+					}
+
+					char buf[12];
+					uint32_t val = va_arg(arg, uint32_t);
+					utoa(val, buf, 8);
 					size_t len = strlen(buf);
 					len = MIN(len, n - 1);
 

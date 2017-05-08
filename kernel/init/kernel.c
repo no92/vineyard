@@ -11,5 +11,5 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	printf("vineyard\n");
 
-	assert(magic != MB2_MAGIC);
+	assert(magic == MB2_MAGIC);
 }
