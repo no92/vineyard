@@ -44,7 +44,7 @@ VBOX		:= util/virtualbox
 MUTE		:= 2>&1 /dev/null
 
 # set some flags for running the tools
-CFLAGS		:= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Winit-self -Winline -Wlogical-op -Wlong-long -Wmissing-braces
+CFLAGS		:= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Winit-self -Winline -Wlogical-op -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
 CFLAGS		+= -MD -pipe -std=gnu11 -pedantic -nostdinc -ffreestanding -finline-functions -fno-omit-frame-pointer -Ilibk -Iinclude -c -ggdb3

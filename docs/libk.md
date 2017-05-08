@@ -1,0 +1,35 @@
+# libk Implementation Progress #
+
+## Standard C Library (as per C11) ##
+- [ ] assert.h (Section 7.2)
+- [ ] complex.h (Section 7.3)
+- [x] ctype.h (Section 7.4)
+- [ ] errno.h (Section 7.5)
+- [ ] fenv.h (Section 7.6)
+- [ ] float.h (Section 7.7)
+- [ ] inttypes.h (Section 7.8)
+- [x] iso646.h (Section 7.9)
+- [ ] limits.h (Section 7.10)
+- [ ] locale.h (Section 7.11)
+- [ ] math.h (Section 7.12)
+- [ ] setjmp.h (Section 7.13)
+- [ ] signal.h (Section 7.14)
+- [x] stdalign.h (Section 7.15)
+- [x] stdarg.h (Section 7.16)
+- [ ] stdatomic.h (Section 7.17)
+- [x] stdbool.h (Section 7.18)
+- [x] stddef.h (Section 7.19)
+- [ ] stdint.h (Section 7.20)
+- [ ] stdio.h (Section 7.21)
+- [ ] stdlib.h (Section 7.22)
+- [x] stdnoreturn.h (Section 7.23)
+- [ ] string.h (Section 7.24)
+- [ ] tgmath.h (Section 7.25)
+- [ ] threads.h (Section 7.26)
+- [ ] time.h (Section 7.27)
+- [ ] uchar.h (Section 7.28)
+- [ ] wchar.h (Section 7.29)
+- [ ] wctype.h (Section 7.30)
+
+## vineyard extensions ##
+- [ ] utf8.h
