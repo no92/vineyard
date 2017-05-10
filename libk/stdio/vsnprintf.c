@@ -120,7 +120,7 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 						n--;
 
 						if(n > 1) {
-							*s++ = 'x';
+							*s++ = (format[0] == 'x') ? 'x' : 'X';
 							n--;
 						}
 					}
@@ -172,13 +172,18 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 					break;
 				}
 				case 'o': {
+					char buf[12];
+					uint32_t val = va_arg(arg, uint32_t);
+
 					if(flags & FLAG_HASH) {
 						*s++ = '0';
 						n--;
+
+						if(val == 0) {
+							break;
+						}
 					}
 
-					char buf[12];
-					uint32_t val = va_arg(arg, uint32_t);
 					utoa(val, buf, 8);
 					size_t len = strlen(buf);
 					len = MIN(len, n - 1);
