@@ -11,14 +11,6 @@ KERNEL_ISO	:= $(HDD)/boot/vineyard
 # define 'all' as the default target
 all: third-party $(ISO)
 
-# find the kernel sources that we compile
-UNI-VGA_C	:= kernel/gfx/font.c
-
-KERNEL_SRC	:= $(shell find kernel libk -name '*.[sc]' -type f)
-KERNEL_SRC	+= $(UNI-VGA_C)
-KERNEL_OBJ	:= $(addsuffix .o,$(KERNEL_SRC))
-KERNEL_DEP	:= $(addsuffix .d,$(KERNEL_SRC))
-
 # if not passed to make, set these default resolutions in the multiboot2 header
 MB2_WIDTH	?= 1280
 MB2_HEIGHT	?= 720
@@ -47,10 +39,20 @@ MUTE		:= 2>&1 /dev/null
 CFLAGS		:= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Winit-self -Winline -Wlogical-op -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
-CFLAGS		+= -MD -pipe -std=gnu11 -pedantic -nostdinc -ffreestanding -finline-functions -fno-omit-frame-pointer -Ilibk -Iinclude -c -ggdb3
+CFLAGS		+= -MD -pipe -std=gnu11 -pedantic -nostdinc -ffreestanding -finline-functions -fno-omit-frame-pointer -fstack-protector-all -Ilibk -Iinclude -c -ggdb3
 LDFLAGS		:= -T build/kernel.ld -nostdlib
 ASFLAGS		:= -f elf32
 EMUARGS		:= -M accel=kvm:tcg -m 1024 -net none -serial stdio -rtc base=utc -vga std -k $(KEYBOARD)
+
+
+# find the kernel sources that we compile
+KERNEL_SRC	:= $(shell find kernel libk -name '*.[sc]' -type f -not -name 'crt[in].s')
+KERNEL_OBJ	:= kernel/init/crti.s.o
+KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS) -print-file-name=crtbegin.o)
+KERNEL_OBJ	+= $(addsuffix .o,$(KERNEL_SRC))
+KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS) -print-file-name=crtend.o)
+KERNEL_OBJ	+= kernel/init/crtn.s.o
+KERNEL_DEP	:= $(addsuffix .d,$(KERNEL_SRC))
 
 %.c.o: %.c
 	@$(INFO) "CC" $<
@@ -61,6 +63,7 @@ EMUARGS		:= -M accel=kvm:tcg -m 1024 -net none -serial stdio -rtc base=utc -vga 
 	@$(AS) $(ASFLAGS) -o $@ $<
 
 kernel/init/boot.s.o: ASFLAGS += -DMB2_WIDTH=$(MB2_WIDTH) -DMB2_HEIGHT=$(MB2_HEIGHT)
+kernel/init/ssp.c.o: CFLAGS := $(filter-out -fstack-protector-all,$(CFLAGS)) -fno-stack-protector
 
 kernel/gfx/font.c: $(UNI-VGA)
 	@$(INFO) "BDF-TO-C" "$@"
@@ -80,10 +83,10 @@ $(ISO): $(KERNEL)
 
 clean:
 	@$(INFO) "CLEAN" "cleaning build files"
-	@$(RM) $(KERNEL_OBJ) $(KERNEL) $(KERNEL_ISO) $(ISO)
+	@$(RM) $(addsuffix .o,$(KERNEL_SRC)) $(KERNEL) $(KERNEL_ISO) $(ISO)
 
 clean-font:
-	@$(RM) $(UNI-VGA_C)
+	@$(RM) kernel/gfx/font.c
 
 test: all
 	@$(INFO) "QEMU" "running emulator"

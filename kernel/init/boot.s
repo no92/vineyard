@@ -34,6 +34,7 @@ mb2_header_end:
 [section .text]
 [global _start]
 [extern kernel]
+[extern _init]
 
 _start:
 	; set up a stack
@@ -42,6 +43,9 @@ _start:
 	; set up the arguments for the kernel
 	push ebx ; holds the physical address of the multiboot struct
 	push eax ; holds the magic number
+
+	call _init
+
 	call kernel
 
 	; loop forever
