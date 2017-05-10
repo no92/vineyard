@@ -2,11 +2,16 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 #define FLAG_HASH 1 << 0
+#define FLAG_PLUS 1 << 1
+#define FLAG_SPACE 1 << 2
+#define FLAG_ZERO 1 << 3
+#define FLAG_MINUS 1 << 4
 
 static char *utoa(uint32_t value, char *str, uint8_t base) {
 	if(base < 1 || base > 36) {
@@ -71,6 +76,7 @@ static char *itoa(int32_t value, char *str, uint8_t base) {
 
 int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list arg) {
 	int flags = 0;
+	size_t width = 0;
 	size_t length_orig = n;
 
 	while(*format && n > 1) {
@@ -81,8 +87,53 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 			/* skip the '%' symbol */
 			format++;
 
-			if(format[0] == '#') {
+flags:
+			if(*format == '#') {
 				flags |= FLAG_HASH;
+				format++;
+				goto flags;
+			}
+
+			if(*format == '+') {
+				flags |= FLAG_PLUS;
+				format++;
+				goto flags;
+			}
+
+			if(*format == ' ') {
+				flags |= FLAG_SPACE;
+				format++;
+				goto flags;
+			}
+
+			if(*format == '0') {
+				flags |= FLAG_ZERO;
+				format++;
+				goto flags;
+			}
+
+			if(*format == '-') {
+				flags |= FLAG_MINUS;
+				format++;
+				goto flags;
+			}
+
+width:
+			if(isdigit(format[0])) {
+				width *= 10;
+				width += (size_t) (format[0] - '0');
+				format++;
+				goto width;
+			} else if(format[0] == '*') {
+				int w = va_arg(arg, int);
+
+				if(w < 0) {
+					width = (size_t) -w;
+					flags |= FLAG_MINUS;
+				} else {
+					width = (size_t) w;
+				}
+
 				format++;
 			}
 
@@ -129,6 +180,19 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 					uint32_t val = va_arg(arg, uint32_t);
 					utoa(val, buf, 0x10);
 					size_t len = strlen(buf);
+
+					if(len < width) {
+						size_t diff = (width - len);
+						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
+
+						diff = MIN(diff, n - 1);
+						n -= diff;
+
+						while(diff --> 0) {
+							*s++ = pad;
+						}
+					}
+
 					len = MIN(len, n - 1);
 
 					if(format[0] == 'x') {
@@ -149,6 +213,19 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 					uint32_t val = va_arg(arg, uint32_t);
 					utoa(val, buf, 10);
 					size_t len = strlen(buf);
+
+					if(len < width) {
+						size_t diff = width - len;
+						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
+
+						diff = MIN(diff, n - 1);
+						n -= diff;
+
+						while(diff --> 0) {
+							*s++ = pad;
+						}
+					}
+
 					len = MIN(len, n - 1);
 
 					strncpy(s, buf, len);
@@ -162,7 +239,29 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 					char buf[12];
 					int32_t val = va_arg(arg, int32_t);
 					itoa(val, buf, 10);
+
+					if(flags & FLAG_PLUS && val >= 0 && n > 1) {
+						*s++ = '+';
+						n--;
+					} else if(flags & FLAG_SPACE && val >= 0 && n > 1) {
+						*s++ = ' ';
+						n--;
+					}
+
 					size_t len = strlen(buf);
+
+					if(len < width) {
+						size_t diff = width - len;
+						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
+
+						diff = MIN(diff, n - 1);
+						n -= diff;
+
+						while(diff --> 0) {
+							*s++ = pad;
+						}
+					}
+
 					len = MIN(len, n - 1);
 
 					strncpy(s, buf, len);
@@ -186,6 +285,19 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 
 					utoa(val, buf, 8);
 					size_t len = strlen(buf);
+
+					if(len < width) {
+						size_t diff = width - len;
+						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
+
+						diff = MIN(diff, n - 1);
+						n -= diff;
+
+						while(diff --> 0) {
+							*s++ = pad;
+						}
+					}
+
 					len = MIN(len, n - 1);
 
 					strncpy(s, buf, len);
@@ -208,6 +320,7 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 			}
 
 			flags = 0;
+			width = 0;
 			format++;
 		} else {
 			/* handle percent symbol */

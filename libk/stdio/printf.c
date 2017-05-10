@@ -2,14 +2,16 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#define PRINTF_BUF_SIZE 1024
+
 int printf(const char * restrict format, ...) {
-	char buf[1024];
+	char buf[PRINTF_BUF_SIZE];
 	size_t off = 0;
 	va_list args;
 
 	va_start(args, format);
 
-	int ret = vsnprintf(buf, 1024, format, args);
+	int ret = vsnprintf(buf, PRINTF_BUF_SIZE, format, args);
 
 	va_end(args);
 
