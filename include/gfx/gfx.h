@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boot/multiboot.h>
+#include <init/multiboot.h>
 #include <stddef.h>
 #include <stdint.h>
 

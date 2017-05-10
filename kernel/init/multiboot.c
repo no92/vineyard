@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <boot/multiboot.h>
+#include <init/multiboot.h>
 
 multiboot2_tag_t *multiboot2_get_tag(multiboot2_t *multiboot, uint32_t type) {
 	/* calculate where the tags start */

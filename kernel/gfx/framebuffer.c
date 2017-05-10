@@ -1,4 +1,4 @@
-#include <boot/multiboot.h>
+#include <init/multiboot.h>
 #include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <stddef.h>

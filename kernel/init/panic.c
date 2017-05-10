@@ -11,6 +11,7 @@ noreturn void panic(const char * restrict format, ...) {
 	va_end(args);
 
 	asm volatile ("cli; hlt;");
-
 	for(;;);
+
+	__builtin_unreachable();
 }
