@@ -1,7 +1,7 @@
 #include <mm/gdt.h>
 #include <string.h>
 
-#define GDT_ENTRIES 256
+#define GDT_ENTRIES 5
 
 /* GDT access bits */
 #define GDT_RW			1 << 1
@@ -13,37 +13,37 @@
 #define GDT_GRANULARITY	1 << 3
 #define GDT_PMODE		1 << 2
 
-gdt_entry_t entries[GDT_ENTRIES];
+#define GDT_KERNEL_CODE	0x08
+#define GDT_KERNEL_DATA	0x10
+#define GDT_USER_CODE	0x18
+#define GDT_USER_DATA	0x20
+
+gdt_entry_t gdt[GDT_ENTRIES];
 gdtr_t gdtr;
 
 static void gdt_set(size_t entry, uintptr_t base, uint32_t limit, uint8_t access, uint8_t flags) {
-	entries[entry].base_low = base & 0xFFFF;
-	entries[entry].base_mid = (base >> 16) & 0xFF;
-	entries[entry].base_high = (uint8_t) (base >> 24) & 0xFF;
+	gdt[entry].base_low = base & 0xFFFF;
+	gdt[entry].base_mid = (base >> 16) & 0xFF;
+	gdt[entry].base_high = (uint8_t) (base >> 24) & 0xFF;
 
-	entries[entry].limit_low = limit & 0xFFFF;
-	entries[entry].limit_high = (limit >> 16) & 0xF;
+	gdt[entry].limit_low = limit & 0xFFFF;
+	gdt[entry].limit_high = (limit >> 16) & 0xF;
 
-	entries[entry].access = access | 0x10;
-	entries[entry].flags = (uint8_t) (flags & 0xF);
+	gdt[entry].access = access | 0x10;
+	gdt[entry].flags = (uint8_t) (flags & 0xF);
 }
 
 void gdt_init(void) {
-	memset(entries, 0, sizeof(entries));
+	memset(gdt, 0, sizeof(gdt));
 
-	/* null segment */
-	gdt_set(0, 0, 0, 0, 0);
 	/* kernel code */
-	gdt_set(1, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_X | GDT_RW, GDT_GRANULARITY | GDT_PMODE);
-	/* kernel data */
-	gdt_set(2, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_RW, GDT_GRANULARITY | GDT_PMODE);
-	/* user code */
-	gdt_set(3, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_X | GDT_RW | GDT_USER, GDT_GRANULARITY | GDT_PMODE);
-	/* user data */
-	gdt_set(4, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_RW | GDT_USER, GDT_GRANULARITY | GDT_PMODE);
+	gdt_set(GDT_KERNEL_CODE >> 3, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_X | GDT_RW, GDT_GRANULARITY | GDT_PMODE);
+	gdt_set(GDT_KERNEL_DATA >> 3, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_RW, GDT_GRANULARITY | GDT_PMODE);
+	gdt_set(GDT_USER_CODE >> 3, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_X | GDT_RW | GDT_USER, GDT_GRANULARITY | GDT_PMODE);
+	gdt_set(GDT_USER_DATA >> 3, 0, 0xFFFFFFFF, GDT_PRESENT | GDT_RW | GDT_USER, GDT_GRANULARITY | GDT_PMODE);
 
-	gdtr.limit = sizeof(entries) - 1;
-	gdtr.addr = (uintptr_t) &entries;
+	gdtr.limit = sizeof(gdt) - 1;
+	gdtr.addr = (uintptr_t) &gdt;
 
 	asm volatile ("lgdt %0" : : "m" (gdtr));
 }
