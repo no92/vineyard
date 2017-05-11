@@ -9,3 +9,4 @@ hdd/*
 third-party/*
 !third-party/Makefile
 !third-party/scripts
+*.test

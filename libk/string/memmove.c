@@ -22,3 +22,12 @@ void *memmove(void *s1, const void *s2, size_t n) {
 
 	return memcpy(s1, s2, n);
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

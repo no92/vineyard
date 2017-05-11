@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdnoreturn.h>
 
+/* TODO: move this to libk? */
+
 #define RDRAND_RETRIES 20
 
 uintptr_t __stack_chk_guard;

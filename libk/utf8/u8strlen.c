@@ -16,3 +16,12 @@ size_t u8strlen(const char *str) {
 
 	return j;
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

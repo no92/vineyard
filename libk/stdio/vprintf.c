@@ -1,4 +1,7 @@
-#include <gfx/gfx.h>
+#ifdef __libk
+	#include <gfx/gfx.h>
+#endif
+
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -8,9 +11,20 @@ int vprintf(const char * restrict format, va_list arg) {
 
 	int ret = vsnprintf(buf, 1024, format, arg);
 
+#ifdef __libk
 	while(buf[off]) {
 		off += gfx_putc(&buf[off]);
 	}
+#endif
 
 	return ret;
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

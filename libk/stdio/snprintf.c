@@ -12,3 +12,12 @@ int snprintf(char * restrict s, size_t n, const char *restrict format, ...) {
 
 	return len;
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

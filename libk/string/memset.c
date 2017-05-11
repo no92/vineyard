@@ -34,3 +34,12 @@ void *memset(void *s, int c, size_t n) {
 
 	return s;
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

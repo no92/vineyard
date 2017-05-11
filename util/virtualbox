@@ -42,7 +42,7 @@ VBoxManage storagectl $vmname --add ide --name "IDE" > /dev/null
 VBoxManage storageattach $vmname --storagectl "IDE" --port 0 --device 0 --medium $disk --type dvddrive > /dev/null
 
 # boot up our VM
-VBoxManage startvm $vmname > /dev/null
+VBoxManage startvm $vmname --type gui > /dev/null
 
 until [ -z "$(VBoxManage list runningvms | grep \"$vmname\")" ]
 do

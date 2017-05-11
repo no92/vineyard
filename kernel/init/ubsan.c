@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdnoreturn.h>
 
+/* TODO: move this to libk? */
+
 static inline void ubsan_location(ubsan_location_t *location) {
 	printf("[ubsan]	caught undefined behavior in %s:%d:%d\n", location->file, location->line, location->column);
 }

@@ -333,3 +333,12 @@ exit:
 	*s++ = '\0';
 	return (int) (length_orig - n);
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif

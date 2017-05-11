@@ -1,11 +1,7 @@
 #include <string.h>
 
-char *strcpy(char * restrict s1, const char * restrict s2) {
-    char *s = s1;
-
-    while(*s) {
-		*s++ = *s2++;
-	}
+char *strcat(char * restrict s1, const char * restrict s2) {
+	strcpy(s1 + strlen(s1), s2);
 
 	return s1;
 }
