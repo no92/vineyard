@@ -39,7 +39,7 @@ MUTE		:= 2>&1 /dev/null
 CFLAGS		:= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Winit-self -Winline -Wlogical-op -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
-CFLAGS		+= -MD -pipe -std=gnu11 -pedantic -nostdinc -ffreestanding -finline-functions -fno-omit-frame-pointer -fstack-protector-all -Ilibk -Iinclude -c -ggdb3
+CFLAGS		+= -MD -pipe -std=gnu11 -pedantic -nostdinc -ffreestanding -finline-functions -fno-omit-frame-pointer -fstack-protector-all -fsanitize=undefined -Ilibk -Iinclude -c -ggdb3
 LDFLAGS		:= -T build/kernel.ld -nostdlib
 ASFLAGS		:= -f elf32
 EMUARGS		:= -M accel=kvm:tcg -m 1024 -net none -serial stdio -rtc base=utc -vga std -k $(KEYBOARD)
