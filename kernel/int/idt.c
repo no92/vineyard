@@ -11,51 +11,12 @@
 idt_entry_t idt[IDT_ENTRIES];
 idtr_t idtr;
 
-static const char *exceptions[32] = {
-	"Divide Error",
-	"Debug",
-	"NMI",
-	"Breakpoint",
-	"Overflow",
-	"Bound Range exceeded",
-	"Invalid Opcode",
-	"Device not available",
-	"Double Fault",
-	"Coprocessor Segment Overrun",
-	"Invalid TSS",
-	"Segment not Present",
-	"Stack Fault",
-	"General Protection",
-	"Page Fault",
-	"x87 Floating-Point",
-	"Alignment Check",
-	"Machine Check",
-	"SIMD Floating-Point",
-	"Virtualization",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-	"Reserved",
-};
-
 static void idt_set(size_t interrupt, void (*function)(void), uint16_t selector, uint8_t flags) {
 	idt[interrupt].offset_low = ((uintptr_t) function) & 0xFFFF;
 	idt[interrupt].offset_high = (uint16_t) ((uintptr_t) function >> 16) & 0xFFFF;
 
 	idt[interrupt].selector = selector;
 	idt[interrupt].flags = flags;
-}
-
-void handler(frame_t *state) {
-	panic("unhandled interrupt %#02x (%s)", state->interrupt, exceptions[state->interrupt]);
 }
 
 void idt_init(void) {
