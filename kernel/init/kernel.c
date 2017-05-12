@@ -1,6 +1,7 @@
 #include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <int/idt.h>
+#include <int/pic.h>
 #include <mm/gdt.h>
 #include <assert.h>
 #include <stdio.h>
@@ -15,6 +16,9 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	gdt_init();
 	idt_init();
+	pic_init();
+
+	asm volatile ("sti");
 
 	printf("vineyard\n");
 }

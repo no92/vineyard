@@ -59,5 +59,4 @@ void idt_init(void) {
 	idtr.addr = (uintptr_t) &idt;
 
 	asm volatile ("lidt %0" : : "m" (idtr));
-	asm volatile ("sti");
 }
