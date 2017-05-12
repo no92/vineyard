@@ -8,6 +8,9 @@ int isblank(int c) {
 #include <_libk_test.h>
 
 int main(void) {
+	assert(isblank(' '));
+	assert(isblank('	'));
+
 	return EXIT_SUCCESS;
 }
 

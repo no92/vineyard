@@ -160,9 +160,8 @@ width:
 					break;
 				}
 				case 'p': {
-					/* fall through */
 					flags |= FLAG_HASH;
-					__attribute__((fallthrough));
+					FALLTHROUGH
 				}
 				case 'X':
 				case 'x': {

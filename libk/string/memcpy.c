@@ -18,7 +18,7 @@ void *memcpy(void * restrict s1, const void * restrict s2, size_t n) {
 
 int main(void) {
 	char buf[16];
-	char *t1 = "test string";
+	const char *t1 = "test string";
 
 	memcpy(buf, t1, strlen(t1));
 	buf[strlen(t1)] = '\0';

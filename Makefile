@@ -29,8 +29,8 @@ MUTE		:= 2>&1 /dev/null
 
 # set some flags for running the tools
 CFLAGS		:= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
-CFLAGS		+= -c -ggdb3 -Ilibk -Iinclude -MD -nostdinc -pipe -std=gnu11
-CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Wimplicit-fallthrough=3 -Winit-self -Winline -Wlogical-op -Wmissing-braces
+CFLAGS		+= -ggdb3 -Ilibk -Iinclude -MD -nostdinc -pipe -std=gnu11
+CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Wimplicit-fallthrough=5 -Winit-self -Winline -Wlogical-op -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses -Wpedantic -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
 LDFLAGS		:= -T build/kernel.ld -nostdlib

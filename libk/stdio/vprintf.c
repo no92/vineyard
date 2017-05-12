@@ -11,11 +11,11 @@ int vprintf(const char * restrict format, va_list arg) {
 
 	int ret = vsnprintf(buf, 1024, format, arg);
 
-#ifdef __libk
 	while(buf[off]) {
+#ifdef __libk
 		off += gfx_putc(&buf[off]);
-	}
 #endif
+	}
 
 	return ret;
 }

@@ -8,6 +8,8 @@ int iscntrl(int c) {
 #include <_libk_test.h>
 
 int main(void) {
+	assert(iscntrl('\033'));
+
 	return EXIT_SUCCESS;
 }
 

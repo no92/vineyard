@@ -22,7 +22,7 @@ KERNEL_OBJ	+= kernel/init/crtn.s.o
 
 %.c.o: %.c
 	@$(INFO) "CC" $<
-	@$(CC) $(CFLAGS) -o $@ $< -D__libk
+	@$(CC) $(CFLAGS) -c -o $@ $< -D__libk
 
 %.s.o: %.s
 	@$(INFO) "AS" $<

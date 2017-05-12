@@ -27,6 +27,13 @@ void *memmove(void *s1, const void *s2, size_t n) {
 #include <_libk_test.h>
 
 int main(void) {
+	char t1[] = "     abcde";
+
+	memmove(t1, t1 + 5, 3);
+	assert(!strcmp("abc  abcde", t1));
+	memmove(t1, t1 + 1, 4);
+	assert(!strcmp("bc   abcde", t1));
+
 	return EXIT_SUCCESS;
 }
 

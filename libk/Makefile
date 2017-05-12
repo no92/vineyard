@@ -8,11 +8,11 @@ LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
 %.libk.c.o: %.c
 	@$(INFO) "CC" $<
-	@$(CC) $(CFLAGS) -o $@ $< -D__libk
+	@$(CC) $(CFLAGS) -c -o $@ $< -D__libk
 
 %.libc.c.o: %.c
 	@$(INFO) "CC" $<
-	@cc -o $@ $<
+	@gcc $(filter-out -Wimplicit-fallthrough=5,$(CFLAGS)) -c -o $@ $<
 
 $(LIBK): $(LIBK_OBJ)
 	@$(INFO) "AR" $@
@@ -24,7 +24,7 @@ $(LIBC): $(LIBC_OBJ)
 
 %.test: %.c
 	@$(INFO) "CC" $<
-	@cc -o $@ $< -DUNIT -Ilibk -Lbin -lc
+	@gcc $(filter-out -Wimplicit-fallthrough=5,$(CFLAGS)) -o $@ $< -DUNIT -Ilibk -Lbin -lc
 
 clean-libk:
 	@$(INFO) "CLEAN" "cleaning libk"

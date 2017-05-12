@@ -8,11 +8,13 @@
 int puts(const char *str) {
 	const char *s = str;
 
-#ifdef __libk
 	while(*s) {
+#ifdef __libk
 		s += gfx_putc((char *) s);
+#endif
 	}
 
+#ifdef __libk
 	gfx_putc((char *) "\n");
 #endif
 
