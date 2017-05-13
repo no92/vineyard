@@ -6,7 +6,7 @@
 | **assert.h**		| C11 7.2	| complete		| complete		| complete		|
 | **complex.h**		| C11 7.3	| missing		| missing		| missing		|
 | **ctype.h**		| C11 7.4	| complete		| incomplete	| incomplete	|
-| **errno.h**		| C11 7.5	| missing		| missing		| missing		|
+| **errno.h**		| C11 7.5	| complete		| complete		| complete		|
 | **fenv.h**		| C11 7.6	| missing		| missing		| missing		|
 | **float.h**		| C11 7.7	| missing		| missing		| missing		|
 | **inttypes.h**	| C11 7.8	| missing		| missing		| missing		|
