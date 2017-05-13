@@ -48,6 +48,7 @@ noreturn void __ubsan_handle_out_of_bounds(ubsan_out_of_bounds_t *out_of_bounds,
 noreturn void __ubsan_handle_negate_overflow(ubsan_location_t *location, uintptr_t pointer);
 noreturn void __ubsan_handle_sub_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right);
 noreturn void __ubsan_handle_add_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right);
+noreturn void __ubsan_handle_mul_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right);
 noreturn void __ubsan_handle_divrem_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right);
 noreturn void __ubsan_handle_shift_out_of_bounds(ubsan_location_t *location, uintptr_t left, uintptr_t right);
 noreturn void __ubsan_handle_builtin_unreachable(ubsan_location_t *location);

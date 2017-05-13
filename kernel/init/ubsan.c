@@ -57,6 +57,14 @@ noreturn void __ubsan_handle_add_overflow(ubsan_location_t *location, uintptr_t 
 	__builtin_unreachable();
 }
 
+noreturn void __ubsan_handle_mul_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right) {
+	ubsan_location(location);
+
+	panic("[ubsan]	%d * %d; multiplication overflow", left, right);
+
+	__builtin_unreachable();
+}
+
 noreturn void __ubsan_handle_divrem_overflow(ubsan_location_t *location, uintptr_t left, uintptr_t right) {
 	ubsan_location(location);
 
