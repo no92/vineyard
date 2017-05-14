@@ -8,7 +8,7 @@
 /* TODO: move this to libk? */
 
 static inline void ubsan_location(ubsan_location_t *location) {
-	printf("[ubsan]	caught undefined behavior in %s:%d:%d\n", location->file, location->line, location->column);
+	printf("[ubsan]	caught undefined behavior in %s:%u:%u\n", location->file, location->line, location->column);
 }
 
 noreturn void __ubsan_handle_type_mismatch(ubsan_type_mismatch_t *type_mismatch, uintptr_t pointer) {

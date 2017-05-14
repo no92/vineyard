@@ -37,7 +37,7 @@ kernel/gfx/font.c: $(UNI-VGA)
 
 $(KERNEL): $(KERNEL_OBJ)
 	@$(INFO) "LD" $@
-	@$(LD) $(LDFLAGS) -o $@ $^
+	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
 $(ISO): $(KERNEL)
 	@$(INFO) "DISK" $@

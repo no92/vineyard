@@ -1,3 +1,4 @@
+#include <sys/types.h>
 #include <ctype.h>
 #include <stdarg.h>
 #include <stddef.h>
@@ -7,13 +8,22 @@
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-#define FLAG_HASH 1 << 0
-#define FLAG_PLUS 1 << 1
-#define FLAG_SPACE 1 << 2
-#define FLAG_ZERO 1 << 3
-#define FLAG_MINUS 1 << 4
+#define FLAG_HASH	1 << 0
+#define FLAG_PLUS	1 << 1
+#define FLAG_SPACE	1 << 2
+#define FLAG_ZERO	1 << 3
+#define FLAG_MINUS	1 << 4
 
-static char *utoa(uint32_t value, char *str, uint8_t base) {
+#define LENGTH_hh	1 << 0
+#define LENGTH_h	1 << 1
+#define LENGTH_l	1 << 2
+#define LENGTH_ll	1 << 3
+#define LENGTH_L	1 << 4
+#define LENGTH_z	1 << 5
+#define LENGTH_j	1 << 6
+#define LENGTH_t	1 << 7
+
+static char *utoa(uint64_t value, char *str, uint8_t base) {
 	if(base < 1 || base > 36) {
 		return 0;
 	}
@@ -41,7 +51,7 @@ static char *utoa(uint32_t value, char *str, uint8_t base) {
 	return str;
 }
 
-static char *itoa(int32_t value, char *str, uint8_t base) {
+static char *itoa(int64_t value, char *str, uint8_t base) {
 	if(base < 1 || base > 36) {
 		return 0;
 	}
@@ -78,6 +88,7 @@ int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list
 	int flags = 0;
 	size_t width = 0;
 	size_t length_orig = n;
+	size_t length = 0;
 
 	while(*format && n > 1) {
 		if(format[0] != '%') {
@@ -137,6 +148,30 @@ width:
 				format++;
 			}
 
+			/* handle length */
+			if(!strncmp(format, "ll", 2)) {
+				length |= LENGTH_ll;
+				format += 2;
+			} else if(!strncmp(format, "hh", 2)) {
+				length |= LENGTH_hh;
+				format += 2;
+			} else if(*format == 'l') {
+				length |= LENGTH_l;
+				format++;
+			} else if(*format == 'h') {
+				length |= LENGTH_h;
+				format++;
+			} else if(*format == 'z') {
+				length |= LENGTH_z;
+				format++;
+			} else if(*format == 'j') {
+				length |= LENGTH_j;
+				format++;
+			} else if(*format == 't') {
+				length |= LENGTH_t;
+				format++;
+			}
+
 			switch(format[0]) {
 				case 'c': {
 					char c = (char) va_arg(arg, int);
@@ -161,6 +196,7 @@ width:
 				}
 				case 'p': {
 					flags |= FLAG_HASH;
+					length = 0;
 					FALLTHROUGH
 				}
 				case 'X':
@@ -176,7 +212,24 @@ width:
 					}
 
 					char buf[9];
-					uint32_t val = va_arg(arg, uint32_t);
+					uint64_t val = 0;
+
+					if(length == 0 || length == LENGTH_l) {
+						val = va_arg(arg, unsigned int);
+					} else if(length == LENGTH_hh) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFF;
+					} else if(length == LENGTH_h) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFFFF;
+					} else if(length == LENGTH_ll || length == LENGTH_j) {
+						val = va_arg(arg, uint64_t);
+					} else if(length == LENGTH_z) {
+						val = va_arg(arg, size_t);
+					} else if(length == LENGTH_t) {
+						val = (uint64_t) va_arg(arg, ptrdiff_t);
+					}
+
 					utoa(val, buf, 0x10);
 					size_t len = strlen(buf);
 
@@ -209,7 +262,24 @@ width:
 				}
 				case 'u': {
 					char buf[11];
-					uint32_t val = va_arg(arg, uint32_t);
+					uint64_t val = 0;
+
+					if(length == 0 || length == LENGTH_l) {
+						val = va_arg(arg, unsigned int);
+					} else if(length == LENGTH_hh) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFF;
+					} else if(length == LENGTH_h) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFFFF;
+					} else if(length == LENGTH_ll || length == LENGTH_j) {
+						val = va_arg(arg, uint64_t);
+					} else if(length == LENGTH_z) {
+						val = va_arg(arg, size_t);
+					} else if(length == LENGTH_t) {
+						val = (uint64_t) va_arg(arg, ptrdiff_t);
+					}
+
 					utoa(val, buf, 10);
 					size_t len = strlen(buf);
 
@@ -235,8 +305,25 @@ width:
 				}
 				case 'd':
 				case 'i': {
-					char buf[12];
-					int32_t val = va_arg(arg, int32_t);
+					char buf[64];
+					int64_t val = 0;
+
+					if(length == 0 || length == LENGTH_l) {
+						val = va_arg(arg, signed int);
+					} else if(length == LENGTH_hh) {
+						val = va_arg(arg, signed int);
+						val &= 0xFF;
+					} else if(length == LENGTH_h) {
+						val = va_arg(arg, signed int);
+						val &= 0xFFFF;
+					} else if(length == LENGTH_ll || length == LENGTH_j) {
+						val = va_arg(arg, int64_t);
+					} else if(length == LENGTH_z) {
+						val = va_arg(arg, ssize_t);
+					} else if(length == LENGTH_t) {
+						val = (uint64_t) va_arg(arg, ptrdiff_t);
+					}
+
 					itoa(val, buf, 10);
 
 					if(flags & FLAG_PLUS && val >= 0 && n > 1) {
@@ -270,8 +357,24 @@ width:
 					break;
 				}
 				case 'o': {
-					char buf[12];
-					uint32_t val = va_arg(arg, uint32_t);
+					char buf[64];
+					uint64_t val = 0;
+
+					if(length == 0 || length == LENGTH_l) {
+						val = va_arg(arg, unsigned int);
+					} else if(length == LENGTH_hh) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFF;
+					} else if(length == LENGTH_h) {
+						val = va_arg(arg, unsigned int);
+						val &= 0xFFFF;
+					} else if(length == LENGTH_ll || length == LENGTH_j) {
+						val = va_arg(arg, uint64_t);
+					} else if(length == LENGTH_z) {
+						val = va_arg(arg, size_t);
+					} else if(length == LENGTH_t) {
+						val = (uint64_t) va_arg(arg, ptrdiff_t);
+					}
 
 					if(flags & FLAG_HASH) {
 						*s++ = '0';
@@ -320,6 +423,7 @@ width:
 
 			flags = 0;
 			width = 0;
+			length = 0;
 			format++;
 		} else {
 			/* handle percent symbol */
