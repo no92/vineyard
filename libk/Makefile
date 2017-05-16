@@ -3,6 +3,8 @@ LIBC		:= bin/libc.a
 LIBK_SRC	:= $(shell find libk -name '*.[sc]' -type f)
 LIBK_OBJ	:= $(LIBK_SRC:.c=.libk.c.o)
 LIBC_OBJ	:= $(LIBK_SRC:.c=.libc.c.o)
+LIBK_DEP	:= $(LIBK_SRC:.c=.libk.c.d)
+LIBC_DEP	:= $(LIBK_SRC:.c=.d)
 
 LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
@@ -28,15 +30,15 @@ $(LIBC): $(LIBC_OBJ)
 
 clean-libk:
 	@$(INFO) "CLEAN" "cleaning libk"
-	@$(RM) $(LIBK_OBJ) $(LIBK)
+	@$(RM) $(LIBK_OBJ) $(LIBK) $(LIBK_DEP)
 
 clean-libc:
 	@$(INFO) "CLEAN" "cleaning libc"
-	@$(RM) $(LIBC_OBJ) $(LIBC)
+	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP)
 
 clean-libc-test:
 	@$(INFO) "CLEAN" "cleaning libc tests"
-	@$(RM) $(LIBC_TESTS)
+	@$(RM) $(LIBC_TESTS) $(LIBC_DEP)
 
 test-libc: $(LIBC_TESTS)
 	@for test in $^; do \

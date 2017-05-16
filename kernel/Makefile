@@ -49,7 +49,7 @@ $(ISO): $(KERNEL)
 
 clean-kernel:
 	@$(INFO) "CLEAN" "cleaning kernel tree"
-	@$(RM) $(addsuffix .o,$(KERNEL_SRC)) $(KERNEL) $(KERNEL_ISO) $(ISO)
+	@$(RM) $(addsuffix .o,$(KERNEL_SRC)) $(KERNEL) $(KERNEL_ISO) $(ISO) $(KERNEL_DEP)
 
 clean-font:
 	@$(INFO) "CLEAN" "cleaning font"
@@ -67,6 +67,6 @@ test-virtualbox: all
 	@$(INFO) "VBOX" "running emulator"
 	@$(VBOX) vineyard $(ISO)
 
--include $(KERNEL_DEPS)
+-include $(KERNEL_DEP)
 
 .PHONY: clean-kernel clean-font test test-debug test-virtualbox

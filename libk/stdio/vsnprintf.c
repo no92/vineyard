@@ -321,7 +321,7 @@ width:
 					} else if(length == LENGTH_z) {
 						val = va_arg(arg, ssize_t);
 					} else if(length == LENGTH_t) {
-						val = (uint64_t) va_arg(arg, ptrdiff_t);
+						val = (int64_t) va_arg(arg, ptrdiff_t);
 					}
 
 					itoa(val, buf, 10);
