@@ -1,5 +1,6 @@
-#include <int/idt.h>
 #include <init/panic.h>
+#include <int/idt.h>
+
 #include <stdio.h>
 #include <string.h>
 

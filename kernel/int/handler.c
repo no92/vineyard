@@ -1,5 +1,6 @@
 #include <init/panic.h>
 #include <int/handler.h>
+
 #include <stdio.h>
 
 static const char *exceptions[32] = {

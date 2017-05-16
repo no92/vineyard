@@ -1,5 +1,5 @@
-#include <string.h>
 #include <stdint.h>
+#include <string.h>
 
 void *memmove(void *s1, const void *s2, size_t n) {
 	if(s2 == s1) {

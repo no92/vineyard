@@ -1,6 +1,6 @@
 #include <stddef.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 /* POSIX extension */
 size_t strnlen(const char *s, size_t maxlen) {

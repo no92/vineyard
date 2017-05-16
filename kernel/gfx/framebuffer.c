@@ -1,6 +1,7 @@
-#include <init/multiboot.h>
 #include <driver/uart.h>
 #include <gfx/gfx.h>
+#include <init/multiboot.h>
+
 #include <stddef.h>
 #include <stdint.h>
 

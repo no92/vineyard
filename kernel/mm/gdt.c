@@ -1,4 +1,5 @@
 #include <mm/gdt.h>
+
 #include <string.h>
 
 #define GDT_ENTRIES 5

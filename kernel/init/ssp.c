@@ -1,4 +1,5 @@
 #include <init/panic.h>
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdnoreturn.h>

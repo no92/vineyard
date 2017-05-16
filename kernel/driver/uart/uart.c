@@ -1,5 +1,6 @@
 #include <cpu/ports.h>
 #include <driver/uart.h>
+
 #include <stdbool.h>
 
 /* UART ports */

@@ -1,5 +1,6 @@
-#include <init/ubsan.h>
 #include <init/panic.h>
+#include <init/ubsan.h>
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
