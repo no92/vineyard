@@ -4,18 +4,17 @@
 #endif
 
 #include <stdio.h>
+#include <string.h>
 
 int puts(const char *str) {
-	const char *s = str;
-
-	while(*s) {
 #ifdef __libk
-		s += gfx_putc((char *) s);
-#endif
+	while(*str) {
+		str += gfx_putc((char *) str);
 	}
 
-#ifdef __libk
 	gfx_putc((char *) "\n");
+#else
+	(void) str;
 #endif
 
 	return 1;

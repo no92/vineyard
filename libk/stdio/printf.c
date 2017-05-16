@@ -10,7 +10,6 @@
 
 int printf(const char * restrict format, ...) {
 	char buf[PRINTF_BUF_SIZE];
-	size_t off = 0;
 	va_list args;
 
 	va_start(args, format);
@@ -19,11 +18,13 @@ int printf(const char * restrict format, ...) {
 
 	va_end(args);
 
-	while(buf[off]) {
 #ifdef __libk
+	size_t off = 0;
+
+	while(buf[off]) {
 		off += gfx_putc(&buf[off]);
-#endif
 	}
+#endif
 
 	return ret;
 }
