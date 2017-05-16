@@ -2,4 +2,4 @@
 
 #include <stdnoreturn.h>
 
-noreturn void panic(const char * restrict format, ...);
+noreturn __attribute__((format(printf, 1, 2))) void panic(const char * restrict format, ...);

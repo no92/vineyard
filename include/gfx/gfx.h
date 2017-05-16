@@ -20,4 +20,4 @@ void gfx_init(multiboot2_t *multiboot);
 void gfx_set(size_t h, size_t v, uint32_t color);
 size_t gfx_draw_char(const char *c, size_t x, size_t y);
 
-size_t gfx_putc(char *c);
+size_t gfx_putc(const char *c);
