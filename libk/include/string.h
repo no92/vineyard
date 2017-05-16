@@ -15,6 +15,7 @@ char *strncat(char * restrict s1, const char * restrict s2, size_t n);
 
 size_t strspn(const char *s1, const char *s2);
 
+__attribute__((nonnull(2))) size_t strxfrm(char * restrict s1, const char * restrict s2, size_t n);
 
 __attribute__((pure, nonnull(1))) void *memchr(const void *s, int c, size_t n);
 __attribute__((pure, nonnull(1, 2))) int memcmp(const void *s1, const void *s2, size_t n);
