@@ -21,9 +21,6 @@
 #define ICW4_SFNM		0x10		/* Special fully nested (not) */
 
 void pic_init(void) {
-	uint8_t mask_master = inb(MASTER_DATA);
-	uint8_t mask_slave = inb(SLAVE_DATA);
-
 	outb(MASTER_COMMAND, ICW1_INIT | ICW1_ICW4);
 	outb(SLAVE_COMMAND, ICW1_INIT | ICW1_ICW4);
 	outb(MASTER_DATA, 32);
@@ -34,8 +31,8 @@ void pic_init(void) {
 	outb(MASTER_DATA, ICW4_8086);
 	outb(SLAVE_DATA, ICW4_8086);
 
-	outb(MASTER_DATA, mask_master);
-	outb(SLAVE_DATA, mask_slave);
+	outb(MASTER_DATA, 0x00);
+	outb(SLAVE_DATA, 0x00);
 }
 
 void pic_eoi(uint8_t irq) {

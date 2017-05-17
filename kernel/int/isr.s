@@ -13,6 +13,14 @@
 		jmp handler_setup
 %endmacro
 
+%macro IRQ 1
+	[global irq%1]
+	irq%1:
+		push 0
+		push %1 + 32
+		jmp handler_setup
+%endmacro
+
 [extern handler]
 handler_setup:
 	pusha
@@ -25,6 +33,7 @@ handler_setup:
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
+	mov ss, ax
 
 	push esp
 	cld
@@ -74,3 +83,20 @@ EXCEPTION 28
 EXCEPTION 29
 EXCEPTION 30 ; osdev.org says it pushes an error, while the manual reserves this interrupt
 EXCEPTION 31
+
+IRQ 0
+IRQ 1
+IRQ 2
+IRQ 3
+IRQ 4
+IRQ 5
+IRQ 6
+IRQ 7
+IRQ 8
+IRQ 9
+IRQ 10
+IRQ 11
+IRQ 12
+IRQ 13
+IRQ 14
+IRQ 15

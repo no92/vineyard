@@ -56,6 +56,24 @@ void idt_init(void) {
 	idt_set(30, &exception30, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(31, &exception31, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 
+	idt_set(32, &irq0, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(33, &irq1, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(34, &irq2, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(35, &irq3, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(36, &irq4, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(37, &irq5, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(38, &irq6, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(39, &irq7, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(40, &irq8, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(41, &irq9, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(42, &irq10, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(43, &irq11, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(44, &irq12, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(45, &irq13, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(46, &irq14, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(47, &irq15, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+
+
 	idtr.limit = sizeof(idt) - 1;
 	idtr.addr = (uintptr_t) &idt;
 
