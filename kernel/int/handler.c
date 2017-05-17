@@ -1,5 +1,6 @@
 #include <init/panic.h>
 #include <int/handler.h>
+#include <util/trace.h>
 
 #include <stdio.h>
 
@@ -41,8 +42,14 @@ static const char *exceptions[32] = {
 isr_handler_t handlers[32];
 
 void handler(frame_t *state) {
+	trace(20);
+
 	if(handlers[state->interrupt] == NULL) {
-		panic("unhandled interrupt %#02x (%s)", state->interrupt, exceptions[state->interrupt]);
+		if(state->interrupt == 0x0D && state->error != 0) {
+			printf("offending segment selector: %#08x\n", (state->error >> 3) & 0x1FFF);
+		}
+
+		panic("unhandled interrupt %#02x (%s, error: %#08x, eip: %#08x)", state->interrupt, exceptions[state->interrupt], state->error, state->eip);
 	} else {
 		(*handlers[state->interrupt])(state);
 	}

@@ -1,7 +1,3 @@
-!.gdbinit
-!.git*
-!third-party/Makefile
-!third-party/scripts
 .*
 .tags
 *.d
@@ -11,3 +7,7 @@ bin/
 hdd/*
 kernel/gfx/font.c
 third-party/*
+!.gdbinit
+!.git*
+!third-party/Makefile
+!third-party/scripts

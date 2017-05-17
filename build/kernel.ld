@@ -5,7 +5,9 @@ SECTIONS {
 
 	.text BLOCK(4K) : ALIGN(4K) {
 		*(.multiboot2)
+		_text_start = .;
 		*(.text)
+		_text_end = .;
 	}
 
 	.rodata BLOCK(4K) : ALIGN(4K) {

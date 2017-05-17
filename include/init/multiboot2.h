@@ -6,6 +6,7 @@
 
 #define MB2_TYPE_MMAP			6
 #define MB2_TYPE_FRAMEBUFFER	8
+#define MB2_TYPE_SYMBOLS		9
 
 typedef struct {
 	uint32_t total_size;
@@ -31,6 +32,13 @@ typedef struct {
 			uint8_t framebuffer_bpp;
 			uint8_t framebuffer_type;
 		} __attribute__((packed)) video;
+
+		struct {
+			uint32_t num;
+			uint32_t entsize;
+			uint32_t shndx;
+			char addr[1];
+		} __attribute__((packed)) symbols;
 	};
 } __attribute__((packed)) multiboot2_tag_t;
 

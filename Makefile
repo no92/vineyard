@@ -35,7 +35,7 @@ CFLAGS		+= -Winline -Wlogical-op -Wmissing-braces -Wmissing-declarations -Wmissi
 CFLAGS		+= -Wpedantic -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wsuggest-attribute=format -Wsuggest-attribute=noreturn
 CFLAGS		+= -Wsuggest-attribute=pure -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
 LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
-ASFLAGS		:= -f elf32
+ASFLAGS		:= -f elf32 -g dwarf2
 EMUARGS		:= -M accel=kvm:tcg -m 1024 -net none -serial stdio -rtc base=utc -vga std -k $(KEYBOARD)
 
 include libk/Makefile

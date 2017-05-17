@@ -4,6 +4,7 @@
 #include <int/pic.h>
 #include <mm/gdt.h>
 #include <mm/map.h>
+#include <util/trace.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -19,6 +20,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	gdt_init();
 	idt_init();
 	pic_init();
+	trace_init(multiboot);
 
 	asm volatile ("sti");
 
