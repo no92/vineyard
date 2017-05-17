@@ -1,3 +1,4 @@
+#include <driver/keyboard.h>
 #include <driver/uart.h>
 #include <gfx/gfx.h>
 #include <int/idt.h>
@@ -29,6 +30,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	printf("vineyard\n");
 
 	pit_init();
+	keyboard_init();
 
 	asm volatile ("sti");
 
