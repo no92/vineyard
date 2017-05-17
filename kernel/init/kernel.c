@@ -4,12 +4,14 @@
 #include <int/pic.h>
 #include <mm/gdt.h>
 #include <mm/map.h>
+#include <time/pit.h>
 #include <util/trace.h>
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdnoreturn.h>
 
-void kernel(uint32_t magic, multiboot2_t *multiboot);
+noreturn void kernel(uint32_t magic, multiboot2_t *multiboot);
 
 void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	gfx_init(multiboot);
@@ -22,9 +24,15 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	pic_init();
 	trace_init(multiboot);
 
-	asm volatile ("sti");
-
 	mm_map_init(multiboot);
 
 	printf("vineyard\n");
+
+	pit_init();
+
+	asm volatile ("sti");
+
+	for(;;) {
+		asm volatile ("hlt");
+	}
 }
