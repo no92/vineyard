@@ -3,6 +3,7 @@
 #include <int/idt.h>
 #include <int/pic.h>
 #include <mm/gdt.h>
+#include <mm/map.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -20,6 +21,8 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	pic_init();
 
 	asm volatile ("sti");
+
+	mm_map_init(multiboot);
 
 	printf("vineyard\n");
 }
