@@ -34,6 +34,8 @@ static void gdt_set(size_t entry, uintptr_t base, uint32_t limit, uint8_t access
 	gdt[entry].flags = (uint8_t) (flags & 0xF);
 }
 
+extern void gdt_flush(void);
+
 void gdt_init(void) {
 	memset(gdt, 0, sizeof(gdt));
 
@@ -47,4 +49,6 @@ void gdt_init(void) {
 	gdtr.addr = (uintptr_t) &gdt;
 
 	asm volatile ("lgdt %0" : : "m" (gdtr));
+
+	gdt_flush();
 }
