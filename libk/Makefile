@@ -43,7 +43,7 @@ clean-libc-test:
 test-libc: $(LIBC_TESTS)
 	@for test in $^; do \
 		$(INFO) "TEST" "$$test"; \
-		./$$test 2> .test.log || $(ERROR) "TEST" "$$test failed"; if grep -v bash .test.log -q; then cat .test.log; rm .test.log; fi; \
+		./$$test 2> .test.log || $(ERROR) "TEST" "$$test failed"; if grep -v bash .test.log -q; then cat .test.log; rm .test.log; else rm .test.log; fi; \
 	done 2> /dev/null
 
 .PHONY: clean-libk clean-libc clean-libc-test test-libc

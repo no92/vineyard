@@ -1,6 +1,6 @@
 #include <driver/uart.h>
 #include <gfx/gfx.h>
-#include <init/multiboot.h>
+#include <init/multiboot2.h>
 
 #include <stddef.h>
 #include <stdint.h>
@@ -14,7 +14,7 @@ static size_t offset_6;
 static size_t offset_7;
 
 void gfx_init(multiboot2_t *multiboot) {
-	multiboot2_tag_t *video = multiboot2_get_tag(multiboot, 8);
+	multiboot2_tag_t *video = multiboot2_get_tag(multiboot, MB2_TYPE_FRAMEBUFFER);
 
 	gfx_framebuffer = (uint32_t *) video->video.framebuffer_addr;
 	gfx_width = video->video.framebuffer_width;

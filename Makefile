@@ -46,7 +46,7 @@ todo:
 
 clean: clean-kernel
 
-clean-deep: clean-kernel clean-font clean-libk clean-libc clean-libc-test
+distclean: clean-kernel clean-font clean-libk clean-libc clean-libc-test
 
 .PHONY: all clean clean-deep test test-debug test-virtualbox
 .SECONDARY:

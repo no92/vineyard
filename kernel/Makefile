@@ -49,7 +49,7 @@ $(ISO): $(KERNEL)
 
 clean-kernel:
 	@$(INFO) "CLEAN" "cleaning kernel tree"
-	@$(RM) $(addsuffix .o,$(KERNEL_SRC)) $(KERNEL) $(KERNEL_ISO) $(ISO) $(KERNEL_DEP)
+	@$(RM) $(addsuffix .o,$(KERNEL_SRC)) $(KERNEL) $(KERNEL_ISO) $(ISO) $(KERNEL_DEP) kernel/init/crti.s.o kernel/init/crtn.s.o
 
 clean-font:
 	@$(INFO) "CLEAN" "cleaning font"
