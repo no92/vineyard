@@ -1,6 +1,7 @@
 #include <driver/uart.h>
 #include <gfx/gfx.h>
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
@@ -48,8 +49,23 @@ size_t gfx_putc(const char *c) {
 
 		goto exit;
 	} else if(c[0] == '\t') {
+		/* move gfx_x to the next-highest multiple of 4 */
 		gfx_x = (gfx_x + (gfx_char_width << 2)) & ~((gfx_char_width << 2) - 1);
 
+		goto exit;
+	} else if(c[0] == '\b') {
+		/* move the x coordinate 1 character to the left, but not off the screen */
+		gfx_x = (gfx_x <= gfx_char_width) ? 0 : gfx_x - gfx_char_width;
+		/* clear the character we deleted */
+		gfx_draw_char(" ", gfx_x, gfx_y);
+
+		/* for some reason, my GNOME terminal needs two backspaces to move back one char */
+		uart_putc(0x08);
+		uart_putc(0x08);
+		/* we want a destructive backspace, so set it up ... */
+		uart_putc(0x20);
+
+		/* ... and complete it, including cleanup */
 		goto exit;
 	}
 
