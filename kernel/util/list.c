@@ -4,7 +4,12 @@ void list_insert_after(list_t *list, list_node_t *after, list_node_t *node) {
 	node->next = after->next;
 	node->prev = after;
 
-	after->next->prev = node;
+	if(!after->next) {
+		list->tail = node;
+	} else {
+		after->next->prev = node;
+	}
+	
 	after->next = node;
 
 	list->length++;
