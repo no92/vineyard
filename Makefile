@@ -34,7 +34,7 @@ CFLAGS		:= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=
 CFLAGS		+= -ggdb3 -Ilibk/include -Iinclude -MD -nostdinc -pipe -std=gnu11 -O3
 CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Wformat-signedness -Wimplicit-fallthrough=5 -Winit-self
 CFLAGS		+= -Winline -Wlogical-op -Wmissing-braces -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses
-CFLAGS		+= -Wpedantic -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wsuggest-attribute=format -Wsuggest-attribute=noreturn
+CFLAGS		+= -Wpedantic -Wpointer-arith -Wredundant-decls -Wrestrict -Wshadow -Wstrict-prototypes -Wsuggest-attribute=format -Wsuggest-attribute=noreturn
 CFLAGS		+= -Wsuggest-attribute=pure -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
 LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
 ASFLAGS		:= -f elf32 -g dwarf2

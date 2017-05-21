@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define SIZE 16384
+#define SIZE 0x80000
 
 static uint8_t buf[SIZE];
 static size_t off = 0;

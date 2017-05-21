@@ -4,6 +4,7 @@
 
 #define MB2_MAGIC				0x36D76289
 
+#define MB2_TYPE_MEMINFO		4
 #define MB2_TYPE_MMAP			6
 #define MB2_TYPE_FRAMEBUFFER	8
 #define MB2_TYPE_SYMBOLS		9
@@ -18,6 +19,11 @@ typedef struct {
 	uint32_t size;
 
 	union {
+		struct {
+			uint32_t lower;
+			uint32_t upper;
+		} __attribute__((packed)) mem;
+
 		struct {
 			uint32_t entry_size;
 			uint32_t entry_version;
