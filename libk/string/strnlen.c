@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-/* POSIX extension */
+/* GNU extension */
 size_t strnlen(const char *s, size_t maxlen) {
 	const char *str;
 
