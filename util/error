@@ -1,8 +1,8 @@
 #!/bin/bash
-length=$(expr 16 - ${#1})
-start=$(printf '%.0f' $((($length+1)/2)))
-end=$(($length/2))
-s=$(printf ' %.0s' $(seq 1 $start))
-e=$(printf ' %.0s' $(seq 1 $end))
+length=$((16 - ${#1}))
+start=$(printf '%.0f' $(((length+1)/2)))
+end=$((length/2))
+s=$(printf ' %.0s' $(seq 1 "$start"))
+e=$(printf ' %.0s' $(seq 1 "$end"))
 echo -e "$s\033[31;1m$1$e$2\033[0m"
 exit 1

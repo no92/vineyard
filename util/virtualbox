@@ -2,47 +2,45 @@
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ "$#" -ne 2 ]; then
-	$DIR/error "VBOX" "usage: $0 <VM name> <disc image path>"
+	"$DIR"/error "VBOX" "usage: $0 <VM name> <disc image path>"
 	exit 1;
 fi
 
 # set up aliases for arguments
 vmname=$1
 disk=$2
-width=$3
-height=$4
 
 # set the host key (left alt 65513 = Alt, 65507 = Ctrl)
 VBoxManage setextradata global GUI/Input/HostKeyCombination 65507
 
 # force-delete the existing VM
-VBoxManage unregistervm $vmname --delete 2> /dev/null || true
+VBoxManage unregistervm "$vmname" --delete 2> /dev/null || true
 
 # set up a new VM
-VBoxManage createvm --name $vmname --register > /dev/null
+VBoxManage createvm --name "$vmname" --register > /dev/null
 
 # configure the VM
-VBoxManage modifyvm $vmname --memory 1024 > /dev/null
+VBoxManage modifyvm "$vmname" --memory 1024 > /dev/null
 
-VBoxManage setextradata $vmname GUI/LastCloseAction PowerOff
-VBoxManage setextradata $vmname GUI/RestrictedRuntimeDevicesMenuActions HardDrives
-VBoxManage setextradata $vmname GUI/RestrictedRuntimeMachineMenuActions TakeSnapshot,Detach,SaveState
-VBoxManage setextradata $vmname GUI/RestrictedRuntimeMenus View,Input,Devices,Debug,Help
-VBoxManage setextradata $vmname GUI/StatusBar/Enabled false
-VBoxManage setextradata $vmname GUI/StatusBar/IndicatorOrder HardDisks,OpticalDisks,FloppyDisks,Network,USB,SharedFolders,Display,VideoCapture,Features,Mouse,Keyboard
+VBoxManage setextradata "$vmname" GUI/LastCloseAction PowerOff
+VBoxManage setextradata "$vmname" GUI/RestrictedRuntimeDevicesMenuActions HardDrives
+VBoxManage setextradata "$vmname" GUI/RestrictedRuntimeMachineMenuActions TakeSnapshot,Detach,SaveState
+VBoxManage setextradata "$vmname" GUI/RestrictedRuntimeMenus View,Input,Devices,Debug,Help
+VBoxManage setextradata "$vmname" GUI/StatusBar/Enabled false
+VBoxManage setextradata "$vmname" GUI/StatusBar/IndicatorOrder HardDisks,OpticalDisks,FloppyDisks,Network,USB,SharedFolders,Display,VideoCapture,Features,Mouse,Keyboard
 
 # set up all possible video modes
-VBoxManage setextradata $vmname CustomVideoMode1 800x600x32
-VBoxManage setextradata $vmname CustomVideoMode2 1280x720x32
-VBoxManage setextradata $vmname CustomVideoMode3 1600x900x32
-VBoxManage setextradata $vmname CustomVideoMode4 1920x1080x32
+VBoxManage setextradata "$vmname" CustomVideoMode1 800x600x32
+VBoxManage setextradata "$vmname" CustomVideoMode2 1280x720x32
+VBoxManage setextradata "$vmname" CustomVideoMode3 1600x900x32
+VBoxManage setextradata "$vmname" CustomVideoMode4 1920x1080x32
 
 # create an IDE controller and attach the disc
-VBoxManage storagectl $vmname --add ide --name "IDE" > /dev/null
-VBoxManage storageattach $vmname --storagectl "IDE" --port 0 --device 0 --medium $disk --type dvddrive > /dev/null
+VBoxManage storagectl "$vmname" --add ide --name "IDE" > /dev/null
+VBoxManage storageattach "$vmname" --storagectl "IDE" --port 0 --device 0 --medium "$disk" --type dvddrive > /dev/null
 
 # boot up our VM
-VBoxManage startvm $vmname --type gui > /dev/null
+VBoxManage startvm "$vmname" --type gui > /dev/null
 
 until [ -z "$(VBoxManage list runningvms | grep \"$vmname\")" ]
 do
