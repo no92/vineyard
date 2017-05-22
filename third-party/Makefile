@@ -24,8 +24,12 @@ UNI-VGA_URL		:= http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz
 UNI-VGA_DIR		:= third-party/uni-vga
 UNI-VGA			:= $(UNI-VGA_DIR)/u_vga16.bdf
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(GRUB) $(UNI-VGA)
-third-party-clean: qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean
+OCLINT_URL		:= https://github.com/oclint/oclint
+OCLINT_DIR		:= third-party/oclint
+OCLINT			:= $(OCLINT_DIR)/build/oclint-release/bin/oclint
+
+third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(GRUB) $(UNI-VGA) $(OCLINT)
+third-party-clean: qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean
 
 $(QEMU):
 	@$(INFO) "MAKE" "downloading QEMU"
@@ -79,4 +83,14 @@ $(UNI-VGA):
 uni-vga-clean:
 	@$(RM) -R $(UNI-VGA_DIR)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean
+$(OCLINT):
+	@$(INFO) "MAKE" "getting oclint"
+	@mkdir -p $(OCLINT_DIR)
+	@git clone $(OCLINT_URL) $(OCLINT_DIR) -q
+	@$(INFO) "MAKE" "building oclint"
+	@cd $(OCLINT_DIR)/oclint-scripts; ./make;
+
+oclint-clean:
+	@$(RM) -R $(OCLINT_DIR)
+
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean

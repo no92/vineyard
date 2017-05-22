@@ -30,12 +30,14 @@ VBOX		:= util/virtualbox
 MUTE		:= 2>&1 /dev/null
 
 # set some flags for running the tools
-CFLAGS		:= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
-CFLAGS		+= -ggdb3 -Ilibk/include -Iinclude -MD -nostdinc -pipe -std=gnu11 -O3
-CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Wformat-signedness -Wimplicit-fallthrough=5 -Winit-self
-CFLAGS		+= -Winline -Wlogical-op -Wmissing-braces -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wparentheses
-CFLAGS		+= -Wpedantic -Wpointer-arith -Wredundant-decls -Wrestrict -Wshadow -Wstrict-prototypes -Wsuggest-attribute=format -Wsuggest-attribute=noreturn
-CFLAGS		+= -Wsuggest-attribute=pure -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code -Wunused -Wwrite-strings
+CFLAGS		?= -ggdb3 -pipe -O3
+CFLAGS		+= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
+CFLAGS		+= -Ilibk/include -Iinclude -MD -nostdinc -std=gnu11
+CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline
+CFLAGS		+= -Wmissing-braces -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpedantic
+CFLAGS		+= -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized
+CFLAGS		+= -Wunreachable-code -Wunused -Wwrite-strings
+CFLAGS_GCC	:= -Wformat-signedness -Wlogical-op -Wrestrict -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure
 LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
 ASFLAGS		:= -f elf32 -g dwarf2
 EMUARGS		:= -M accel=kvm:tcg -m 1G -net none -serial stdio -rtc base=utc -vga std -k en-us

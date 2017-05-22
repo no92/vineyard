@@ -8,13 +8,15 @@ LIBC_DEP	:= $(LIBK_SRC:.c=.d)
 
 LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
+CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
+
 %.libk.c.o: %.c
 	@$(INFO) "CC" $<
-	@$(CC) $(CFLAGS) -c -o $@ $< -D__libk
+	@$(CC) $(CFLAGS_LIBK) -c -o $@ $< -D__libk
 
 %.libc.c.o: %.c
 	@$(INFO) "CC" $<
-	@gcc $(filter-out -Wrestrict,$(filter-out -Wimplicit-fallthrough=5,$(CFLAGS))) -c -o $@ $<
+	@gcc $(filter-out -Wrestrict,$(CFLAGS_LIBK)) -c -o $@ $<
 
 $(LIBK): $(LIBK_OBJ)
 	@$(INFO) "AR" $@
@@ -26,7 +28,7 @@ $(LIBC): $(LIBC_OBJ)
 
 %.test: %.c
 	@$(INFO) "CC" $<
-	@gcc $(filter-out -Wrestrict,$(filter-out -Wimplicit-fallthrough=5,$(CFLAGS))) -o $@ $< -DUNIT -Ilibk -Lbin -lc
+	@gcc $(filter-out -Wrestrict,$(CFLAGS_LIBK)) -o $@ $< -DUNIT -Ilibk -Lbin -lc
 
 clean-libk:
 	@$(INFO) "CLEAN" "cleaning libk"
@@ -45,5 +47,9 @@ test-libc: $(LIBC_TESTS)
 		$(INFO) "TEST" "$$test"; \
 		./$$test 2> .test.log || $(ERROR) "TEST" "$$test failed"; if grep -v bash .test.log -q; then cat .test.log; rm .test.log; else rm .test.log; fi; \
 	done 2> /dev/null
+
+test-libk-static:
+	@$(INFO) "OCLINT" "running static analysis on libk"
+	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c || true
 
 .PHONY: clean-libk clean-libc clean-libc-test test-libc

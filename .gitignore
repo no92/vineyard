@@ -9,5 +9,6 @@ kernel/gfx/font.c
 third-party/*
 !.gdbinit
 !.git*
+!.oclint
 !third-party/Makefile
 !third-party/scripts

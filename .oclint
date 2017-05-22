@@ -1,0 +1,6 @@
+rule-configurations:
+  - key: CYCLOMATIC_COMPLEXITY
+    value: 15
+disable-rules:
+  - ShortVariableName
+enable-clang-static-analyzer: false
