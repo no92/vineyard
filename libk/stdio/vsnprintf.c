@@ -1,3 +1,4 @@
+#include <_/vineyard.h>
 #include <ctype.h>
 #include <stdarg.h>
 #include <stddef.h>
@@ -84,6 +85,7 @@ static char *itoa(int64_t value, char *str, uint8_t base) {
 	return str;
 }
 
+A("bitwise operator in conditional")
 int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list arg) {
 	int flags = 0;
 	size_t width = 0;

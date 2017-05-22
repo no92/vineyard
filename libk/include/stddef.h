@@ -19,5 +19,5 @@ typedef struct {
 
 typedef int32_t wchar_t;
 
-#define NULL ((void*)0)
+#define NULL (void*)0
 #define offsetof(type, member) __builtin_offsetof(type, member)

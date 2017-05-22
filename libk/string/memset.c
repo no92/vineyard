@@ -1,6 +1,8 @@
+#include <_/vineyard.h>
 #include <stddef.h>
 #include <string.h>
 
+A("bitwise operator in conditional")
 void *memset(void *s, int c, size_t n) {
 	uint8_t *ptr8;
 	uint8_t value8;

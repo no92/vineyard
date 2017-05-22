@@ -1,6 +1,8 @@
+#include <_/vineyard.h>
 #include <stdint.h>
 #include <utf8.h>
 
+A("bitwise operator in conditional")
 size_t u8len(const char *c) {
 	if((c[0] & 0x80) == 0) {
 		/* single-byte */

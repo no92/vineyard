@@ -33,10 +33,10 @@ MUTE		:= 2>&1 /dev/null
 CFLAGS		?= -ggdb3 -pipe -O3
 CFLAGS		+= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
 CFLAGS		+= -Ilibk/include -Iinclude -MD -nostdinc -std=gnu11
-CFLAGS		+= -Wall -Wbad-function-cast -Wcast-align -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline
-CFLAGS		+= -Wmissing-braces -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpedantic
-CFLAGS		+= -Wpointer-arith -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized
-CFLAGS		+= -Wunreachable-code -Wunused -Wwrite-strings
+CFLAGS		+= -Wall -Wbad-function-cast -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline -Wmissing-braces
+CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpedantic -Wpointer-arith
+CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code
+CFLAGS		+= -Wunused -Wwrite-strings
 CFLAGS_GCC	:= -Wformat-signedness -Wlogical-op -Wrestrict -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure
 LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
 ASFLAGS		:= -f elf32 -g dwarf2

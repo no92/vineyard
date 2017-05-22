@@ -1,8 +1,10 @@
+#include <_/vineyard.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
 /* GNU extension */
+A("empty for statement")
 size_t strnlen(const char *s, size_t maxlen) {
 	const char *str;
 

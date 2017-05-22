@@ -20,10 +20,12 @@ CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
 
 $(LIBK): $(LIBK_OBJ)
 	@$(INFO) "AR" $@
+	@$(MKDIR) $(dir $@)
 	@$(AR) rcs $@ $^
 
 $(LIBC): $(LIBC_OBJ)
 	@$(INFO) "AR" $@
+	@$(MKDIR) $(dir $@)
 	@$(AR) rcs $@ $^
 
 %.test: %.c
@@ -50,6 +52,6 @@ test-libc: $(LIBC_TESTS)
 
 test-libk-static:
 	@$(INFO) "OCLINT" "running static analysis on libk"
-	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c || true
+	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c -target i386-pc-none-elf -Wno-language-extension-token
 
 .PHONY: clean-libk clean-libc clean-libc-test test-libc

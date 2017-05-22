@@ -1,5 +1,5 @@
 #!/bin/bash
-kb=`setxkbmap -v | awk -F "+" '/symbols/ {print $2}'`
+kb=$(setxkbmap -v | awk -F "+" '/symbols/ {print $2}')
 
 case $kb in
 	de)

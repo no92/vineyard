@@ -1,6 +1,8 @@
+#include <_/vineyard.h>
 #include <stdbool.h>
 #include <string.h>
 
+A("avoid branching statement as last in loop")
 size_t strspn(const char *s1, const char *s2) {
 	size_t len1 = strlen(s1);
 	size_t len2 = strlen(s2);

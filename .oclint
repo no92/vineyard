@@ -1,6 +1,16 @@
 rule-configurations:
   - key: CYCLOMATIC_COMPLEXITY
-    value: 15
+    value: 16
+  - key: LONG_VARIABLE_NAME
+    value: 32
+  - key: LONG_LINE
+    value: 150
+  - key: LONG_METHOD
+    value: 64
 disable-rules:
   - ShortVariableName
+  - InvertedLogic
 enable-clang-static-analyzer: false
+max-priority-1: 10000
+max-priority-2: 10000
+max-priority-3: 10000
