@@ -1,6 +1,7 @@
 #include <init/panic.h>
 #include <int/idt.h>
 
+#include <_/vineyard.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -20,9 +21,11 @@ static void idt_set(size_t interrupt, void (*function)(void), uint16_t selector,
 	idt[interrupt].flags = flags;
 }
 
+A("high ncss method")
 void idt_init(void) {
 	memset(idt, 0, sizeof(idt));
 
+	/* set up exception handlers */
 	idt_set(0, &exception0, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(1, &exception1, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(2, &exception2, 0x08, IDT_PRESENT | IDT_INTERRUPT);
@@ -56,6 +59,7 @@ void idt_init(void) {
 	idt_set(30, &exception30, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(31, &exception31, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 
+	/* set up IRQ handlers */
 	idt_set(32, &irq0, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(33, &irq1, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(34, &irq2, 0x08, IDT_PRESENT | IDT_INTERRUPT);
@@ -73,9 +77,10 @@ void idt_init(void) {
 	idt_set(46, &irq14, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(47, &irq15, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 
-
+	/* set up the IDT pointer */
 	idtr.limit = sizeof(idt) - 1;
 	idtr.addr = (uintptr_t) &idt;
 
+	/* load the IDT */
 	asm volatile ("lidt %0" : : "m" (idtr));
 }

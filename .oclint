@@ -7,9 +7,12 @@ rule-configurations:
     value: 150
   - key: LONG_METHOD
     value: 64
+  - key: NCSS_METHOD
+    value: 32
 disable-rules:
   - ShortVariableName
   - InvertedLogic
+  - AvoidBranchingStatementAsLastInLoop
 enable-clang-static-analyzer: false
 max-priority-1: 10000
 max-priority-2: 10000

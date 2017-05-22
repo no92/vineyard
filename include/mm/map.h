@@ -3,6 +3,7 @@
 #include <init/multiboot2.h>
 #include <util/list.h>
 
+#include <_/vineyard.h>
 #include <stddef.h>
 
 #define MAP_TYPE_RESERVED			0
@@ -18,5 +19,5 @@ typedef struct {
 	uint32_t type;
 } map_entry_t;
 
-__attribute__((no_sanitize_undefined)) void mm_map_init(multiboot2_t *multiboot);
+NO_UBSAN void mm_map_init(multiboot2_t *multiboot);
 list_t *mm_map_get(void);

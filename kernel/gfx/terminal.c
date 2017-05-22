@@ -1,6 +1,7 @@
 #include <driver/uart.h>
 #include <gfx/gfx.h>
 
+#include <_/vineyard.h>
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -19,7 +20,7 @@ static void gfx_refresh(void) {
 		gfx_lines = gfx_height / gfx_char_height;
 	}
 
-	uint32_t bytes_per_line = (gfx_pitch * gfx_char_height);
+	uint32_t bytes_per_line = gfx_pitch * gfx_char_height;
 
 	if(gfx_x >= gfx_width) {
 		gfx_x = 0;
@@ -42,6 +43,7 @@ static void gfx_refresh(void) {
 	}
 }
 
+A("goto statement")
 size_t gfx_putc(const char *c) {
 	if(c[0] == '\n') {
 		gfx_x = 0;

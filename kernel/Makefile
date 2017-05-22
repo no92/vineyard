@@ -9,6 +9,7 @@ MB2_WIDTH	?= 1280
 MB2_HEIGHT	?= 720
 
 CFLAGS_KERN	:= $(CFLAGS) $(CFLAGS_GCC)
+CFLAGS_LINT	:= -c -D__libk -target i386-pc-none-elf -Wno-language-extension-token -Wno-unreachable-code
 
 # find the kernel sources that we compile
 KERNEL_SRC	:= $(shell find kernel -name '*.[sc]' -type f -not -name 'crt[in].s')
@@ -39,6 +40,7 @@ kernel/gfx/font.c: $(UNI-VGA)
 
 $(KERNEL): $(KERNEL_OBJ)
 	@$(INFO) "LD" $@
+	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
 $(ISO): $(KERNEL)
@@ -71,7 +73,7 @@ test-virtualbox: all
 
 test-kernel:
 	@$(INFO) "OCLINT" "running static analysis on kernel"
-	@$(OCLINT) $(filter-out %.s,$(KERNEL_SRC)) -- $(CFLAGS) -c -D__libk -target i386-pc-none-elf
+	@$(OCLINT) $(filter-out kernel/gfx/font.c,$(filter-out %.s,$(KERNEL_SRC))) -- $(CFLAGS) $(CFLAGS_LINT)
 
 -include $(KERNEL_DEP)
 

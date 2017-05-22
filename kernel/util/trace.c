@@ -2,6 +2,7 @@
 #include <proc/elf32.h>
 #include <util/trace.h>
 
+#include <_/vineyard.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -44,6 +45,7 @@ void trace_init(multiboot2_t *multiboot) {
 	}
 }
 
+A("bitwise operator in conditional")
 const char *trace_lookup_addr(uintptr_t addr) {
 	elf32_sym_t *symbol = symtab;
 
@@ -62,6 +64,7 @@ const char *trace_lookup_addr(uintptr_t addr) {
 	return "unknown";
 }
 
+A("bitwise operator in conditional")
 uintptr_t trace_lookup_name(const char *name) {
 	elf32_sym_t *symbol = symtab;
 

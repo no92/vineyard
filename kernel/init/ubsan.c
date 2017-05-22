@@ -8,6 +8,19 @@
 
 /* TODO: move this to libk? */
 
+const char *type_check_kinds[] = {
+	"load of",
+	"store to",
+	"reference binding to",
+	"member access within",
+	"member call on",
+	"constructor call on",
+	"downcast of",
+	"downcast of",
+	"upcast of",
+	"cast to virtual base of",
+};
+
 static void ubsan_location(ubsan_location_t *location) {
 	if(location->file) {
 		printf("[ubsan]	caught undefined behavior in %s:%u:%u\n", location->file, location->line, location->column);
@@ -24,7 +37,8 @@ noreturn void __ubsan_handle_type_mismatch(ubsan_type_mismatch_t *type_mismatch,
 	} else if(type_mismatch->alignment != 0 && is_aligned(pointer, type_mismatch->alignment)) {
 		panic("[ubsan]	unaligned memory access");
 	} else {
-		panic("[ubsan]	%s adress %p with insufficient space for object of type %s\n", type_check_kinds[type_mismatch->type_check_kind], (void *) pointer, type_mismatch->type->name);
+		panic("[ubsan]	%s adress %p with insufficient space for object of type %s\n",
+			type_check_kinds[type_mismatch->type_check_kind], (void *) pointer, type_mismatch->type->name);
 	}
 
 	__builtin_unreachable();
@@ -89,7 +103,8 @@ noreturn void __ubsan_handle_shift_out_of_bounds(ubsan_location_t *location, uin
 noreturn void __ubsan_handle_nonnull_arg(ubsan_nonnull_arg_t *data) {
 	ubsan_location(&data->loc);
 
-	panic("[ubsan]	argument %d null, but required to be non-null by %s:%u:%u", data->argument, data->attr_loc.file, data->attr_loc.line, data->attr_loc.column);
+	panic("[ubsan]	argument %d null, but required to be non-null by %s:%u:%u", data->argument, data->attr_loc.file, data->attr_loc.line,
+		data->attr_loc.column);
 }
 
 noreturn void __ubsan_handle_builtin_unreachable(ubsan_location_t *location) {

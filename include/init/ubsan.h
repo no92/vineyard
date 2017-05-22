@@ -24,19 +24,6 @@ typedef struct {
 	uint8_t type_check_kind;
 } ubsan_type_mismatch_t;
 
-const char *type_check_kinds[] = {
-	"load of",
-	"store to",
-	"reference binding to",
-	"member access within",
-	"member call on",
-	"constructor call on",
-	"downcast of",
-	"downcast of",
-	"upcast of",
-	"cast to virtual base of",
-};
-
 typedef struct {
     ubsan_location_t location;
     const ubsan_type_t *left_type;

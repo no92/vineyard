@@ -2,6 +2,7 @@
 #include <driver/keyboard.h>
 #include <int/handler.h>
 
+#include <_/vineyard.h>
 #include <ctype.h>
 #include <stdio.h>
 
@@ -17,6 +18,7 @@ static const struct keymap *keyboard_conversion(uint32_t c) {
 	return NULL;
 }
 
+A("bitwise operator in conditional")
 static void keyboard_press(frame_t *state) {
 	(void) state;
 

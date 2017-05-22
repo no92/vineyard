@@ -1,3 +1,4 @@
+#include <_/vineyard.h>
 #include <cpu/ports.h>
 #include <driver/uart.h>
 
@@ -46,7 +47,7 @@ void uart_init(void) {
 	/* set high divisor to zero */
 	outb(UART0 + DLH, 0x00);
 
-	/* set no parity (0bXX000XXX), one stop bit (0bXXXXX0XX) and 8-bit word length (0bXXXXXX11) and leave set break disabled (0bX0XXXXXX) */
+	/* no parity (0bXX000XXX), one stop bit (bit 2 = 0) and 8-bit words (0bXXXXXX11) and leave set break disabled (bit 8 = 0) */
 	outb(UART0 + LCR, 0x03);
 
 	/* enable FIFOs (bit 0), clear FIFOs (bits 1 & 2), 14-byte threshold (bits 6 & 7) */
@@ -61,7 +62,7 @@ static bool uart_transmit_empty(void) {
 	return inb(UART0 + LSR) & 0x20;
 }
 
-void uart_putc(uint8_t c) {
+A("empty while statement") void uart_putc(uint8_t c) {
 	while(!uart_transmit_empty());
 
 	outb(UART0 + THR, c);
