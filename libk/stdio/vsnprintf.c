@@ -7,8 +7,6 @@
 #include <string.h>
 #include <sys/types.h>
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-
 #define FLAG_HASH	1 << 0
 #define FLAG_PLUS	1 << 1
 #define FLAG_SPACE	1 << 2
@@ -239,7 +237,7 @@ width:
 						size_t diff = (width - len);
 						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
 
-						diff = MIN(diff, n - 1);
+						diff = min(diff, n - 1);
 						n -= diff;
 
 						while(diff --> 0) {
@@ -247,7 +245,7 @@ width:
 						}
 					}
 
-					len = MIN(len, n - 1);
+					len = min(len, n - 1);
 
 					if(format[0] == 'x') {
 						for(size_t i = 0; i < len; i++) {
@@ -289,7 +287,7 @@ width:
 						size_t diff = width - len;
 						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
 
-						diff = MIN(diff, n - 1);
+						diff = min(diff, n - 1);
 						n -= diff;
 
 						while(diff --> 0) {
@@ -297,7 +295,7 @@ width:
 						}
 					}
 
-					len = MIN(len, n - 1);
+					len = min(len, n - 1);
 
 					strncpy(s, buf, len);
 					s += len;
@@ -342,7 +340,7 @@ width:
 						size_t diff = width - len;
 						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
 
-						diff = MIN(diff, n - 1);
+						diff = min(diff, n - 1);
 						n -= diff;
 
 						while(diff --> 0) {
@@ -350,7 +348,7 @@ width:
 						}
 					}
 
-					len = MIN(len, n - 1);
+					len = min(len, n - 1);
 
 					strncpy(s, buf, len);
 					s += len;
@@ -394,7 +392,7 @@ width:
 						size_t diff = width - len;
 						char pad = (flags & FLAG_ZERO) ? '0' : ' ';
 
-						diff = MIN(diff, n - 1);
+						diff = min(diff, n - 1);
 						n -= diff;
 
 						while(diff --> 0) {
@@ -402,7 +400,7 @@ width:
 						}
 					}
 
-					len = MIN(len, n - 1);
+					len = min(len, n - 1);
 
 					strncpy(s, buf, len);
 					s += len;
