@@ -3,6 +3,7 @@
 *.d
 *.o
 *.test
+*.gch
 bin/
 hdd/*
 kernel/gfx/font.c
