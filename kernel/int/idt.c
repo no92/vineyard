@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define IDT_ENTRIES		256
-
 #define IDT_PRESENT		0x80
 #define IDT_INTERRUPT	0x0E
 

@@ -17,4 +17,9 @@ typedef struct {
 	uint8_t base_high;
 } __attribute__((packed)) gdt_entry_t;
 
+#define GDT_ENTRIES 5
+
+extern gdt_entry_t gdt[GDT_ENTRIES];
+extern gdtr_t gdtr;
+
 void gdt_init(void);

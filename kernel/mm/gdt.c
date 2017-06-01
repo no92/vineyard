@@ -2,8 +2,6 @@
 
 #include <string.h>
 
-#define GDT_ENTRIES 5
-
 /* GDT access bits */
 #define GDT_RW			1 << 1
 #define GDT_X			1 << 3

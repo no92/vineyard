@@ -15,6 +15,11 @@ typedef struct {
 	uintptr_t addr;
 } __attribute__((packed)) idtr_t;
 
+#define IDT_ENTRIES 256
+
+extern idt_entry_t idt[IDT_ENTRIES];
+extern idtr_t idtr;
+
 void idt_init(void);
 
 extern void exception0(void);
