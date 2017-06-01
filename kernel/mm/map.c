@@ -6,8 +6,6 @@
 
 #include <stdio.h>
 
-#define ALIGN_UP(addr, alignment)	((addr + (alignment - 1)) & ~(alignment - 1))
-
 list_t mmap;
 
 static const char* types[] = {

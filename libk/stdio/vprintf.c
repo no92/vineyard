@@ -14,6 +14,8 @@ int vprintf(const char * restrict format, va_list arg) {
 	while(buf[off]) {
 #ifdef __libk
 		off += gfx_putc(&buf[off]);
+#else
+		(void) 0;
 #endif
 	}
 

@@ -18,7 +18,7 @@
 
 uint32_t page_directory[1024] __attribute__((aligned(4096)));
 
-__attribute__((no_sanitize_undefined)) static void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
+NO_UBSAN static void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
 	size_t index_dir = virt >> 22;
 	size_t index_tab = (virt >> 12) & 0x03FF;
 
@@ -35,8 +35,6 @@ __attribute__((no_sanitize_undefined)) static void mm_virtual_map_page(uintptr_t
 
 extern uintptr_t _kernel_start;
 extern uintptr_t _kernel_end;
-
-#define ALIGN_UP(addr, alignment)	((addr + (alignment - 1U)) & ~(alignment - 1U))
 
 void mm_virtual_init(multiboot2_t *multiboot) {
 	(void) multiboot;

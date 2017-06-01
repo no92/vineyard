@@ -7,3 +7,5 @@
 	#define A(x)
 	#define NO_UBSAN __attribute__((no_sanitize_undefined))
 #endif
+
+#define ALIGN_UP(addr, alignment)	((addr + (alignment - 1U)) & ~(alignment - 1U))
