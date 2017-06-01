@@ -6,6 +6,7 @@
 #include <mm/gdt.h>
 #include <mm/map.h>
 #include <mm/physical.h>
+#include <mm/virtual.h>
 #include <time/pit.h>
 #include <util/trace.h>
 
@@ -28,6 +29,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	mm_map_init(multiboot);
 	mm_physical_init(multiboot);
+	mm_virtual_init(multiboot);
 
 	printf("vineyard\n");
 

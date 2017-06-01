@@ -22,6 +22,7 @@ void gfx_init(multiboot2_t *multiboot) {
 	gfx_height = video->video.framebuffer_height;
 	gfx_pitch = video->video.framebuffer_pitch;
 	gfx_bpp = video->video.framebuffer_bpp >> 3;
+	gfx_framebuffer_size = gfx_pitch * gfx_height;
 
 	offset_1 = gfx_bpp;
 	offset_2 = gfx_bpp << 1;

@@ -12,6 +12,7 @@ const uint8_t gfx_font[46384];
 const uint16_t gfx_font_index[11120];
 
 uint32_t *gfx_framebuffer;
+uint32_t gfx_framebuffer_size;
 uint32_t gfx_width;
 uint32_t gfx_height;
 uint32_t gfx_pitch;
