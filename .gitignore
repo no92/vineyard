@@ -1,13 +1,25 @@
+# dotfiles
 .*
-.tags
 *.d
 *.o
 *.test
 *.gch
+
+# binary directories
 bin/
 hdd/*
+
+# generated files
+build/pxe.cfg
 kernel/gfx/font.c
+
+# configuration
+conf/wol
+
+# huge dependency directory
 third-party/*
+
+# exceptions
 !.gdbinit
 !.git*
 !.oclint

@@ -27,6 +27,7 @@ INFO		:= util/info
 ERROR		:= util/error
 KEYBOARD	:= $(shell util/keyboard)
 VBOX		:= util/virtualbox
+WOL			:= util/wol
 MUTE		:= 2>&1 /dev/null
 
 # set some flags for running the tools
@@ -50,7 +51,7 @@ todo:
 
 clean: clean-kernel
 
-distclean: clean-kernel clean-font clean-libk clean-libc clean-libc-test
+distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test
 
 .PHONY: all clean clean-deep test test-debug test-virtualbox
 .SECONDARY:

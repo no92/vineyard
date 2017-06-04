@@ -1,6 +1,9 @@
 # define some output file names
 KERNEL		:= bin/vineyard
+PXE_BUILD	:= build/pxe.cfg
+
 HDD			:= hdd
+PXE_CONFIG	:= $(HDD)/boot/i386-pc/grub.cfg
 GRUB_CONFIG	:= $(HDD)/boot/grub/grub.cfg
 KERNEL_ISO	:= $(HDD)/boot/vineyard
 
@@ -23,6 +26,8 @@ KERNEL_OBJ	+= $(LIBK)
 KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
 KERNEL_OBJ	+= kernel/init/crtn.s.o
 
+LOCAL_IP	?= $(shell hostname -I | head -n1 | cut -d " " -f1)
+
 %.c.o: %.c
 	@$(INFO) "CC" $<
 	@$(CC) $(CFLAGS_KERN) -c -o $@ $< -D__libk
@@ -43,13 +48,22 @@ $(KERNEL): $(KERNEL_OBJ)
 	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
-$(ISO): $(KERNEL)
+$(ISO): $(KERNEL) $(PXE_BUILD)
 	@$(INFO) "DISK" $@
 	@$(MKDIR) $(dir $(GRUB_CONFIG))
 	@$(CP) build/grub.cfg $(GRUB_CONFIG)
 	@$(CP) $(KERNEL) $(KERNEL_ISO)
 	@$(GRUB) -o $@ $(HDD) 2> .error.log; if grep "FAIL" .error.log -q; then $(ERROR) "GRUB" "building $@ failed; output of $(GRUB):"; cat .error.log; rm .error.log; $(ERROR) "GRUB" "end of output"; exit 1; else rm .error.log; fi;
 	@$(GRUB_DIR)/bin/grub-file --is-x86-multiboot2 $< || $(ERROR) "DISK" "$@ is not a valid multiboot2 kernel"
+	@$(GRUB_DIR)/bin/grub-mknetdir --net-directory=$(HDD)/boot --subdir grub > /dev/null
+	@cd $(HDD); ln -sf boot/grub/i386-pc/ i386-pc
+	@cp $(PXE_BUILD) $(HDD)/i386-pc/grub.cfg
+	@$(GRUB_DIR)/bin/grub-mkimage -d third-party/grub/lib/grub/i386-pc/ -O i386-pc-pxe --output $(HDD)/boot/grub/i386-pc/core.0 -c $(HDD)/i386-pc/grub.cfg -p=boot/grub  tftp pxe net configfile
+
+$(PXE_BUILD):
+	@$(INFO) "DISK" "creating PXE configuration"
+	@echo 'set root=(tftp,$(LOCAL_IP))' > $(PXE_BUILD)
+	@echo 'configfile boot/grub/grub.cfg' >> $(PXE_BUILD)
 
 clean-kernel:
 	@$(INFO) "CLEAN" "cleaning kernel tree"
@@ -58,6 +72,10 @@ clean-kernel:
 clean-font:
 	@$(INFO) "CLEAN" "cleaning font"
 	@$(RM) kernel/gfx/font.c
+
+clean-disk:
+	@$(INFO) "CLEAN" "cleaning hard drive image"
+	@$(RM) -r $(HDD)/boot $(PXE_BUILD)
 
 test: all
 	@$(INFO) "QEMU" "running emulator"
@@ -75,6 +93,12 @@ test-kernel:
 	@$(INFO) "OCLINT" "running static analysis on kernel"
 	@$(OCLINT) $(filter-out kernel/gfx/font.c,$(filter-out %.s,$(KERNEL_SRC))) -- $(CFLAGS) $(CFLAGS_LINT)
 
+test-real: $(PXE_BUILD) all
+	@$(INFO) "BOOT" "spinning up machines"
+	@mkdir -p conf
+	@touch -a conf/wol
+	@for mac in `cat conf/wol`; do $(WOL) $$mac; done
+
 -include $(KERNEL_DEP)
 
-.PHONY: clean-kernel clean-font test test-debug test-virtualbox
+.PHONY: clean-kernel clean-font clean-disk test test-debug test-virtualbox
