@@ -27,6 +27,7 @@ INFO		:= util/info
 ERROR		:= util/error
 KEYBOARD	:= $(shell util/keyboard)
 VBOX		:= util/virtualbox
+VMWARE		:= util/vmware
 WOL			:= util/wol
 MUTE		:= 2>&1 /dev/null
 

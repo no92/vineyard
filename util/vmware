@@ -1,0 +1,21 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [ "$#" -ne 1 ]; then
+	"$DIR"/error "VMWARE" "usage: $0 <config>"
+	exit 1;
+fi
+
+# set up aliases for arguments
+config=$1
+
+vmrun start $config &> /dev/null
+
+until [ "$(vmrun list | grep -o '[0-9]')" -eq 0 ]
+do
+	sleep .5
+done
+
+sleep .5
+
+rm conf/vineyard.{vmsd,vmxf} conf/vmware*.log

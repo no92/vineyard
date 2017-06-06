@@ -26,7 +26,7 @@
 		$options = socket_set_option($sock, SOL_SOCKET, SO_BROADCAST, true);
 
 		if($options) {
-			$send = socket_sendto($sock, $packet, strlen($packet), 0, $addr[1], 7);
+			$send = socket_sendto($sock, $packet, strlen($packet), 0, $addr[1], 9);
 			socket_close($sock);
 		}
 	}

@@ -28,8 +28,17 @@ OCLINT_URL		:= https://github.com/oclint/oclint
 OCLINT_DIR		:= third-party/oclint
 OCLINT			:= $(OCLINT_DIR)/build/oclint-release/bin/oclint
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(GRUB) $(UNI-VGA) $(OCLINT)
-third-party-clean: qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean
+BOCHS_URL		:= https://sourceforge.net/projects/bochs/files/bochs/2.6.9/bochs-2.6.9.tar.gz
+BOCHS_DIR		:= $(shell pwd)/third-party/bochs
+BOCHS_CONFIG	:= --enable-debugger --enable-debugger-gui --enable-readline --enable-disasm --enable-logging
+BOCHS_CONFIG	+= --enable-cpu-level=6 --enable-smp --enable-fpu --enable-3dnow --enable-x86-64 --enable-avx --enable-x86-debugger --enable-all-optimizations
+BOCHS_CONFIG	+= --enable-sb16=default --enable-ne2000 --enable-e1000 --enable-iodebug --enable-pci --enable-usb --enable-usb-ohci --enable-usb-ehci --enable-usb-xhci
+BOCHS_CONFIG	+= --disable-plugins --disable-docbook
+BOCHS_CONFIG	+= --with-sdl2
+BOCHS			:= $(BOCHS_DIR)/bochs
+
+third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS)
+third-party-clean: qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
 
 $(QEMU):
 	@$(INFO) "MAKE" "downloading QEMU"
@@ -93,4 +102,14 @@ $(OCLINT):
 oclint-clean:
 	@$(RM) -R $(OCLINT_DIR)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean
+$(BOCHS):
+	@$(INFO) "MAKE" "getting bochs"
+	@mkdir -p $(BOCHS_DIR)
+	# @wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
+	# @tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
+	@bash -c 'cd $(BOCHS_DIR); ./configure $(BOCHS_CONFIG) --prefix="$(BOCHS_DIR)" -q; make -s; make install -s'
+
+bochs-clean:
+	@$(RM) -R $(BOCHS_DIR)
+
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean

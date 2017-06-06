@@ -1,32 +1,33 @@
 # define some output file names
-KERNEL		:= bin/vineyard
-PXE_BUILD	:= build/pxe.cfg
+KERNEL			:= bin/vineyard
+PXE_BUILD		:= build/pxe.cfg
+VMWARE_CONFIG	:= conf/vineyard.vmx
 
-HDD			:= hdd
-PXE_CONFIG	:= $(HDD)/boot/i386-pc/grub.cfg
-GRUB_CONFIG	:= $(HDD)/boot/grub/grub.cfg
-KERNEL_ISO	:= $(HDD)/boot/vineyard
+HDD				:= hdd
+PXE_CONFIG		:= $(HDD)/boot/i386-pc/grub.cfg
+GRUB_CONFIG		:= $(HDD)/boot/grub/grub.cfg
+KERNEL_ISO		:= $(HDD)/boot/vineyard
 
 # if not passed to make, set these default resolutions in the multiboot2 header
-MB2_WIDTH	?= 1280
-MB2_HEIGHT	?= 720
+MB2_WIDTH		?= 1280
+MB2_HEIGHT		?= 720
 
-CFLAGS_KERN	:= $(CFLAGS) $(CFLAGS_GCC)
-CFLAGS_LINT	:= -c -D__libk -target i386-pc-none-elf -Wno-language-extension-token -Wno-unreachable-code
+CFLAGS_KERN		:= $(CFLAGS) $(CFLAGS_GCC)
+CFLAGS_LINT		:= -c -D__libk -target i386-pc-none-elf -Wno-language-extension-token -Wno-unreachable-code
 
 # find the kernel sources that we compile
-KERNEL_SRC	:= $(shell find kernel -name '*.[sc]' -type f -not -name 'crt[in].s')
-KERNEL_SRC	:= $(filter-out kernel/gfx/font.c,$(KERNEL_SRC)) kernel/gfx/font.c
-KERNEL_DEP	:= $(addsuffix .d,$(KERNEL_SRC))
+KERNEL_SRC		:= $(shell find kernel -name '*.[sc]' -type f -not -name 'crt[in].s')
+KERNEL_SRC		:= $(filter-out kernel/gfx/font.c,$(KERNEL_SRC)) kernel/gfx/font.c
+KERNEL_DEP		:= $(addsuffix .d,$(KERNEL_SRC))
 
-KERNEL_OBJ	:= kernel/init/crti.s.o
-KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtbegin.o)
-KERNEL_OBJ	+= $(addsuffix .o,$(KERNEL_SRC))
-KERNEL_OBJ	+= $(LIBK)
-KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
-KERNEL_OBJ	+= kernel/init/crtn.s.o
+KERNEL_OBJ		:= kernel/init/crti.s.o
+KERNEL_OBJ		+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtbegin.o)
+KERNEL_OBJ		+= $(addsuffix .o,$(KERNEL_SRC))
+KERNEL_OBJ		+= $(LIBK)
+KERNEL_OBJ		+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
+KERNEL_OBJ		+= kernel/init/crtn.s.o
 
-LOCAL_IP	?= $(shell hostname -I | head -n1 | cut -d " " -f1)
+LOCAL_IP		?= $(shell hostname -I | head -n1 | cut -d " " -f1)
 
 %.c.o: %.c
 	@$(INFO) "CC" $<
@@ -77,7 +78,9 @@ clean-disk:
 	@$(INFO) "CLEAN" "cleaning hard drive image"
 	@$(RM) -r $(HDD)/boot $(PXE_BUILD)
 
-test: all
+test: test-qemu
+
+test-qemu: all
 	@$(INFO) "QEMU" "running emulator"
 	@$(EMU) $(EMUARGS) -cdrom $(ISO)
 
@@ -89,9 +92,14 @@ test-virtualbox: all
 	@$(INFO) "VBOX" "running emulator"
 	@$(VBOX) vineyard $(ISO)
 
-test-kernel:
-	@$(INFO) "OCLINT" "running static analysis on kernel"
-	@$(OCLINT) $(filter-out kernel/gfx/font.c,$(filter-out %.s,$(KERNEL_SRC))) -- $(CFLAGS) $(CFLAGS_LINT)
+test-vmware: all
+	@if ! command -v vmrun &> /dev/null; then $(ERROR) "VMWARE" "VMWare Workstation is not installed"; fi
+	@$(INFO) "VMWARE" "running emulator"
+	@$(VMWARE) $(VMWARE_CONFIG)
+
+test-bochs: all
+	@$(INFO) "BOCHS" "running emulator"
+	@$(BOCHS) -f conf/bochsrc -rc conf/bochsinit -q || true
 
 test-real: $(PXE_BUILD) all
 	@$(INFO) "BOOT" "spinning up machines"
@@ -99,6 +107,10 @@ test-real: $(PXE_BUILD) all
 	@touch -a conf/wol
 	@for mac in `cat conf/wol`; do $(WOL) $$mac; done
 
+test-kernel:
+	@$(INFO) "OCLINT" "running static analysis on kernel"
+	@$(OCLINT) $(filter-out kernel/gfx/font.c,$(filter-out %.s,$(KERNEL_SRC))) -- $(CFLAGS) $(CFLAGS_LINT)
+
 -include $(KERNEL_DEP)
 
-.PHONY: clean-kernel clean-font clean-disk test test-debug test-virtualbox
+.PHONY: clean-kernel clean-font clean-disk test test-qemu test-debug test-virtualbox test-vmware test-real test-kernel
