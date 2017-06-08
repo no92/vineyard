@@ -4,6 +4,7 @@
 #include <mm/map.h>
 #include <util/list.h>
 
+#include <stdlib.h>
 #include <stdio.h>
 
 list_t mmap;
@@ -29,11 +30,30 @@ static void mm_map_reserve(uintptr_t start, uintptr_t end, uint32_t type) {
 	list_append(&mmap, node);
 }
 
+extern uintptr_t _kernel_end;
+
+A("high ncss method")
 void mm_map_init(multiboot2_t *multiboot) {
 	multiboot2_tag_t *map = multiboot2_get_tag(multiboot, MB2_TYPE_MMAP);
 
 	uintptr_t end = (uintptr_t) map + map->size;
 	uintptr_t entry_addr = (uintptr_t) map + sizeof(map->type) + sizeof(map->size) + sizeof(map->map.entry_size) + sizeof(map->map.entry_version);
+
+	while(entry_addr < end) {
+		multiboot2_map_entry_t *entry = (multiboot2_map_entry_t *) entry_addr;
+		uint32_t start = entry->addr & 0xFFFFF000;
+		uint32_t limit = (uint32_t) (entry->addr + entry->length - 1);
+		limit = ALIGN_UP(limit, 4096U) - 1;
+
+		if(entry->type == MAP_TYPE_USABLE && start >= 0x100000 && entry->length != 0) {
+			mm_early_config(max(start, (uintptr_t) &_kernel_end), limit - start + 1);
+			break;
+		}
+
+		entry_addr += map->map.entry_size;
+	}
+
+	entry_addr = (uintptr_t) map + sizeof(map->type) + sizeof(map->size) + sizeof(map->map.entry_size) + sizeof(map->map.entry_version);
 
 	while(entry_addr < end) {
 		multiboot2_map_entry_t *entry = (multiboot2_map_entry_t *) entry_addr;

@@ -3,19 +3,24 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdio.h>
 
-#define SIZE 0x100000
+static uintptr_t start;
+static size_t length;
+static size_t off;
 
-static uint8_t buf[SIZE];
-static size_t off = 0;
+void mm_early_config(uintptr_t ptr, size_t len) {
+	start = ptr;
+	length = len;
+}
 
 void *mm_early_alloc(size_t size) {
-	if(off + size > SIZE) {
+	if(off + size > length) {
 		panic("out of early memory");
 		return NULL;
 	}
 
-	void *ptr = &buf[off];
+	void *ptr = (void *) (start + off);
 	off += size;
 
 	return ptr;
