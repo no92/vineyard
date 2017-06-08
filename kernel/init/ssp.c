@@ -17,12 +17,13 @@ __attribute__((constructor)) void __stack_chk_setup(void) {
 	uint32_t canary = 0;
 	int done = 0;
 	size_t counter = 0;
-
 	uint32_t rdseed;
-	asm volatile ("mov $7, %%eax; mov $0, %%ecx; cpuid;"
-		: "=b" (rdseed) : : "eax", "ecx", "edx");
 
-	if(rdseed & 0x40000) {
+	asm volatile ("mov $7, %%eax; mov $0, %%ecx; cpuid;" : "=b" (rdseed) : : "eax", "ecx", "edx");
+
+	rdseed &= 0x40000;
+
+	if(rdseed) {
 		while(!done && counter < RDRAND_RETRIES) {
 			asm (
 				"rdseed %%eax;"
