@@ -45,14 +45,14 @@ isr_handler_t handlers[256];
 
 void handler(frame_t *state) {
 	if(handlers[state->interrupt] == NULL) {
+		size_t offset = (state->interrupt < 32) ? state->interrupt : 32;
+		panic("unhandled interrupt %#02x (%s, error: %#08x, eip: %#08x)", state->interrupt, exceptions[offset], state->error, state->eip);
+
 		trace(20);
 
 		if(state->interrupt == 0x0D && state->error != 0) {
 			printf("offending segment selector: %#08x\n", (state->error >> 3) & 0x1FFF);
 		}
-
-		size_t offset = (state->interrupt < 32) ? state->interrupt : 32;
-		panic("unhandled interrupt %#02x (%s, error: %#08x, eip: %#08x)", state->interrupt, exceptions[offset], state->error, state->eip);
 	} else {
 		(*handlers[state->interrupt])(state);
 	}
