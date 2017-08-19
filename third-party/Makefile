@@ -9,7 +9,7 @@ YASM			:= $(YASM_DIR)/yasm
 
 GCC_DIR			:= $(shell pwd)/third-party/gcc
 GCC_TARGET		:= i686-elf
-GCC_VER			:= 7.1.0
+GCC_VER			:= 7.2.0
 BINUTILS_VER	:= 2.28
 GCC_SCRIPT		:= third-party/scripts/gcc
 CROSS_GCC		:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
