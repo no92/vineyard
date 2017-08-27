@@ -22,6 +22,7 @@
 %endmacro
 
 [extern handler]
+[global handler_setup]
 handler_setup:
 	pusha
 

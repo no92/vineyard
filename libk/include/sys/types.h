@@ -9,3 +9,5 @@
 #else
 	#error Building for an unsupported arch. How did you do that?
 #endif
+
+typedef long int off_t;

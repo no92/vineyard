@@ -37,7 +37,7 @@ noreturn void __ubsan_handle_type_mismatch(ubsan_type_mismatch_t *type_mismatch,
 	} else if(type_mismatch->alignment != 0 && is_aligned(pointer, type_mismatch->alignment)) {
 		panic("[ubsan]	unaligned memory access");
 	} else {
-		panic("[ubsan]	%s adress %p with insufficient space for object of type %s\n",
+		panic("[ubsan]	%s address %p with insufficient space for object of type %s\n",
 			type_check_kinds[type_mismatch->type_check_kind], (void *) pointer, type_mismatch->type->name);
 	}
 

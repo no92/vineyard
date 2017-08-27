@@ -20,4 +20,4 @@ typedef struct {
 } map_entry_t;
 
 NO_UBSAN void mm_map_init(multiboot2_t *multiboot);
-list_t *mm_map_get(void);
+__attribute__((pure)) list_t *mm_map_get(void);

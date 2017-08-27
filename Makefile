@@ -42,7 +42,7 @@ CFLAGS		+= -Wunused -Wwrite-strings
 CFLAGS_GCC	:= -Wformat-signedness -Wlogical-op -Wrestrict -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure
 LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
 ASFLAGS		:= -f elf32 -g dwarf2
-EMUARGS		:= -M accel=kvm:tcg -m 1G -net none -serial stdio -rtc base=utc -vga std -k en-us -cpu max
+EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga std -k en-us -cpu max
 
 include libk/Makefile
 include kernel/Makefile
@@ -54,6 +54,6 @@ clean: clean-kernel
 
 distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test
 
-.PHONY: all clean clean-deep test test-debug test-virtualbox
+.PHONY: all clean test test-debug test-virtualbox
 .SECONDARY:
 .SUFFIXES:
