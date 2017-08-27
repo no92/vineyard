@@ -1,27 +1,25 @@
+#include <_/vineyard.h>
 #include <mm/early.h>
+#include <mm/virtual.h>
 #include <init/panic.h>
 
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 
-static uintptr_t start;
-static size_t length;
+#define POOL_SIZE	0x100000
+
+static uint8_t pool[POOL_SIZE];
 static size_t off;
 
-void mm_early_config(uintptr_t ptr, size_t len) {
-	start = ptr;
-	length = len;
-}
-
-void *mm_early_alloc(size_t size) {
-	if(off + size > length) {
+void *mm_early_alloc(size_t s) {
+	if(off + s > POOL_SIZE) {
 		panic("out of early memory");
-		return NULL;
 	}
 
-	void *ptr = (void *) (start + off);
-	off += size;
+	void *ret = &pool[off];
 
-	return ptr;
+	off += s;
+
+	return ret;
 }
