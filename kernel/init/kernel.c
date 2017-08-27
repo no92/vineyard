@@ -29,7 +29,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	mm_map_init(multiboot);
 	mm_physical_init(multiboot);
-	mm_virtual_init(multiboot);
+	mm_virtual_init();
 
 	printf("vineyard\n");
 

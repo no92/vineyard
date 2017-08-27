@@ -1,3 +1,4 @@
+#include <driver/uart.h>
 #include <init/multiboot2.h>
 #include <init/panic.h>
 #include <mm/early.h>
@@ -6,8 +7,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
-list_t mmap;
+list_t *memmap;
 
 static const char* types[] = {
 	[MAP_TYPE_RESERVED] = "Reserved",
@@ -27,7 +29,7 @@ static void mm_map_reserve(uintptr_t start, uintptr_t end, uint32_t type) {
 	data->type = type;
 	node->data = (void *) data;
 
-	list_append(&mmap, node);
+	list_append(memmap, node);
 }
 
 extern uintptr_t _kernel_end;
@@ -39,21 +41,10 @@ void mm_map_init(multiboot2_t *multiboot) {
 	uintptr_t end = (uintptr_t) map + map->size;
 	uintptr_t entry_addr = (uintptr_t) map + sizeof(map->type) + sizeof(map->size) + sizeof(map->map.entry_size) + sizeof(map->map.entry_version);
 
-	while(entry_addr < end) {
-		multiboot2_map_entry_t *entry = (multiboot2_map_entry_t *) entry_addr;
-		uint32_t start = entry->addr & 0xFFFFF000;
-		uint32_t limit = (uint32_t) (entry->addr + entry->length - 1);
-		limit = ALIGN_UP(limit, 4096U) - 1;
-
-		if(entry->type == MAP_TYPE_USABLE && start >= 0x100000 && entry->length != 0) {
-			mm_early_config(max(start, (uintptr_t) &_kernel_end), limit - start + 1);
-			break;
-		}
-
-		entry_addr += map->map.entry_size;
-	}
-
 	entry_addr = (uintptr_t) map + sizeof(map->type) + sizeof(map->size) + sizeof(map->map.entry_size) + sizeof(map->map.entry_version);
+
+	memmap = mm_early_alloc(sizeof(*memmap));
+	memset(memmap, 0, sizeof(*memmap));
 
 	while(entry_addr < end) {
 		multiboot2_map_entry_t *entry = (multiboot2_map_entry_t *) entry_addr;
@@ -68,7 +59,7 @@ void mm_map_init(multiboot2_t *multiboot) {
 		entry_addr += map->map.entry_size;
 	}
 
-	list_node_t *node = mmap.head;
+	list_node_t *node = memmap->head;
 
 	while(node->next) {
 		map_entry_t *c = node->data;
@@ -88,18 +79,19 @@ void mm_map_init(multiboot2_t *multiboot) {
 		node = node->next;
 	}
 
-	node = mmap.head;
+	node = memmap->head;
 
+	return;
 	while(node) {
 		map_entry_t *c = node->data;
 		size_t length = (1 + c->end - c->start) >> 12;
 
-		printf("%#08x - %#08x (%#06x pages) %s\n", c->start, c->end, length, types[c->type]);
+		printf("%#08x - %#08x (%#06x pages) %s (%u)\n", c->start, c->end, length, types[c->type], c->type);
 
 		node = node->next;
 	}
 }
 
 list_t *mm_map_get(void) {
-	return &mmap;
+	return memmap;
 }

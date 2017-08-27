@@ -19,8 +19,8 @@ void trace_init(multiboot2_t *multiboot) {
 		panic("no symbol tag found");
 	}
 
-	elf32_shdr_t *shdr = (elf32_shdr_t *) &tag->symbols.addr;
-	uintptr_t shstrtab = shdr[tag->symbols.shndx].sh_addr;
+	elf32_shdr_t *shdr = (elf32_shdr_t *) tag->symbols.addr;
+	uintptr_t shstrtab = shdr[tag->symbols.shndx].sh_addr + 0xC0000000;
 
 	for(size_t i = 0; i < tag->symbols.num; i++, shdr++) {
 		if(!shdr->sh_addr) {
@@ -30,10 +30,10 @@ void trace_init(multiboot2_t *multiboot) {
 		const char *name = (const char *) (shstrtab + shdr->sh_name);
 
 		if(!strcmp(name, ".symtab")) {
-			symtab = (elf32_sym_t *) shdr->sh_addr;
+			symtab = (elf32_sym_t *) (shdr->sh_addr + 0xC0000000);
 			symtab_len = shdr->sh_size;
 		} else if(!strcmp(name, ".strtab")) {
-			strtab = shdr->sh_addr;
+			strtab = shdr->sh_addr + 0xC0000000;
 			strtab_len = shdr->sh_size;
 		}
 	}
@@ -61,7 +61,7 @@ const char *trace_lookup_addr(uintptr_t addr) {
 		}
 	}
 
-	return "unknown";
+	return "???";
 }
 
 A("bitwise operator in conditional")

@@ -3,6 +3,7 @@
 #include <mm/map.h>
 #include <mm/physical.h>
 #include <util/bitmap.h>
+#include <util/trace.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -21,7 +22,7 @@ static void mm_physical_mark_free(uintptr_t addr) {
 	bitmap_unset(pages, addr >> 12);
 }
 
-static void mm_physical_mark_reserved(uintptr_t addr) {
+__attribute__((used)) static void mm_physical_mark_reserved(uintptr_t addr) {
 	bitmap_set(pages, addr >> 12);
 }
 
@@ -34,17 +35,21 @@ void mm_physical_init(multiboot2_t *multiboot) {
 	list_t *map = mm_map_get();
 	list_node_t *node = map->head;
 
-	n = limit >> (BITS_PAGE_OFF + 3);
+	n = limit >> (BITS_PAGE_OFF);
 	pages = (bitmap_t *) mm_early_alloc(n);
 	memset(pages, 0xFF, n);
 
 	for(size_t i = 0; i < map->length; i++) {
+		if(!node) {
+			continue;
+		}
+
 		map_entry_t *c = node->data;
 		uintptr_t start = c->start;
 		uintptr_t end = c->end;
 		size_t length = (1 + end - start) >> BITS_PAGE_OFF;
 
-		if(c->type != MAP_TYPE_USABLE) {
+		if(c->type != MAP_TYPE_USABLE || start < 0x100000) {
 			node = node->next;
 			continue;
 		}
@@ -55,15 +60,13 @@ void mm_physical_init(multiboot2_t *multiboot) {
 
 		node = node->next;
 	}
-
-	mm_physical_mark_reserved(0);
 }
 
 void *mm_physical_alloc(void) {
 	ssize_t page = bitmap_first_unset(pages);
 
 	if(page == -1) {
-		panic("out of physical memory");
+		panic("out of physical memory\n");
 	}
 
 	bitmap_set(pages, (size_t) page);

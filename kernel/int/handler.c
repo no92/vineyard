@@ -46,13 +46,20 @@ isr_handler_t handlers[256];
 void handler(frame_t *state) {
 	if(handlers[state->interrupt] == NULL) {
 		size_t offset = (state->interrupt < 32) ? state->interrupt : 32;
-		panic("unhandled interrupt %#02x (%s, error: %#08x, eip: %#08x)", state->interrupt, exceptions[offset], state->error, state->eip);
-
-		trace(20);
+		printf("unhandled interrupt %#02x (%s, error: %#08x, eip: %#08x)\n", state->interrupt, exceptions[offset], state->error, state->eip);
 
 		if(state->interrupt == 0x0D && state->error != 0) {
 			printf("offending segment selector: %#08x\n", (state->error >> 3) & 0x1FFF);
 		}
+
+		if(state->interrupt == 0x0E) {
+			uint32_t val;
+			asm volatile ("mov %%cr2, %0" : "=r" (val));
+			printf("offending linear address: %#x\n", val);
+		}
+
+		trace(20);
+		panic("unhandled interrupt");
 	} else {
 		(*handlers[state->interrupt])(state);
 	}

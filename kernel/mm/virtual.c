@@ -1,12 +1,9 @@
+#include <_/vineyard.h>
 #include <gfx/gfx.h>
-#include <int/idt.h>
-#include <mm/gdt.h>
-#include <mm/map.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
 
 #include <assert.h>
-#include <stdint.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -16,51 +13,60 @@
 #define PAGE_WRITE_THROUGH	(1 << 3)
 #define PAGE_NO_CACHE		(1 << 4)
 
-uint32_t page_directory[1024] __attribute__((aligned(4096)));
+uint32_t *page_directory = (uint32_t *) 0xFFFFF000;
+uint32_t *page_tables = (uint32_t *) 0xFFC00000;
 
-NO_UBSAN static void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
+static void mm_virtual_invlpg(uintptr_t addr) {
+	asm volatile("invlpg (%0)" :: "r" (addr) : "memory");
+}
+
+static void mm_virtual_page_touch(uintptr_t page) {
+	if(!(page_directory[page >> 22] & PAGE_PRESENT)) {
+		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | PAGE_PRESENT | PAGE_WRITE;
+		mm_virtual_invlpg((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000);
+		memset((void *) ((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000), 0, 0x1000);
+	}
+}
+
+void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
+	assert(!(virt & 0x3FF));
+
+	mm_virtual_page_touch(virt);
+	page_tables[virt >> 12] = phys | flags;
+	mm_virtual_invlpg(virt);
+}
+
+void mm_virtual_map(uintptr_t virt, size_t length, uintptr_t flags) {
+	size_t n = ALIGN_UP(length, 0x1000) >> 12;
+
+	for(size_t i = 0; i < n; i++) {
+		mm_virtual_map_page(virt + (n << 12), (uintptr_t) (uintptr_t *) mm_physical_alloc(), flags);
+	}
+}
+
+static void mm_virtual_unmap_page(uintptr_t virt) {
 	size_t index_dir = virt >> 22;
 	size_t index_tab = (virt >> 12) & 0x03FF;
 
-	if(!page_directory[index_dir]) {
-		void *table = mm_physical_alloc();
-		memset(table, 0x0, 0x400);
-		page_directory[index_dir] = ((uintptr_t) table) | PAGE_PRESENT | PAGE_WRITE | flags;
-	}
+	assert(page_directory[index_dir]);
 
 	uint32_t *page_table = (uint32_t *) (page_directory[index_dir] & 0xFFFFF000);
 
-	page_table[index_tab] = (phys & 0xFFFFF000) | PAGE_PRESENT | PAGE_WRITE | flags;
+	page_table[index_tab] = 0x00;
+
+	mm_virtual_invlpg(virt);
 }
 
-extern uintptr_t _kernel_start;
-extern uintptr_t _kernel_end;
+void mm_virtual_unmap(uintptr_t virt, size_t length) {
+	size_t n = ALIGN_UP(length, 0x1000);
 
-void mm_virtual_init(multiboot2_t *multiboot) {
-	(void) multiboot;
-	memset(page_directory, 0x00, sizeof(page_directory));
-
-	uintptr_t kernel_start = (uintptr_t) &_kernel_start;
-	uintptr_t kernel_end = ALIGN_UP((uintptr_t) &_kernel_end, 0x1000);
-
-	uintptr_t framebuffer_start = (uintptr_t) &gfx_framebuffer & 0xFFFFF000;
-	uintptr_t framebuffer_end = framebuffer_start - 1 + gfx_framebuffer_size;
-	framebuffer_end = ALIGN_UP(framebuffer_end, 0x1000);
-
-	size_t framebuffer_pages = ALIGN_UP(gfx_framebuffer_size, 0x1000) >> 12;
-	printf("framebuffer_size: %#x, framebuffer_pages: %#x\n", gfx_framebuffer_size, framebuffer_pages);
-
-	for(uintptr_t i = 0; i < framebuffer_pages; i++) {
-		mm_virtual_map_page((uintptr_t) gfx_framebuffer + (i << 12), (uintptr_t) gfx_framebuffer + (i << 12), 0);
+	for(size_t i = 0; i < n; i++) {
+		mm_virtual_unmap_page(virt + (n << 12));
 	}
+}
 
-	for(uintptr_t i = kernel_start; i < kernel_end; i += 0x1000) {
-		mm_virtual_map_page(i, i, 0);
+void mm_virtual_init(void) {
+	for(size_t i = 0; i < gfx_framebuffer_size; i += 0x1000) {
+		mm_virtual_map_page((uintptr_t) gfx_framebuffer + i, (uintptr_t) gfx_framebuffer + i, PAGE_PRESENT | PAGE_WRITE);
 	}
-
-	printf("kernel: %#08x - %#08x\n", kernel_start, kernel_end);
-	printf("framebuffer: %#08x - %#08x\n", framebuffer_start, framebuffer_end);
-
-	asm volatile ("mov %0, %%cr3" : : "r" (page_directory) : "memory");
-	asm volatile ("mov %cr0, %eax; or $0x80000000, %eax; mov %eax, %cr0");
 }

@@ -1,4 +1,6 @@
 #include <util/bitmap.h>
+#include <util/trace.h>
+#include <stdio.h>
 
 #define BITS_PER_DWORD 32
 #define LOG_BITS_PER_DWORD 5
@@ -25,15 +27,22 @@ void bitmap_unset(bitmap_t *b, size_t i) {
 }
 
 ssize_t bitmap_first_unset(bitmap_t *b) {
-	size_t res = 0;
+	ssize_t res = 0;
 	bitmap_t *bitmap = b;
 
-	while(res == 0) {
+	if(!b) {
+		trace(20);
+		return -1;
+	}
+
+	while(res < 0x20000) {
 		if(*bitmap == ~0U) {
+			bitmap++;
+			res++;
 			continue;
 		}
 
-		return __builtin_ctz(~*bitmap);
+		return __builtin_ctz(~(*bitmap)) + res;
 	}
 
 	return -1;
