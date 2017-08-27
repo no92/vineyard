@@ -181,6 +181,11 @@ width:
 				}
 				case 's': {
 					const char *str = va_arg(arg, const char *);
+
+					if(!str) {
+						str = "(null)";
+					}
+
 					size_t len = strlen(str);
 
 					while(len --> 0) {
