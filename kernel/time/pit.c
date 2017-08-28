@@ -2,8 +2,6 @@
 #include <int/handler.h>
 #include <time/pit.h>
 
-#include <stdio.h>
-
 static void pit_tick(frame_t *state) {
 	(void) state;
 }

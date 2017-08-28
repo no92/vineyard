@@ -1,6 +1,5 @@
 #include <init/panic.h>
 
-#include <stdarg.h>
 #include <stdio.h>
 
 noreturn void panic(const char * restrict format, ...) {

@@ -1,10 +1,6 @@
 #include <_/vineyard.h>
 #include <driver/uart.h>
 #include <gfx/gfx.h>
-#include <init/multiboot2.h>
-
-#include <stddef.h>
-#include <stdint.h>
 
 static size_t offset_1;
 static size_t offset_2;

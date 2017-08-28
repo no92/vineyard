@@ -1,11 +1,7 @@
-#include <driver/uart.h>
-#include <init/multiboot2.h>
 #include <init/panic.h>
 #include <mm/early.h>
 #include <mm/map.h>
-#include <util/list.h>
 
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 

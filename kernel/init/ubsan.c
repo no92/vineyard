@@ -1,10 +1,7 @@
 #include <init/panic.h>
 #include <init/ubsan.h>
 
-#include <stddef.h>
-#include <stdint.h>
 #include <stdio.h>
-#include <stdnoreturn.h>
 
 /* TODO: move this to libk? */
 

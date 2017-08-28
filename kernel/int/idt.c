@@ -1,8 +1,6 @@
-#include <init/panic.h>
 #include <int/idt.h>
 
 #include <_/vineyard.h>
-#include <stdio.h>
 #include <string.h>
 
 #define IDT_PRESENT		0x80

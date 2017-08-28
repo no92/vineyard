@@ -1,8 +1,6 @@
 #include <init/panic.h>
 
 #include <stddef.h>
-#include <stdint.h>
-#include <stdnoreturn.h>
 
 /* TODO: move this to libk? */
 

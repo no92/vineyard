@@ -1,11 +1,5 @@
-#include <_/vineyard.h>
 #include <mm/early.h>
-#include <mm/virtual.h>
 #include <init/panic.h>
-
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
 
 #define POOL_SIZE	0x100000
 

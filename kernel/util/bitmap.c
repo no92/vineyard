@@ -1,5 +1,4 @@
 #include <util/bitmap.h>
-#include <util/trace.h>
 #include <stdio.h>
 
 #define BITS_PER_DWORD 32
@@ -31,7 +30,6 @@ ssize_t bitmap_first_unset(bitmap_t *b) {
 	bitmap_t *bitmap = b;
 
 	if(!b) {
-		trace(20);
 		return -1;
 	}
 
