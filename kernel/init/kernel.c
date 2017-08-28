@@ -3,6 +3,7 @@
 #include <gfx/gfx.h>
 #include <int/idt.h>
 #include <int/pic.h>
+#include <mm/alloc.h>
 #include <mm/gdt.h>
 #include <mm/map.h>
 #include <mm/physical.h>
@@ -30,6 +31,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	mm_map_init(multiboot);
 	mm_physical_init(multiboot);
 	mm_virtual_init();
+	mm_alloc_init();
 
 	printf("vineyard\n");
 

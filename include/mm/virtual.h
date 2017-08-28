@@ -12,7 +12,11 @@
 
 void mm_virtual_init(void);
 
-void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags);
+uintptr_t mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags);
+uintptr_t mm_virtual_unmap_page(uintptr_t virt);
 
 void mm_virtual_map(uintptr_t virt, size_t length, uintptr_t flags);
 void mm_virtual_unmap(uintptr_t virt, size_t length);
+
+uintptr_t mm_virtual_get_physical(uintptr_t virt);
+uint16_t mm_virtual_get_flags(uintptr_t virt);

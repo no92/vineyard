@@ -20,6 +20,7 @@ static void mm_virtual_invlpg(uintptr_t addr) {
 	asm volatile("invlpg (%0)" :: "r" (addr) : "memory");
 }
 
+A("bitwise operator in conditional")
 static void mm_virtual_page_touch(uintptr_t page) {
 	if(!(page_directory[page >> 22] & PAGE_PRESENT)) {
 		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | PAGE_PRESENT | PAGE_WRITE;
@@ -28,12 +29,15 @@ static void mm_virtual_page_touch(uintptr_t page) {
 	}
 }
 
-void mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
+A("bitwise operator in conditional")
+uintptr_t mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
 	assert(!(virt & 0x3FF));
 
 	mm_virtual_page_touch(virt);
 	page_tables[virt >> 12] = phys | flags;
 	mm_virtual_invlpg(virt);
+
+	return virt;
 }
 
 void mm_virtual_map(uintptr_t virt, size_t length, uintptr_t flags) {
@@ -44,25 +48,30 @@ void mm_virtual_map(uintptr_t virt, size_t length, uintptr_t flags) {
 	}
 }
 
-static void mm_virtual_unmap_page(uintptr_t virt) {
-	size_t index_dir = virt >> 22;
-	size_t index_tab = (virt >> 12) & 0x03FF;
+uintptr_t mm_virtual_unmap_page(uintptr_t virt) {
+	uintptr_t phys = mm_virtual_get_physical(virt);
 
-	assert(page_directory[index_dir]);
-
-	uint32_t *page_table = (uint32_t *) (page_directory[index_dir] & 0xFFFFF000);
-
-	page_table[index_tab] = 0x00;
+	page_tables[virt >> 12] = 0x00;
 
 	mm_virtual_invlpg(virt);
+
+	return phys;
 }
 
 void mm_virtual_unmap(uintptr_t virt, size_t length) {
 	size_t n = ALIGN_UP(length, 0x1000);
 
 	for(size_t i = 0; i < n; i++) {
-		mm_virtual_unmap_page(virt + (n << 12));
+		mm_physical_free(mm_virtual_unmap_page(virt + (n << 12)));
 	}
+}
+
+uintptr_t mm_virtual_get_physical(uintptr_t virt) {
+	return page_tables[virt >> 12] & 0xFFFFF000;
+}
+
+uint16_t mm_virtual_get_flags(uintptr_t virt) {
+	return page_tables[virt >> 12] & 0xFFF;
 }
 
 void mm_virtual_init(void) {

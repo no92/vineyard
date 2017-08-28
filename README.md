@@ -32,3 +32,16 @@ vineyard is licensed under the terms of the MIT (Expat) License. For details, se
 > Glyphs in Arabic, Arabic Presentation Forms-A, Arabic Presentation Forms-B and U+262B Farsi symbol were kindly donated by Behdad Esfahbod.
 >
 > Thanks to Birger Langkjer for idea, to Mark Leisher for his wonderful XmBDFEd, and to many others for their support.
+
+### dlmalloc ###
+[`dlmalloc`](http://g.oswego.edu/dl/html/malloc.html) is a widely-used memory allocator written by Doug Lea. It is located at `kernel/mm/dlmalloc.c` and `include/mm/dlmalloc.h`. It is licensed under the Creative Commons CC0 1.0 Universal:
+
+> This is a version (aka dlmalloc) of malloc/free/realloc written by
+> Doug Lea and released to the public domain, as explained at
+> http://creativecommons.org/publicdomain/zero/1.0/ Send questions,
+> comments, complaints, performance data, etc to dl@cs.oswego.edu
+>
+> * Version 2.8.6 Wed Aug 29 06:57:58 2012  Doug Lea
+>  Note: There may be an updated version of this malloc obtainable at
+>		 ftp://gee.cs.oswego.edu/pub/misc/malloc.c
+>	   Check before installing!

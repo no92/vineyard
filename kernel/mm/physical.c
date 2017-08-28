@@ -73,3 +73,7 @@ void *mm_physical_alloc(void) {
 
 	return (void *) (page << 12);
 }
+
+void mm_physical_free(uintptr_t page) {
+	mm_physical_mark_free(page);
+}
