@@ -1,5 +1,7 @@
 # define some output file names
 KERNEL			:= bin/vineyard
+INITRD			:= bin/initrd
+
 PXE_BUILD		:= build/pxe.cfg
 VMWARE_CONFIG	:= conf/vineyard.vmx
 
@@ -7,6 +9,7 @@ HDD				:= hdd
 PXE_CONFIG		:= $(HDD)/boot/i386-pc/grub.cfg
 GRUB_CONFIG		:= $(HDD)/boot/grub/grub.cfg
 KERNEL_ISO		:= $(HDD)/boot/vineyard
+INITRD_ISO		:= $(HDD)/boot/initrd
 
 # if not passed to make, set these default resolutions in the multiboot2 header
 MB2_WIDTH		?= 1280
@@ -49,11 +52,15 @@ $(KERNEL): $(KERNEL_OBJ)
 	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
-$(ISO): $(KERNEL) $(PXE_BUILD)
+$(INITRD):
+	@cd initrd; tar -cf ../bin/initrd *
+
+$(ISO): $(KERNEL) $(PXE_BUILD) $(INITRD)
 	@$(INFO) "DISK" $@
 	@$(MKDIR) $(dir $(GRUB_CONFIG))
 	@$(CP) build/grub.cfg $(GRUB_CONFIG)
 	@$(CP) $(KERNEL) $(KERNEL_ISO)
+	@$(CP) $(INITRD) $(INITRD_ISO)
 	@$(GRUB) -o $@ $(HDD) 2> .error.log; if grep "FAIL" .error.log -q; then $(ERROR) "GRUB" "building $@ failed; output of $(GRUB):"; cat .error.log; rm .error.log; $(ERROR) "GRUB" "end of output"; exit 1; else rm .error.log; fi;
 	@$(GRUB_DIR)/bin/grub-file --is-x86-multiboot2 $< || $(ERROR) "DISK" "$@ is not a valid multiboot2 kernel"
 	@$(GRUB_DIR)/bin/grub-mknetdir --net-directory=$(HDD)/boot --subdir grub > /dev/null

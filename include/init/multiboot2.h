@@ -4,6 +4,7 @@
 
 #define MB2_MAGIC				0x36D76289
 
+#define MB2_TYPE_MODULE			3
 #define MB2_TYPE_MEMINFO		4
 #define MB2_TYPE_MMAP			6
 #define MB2_TYPE_FRAMEBUFFER	8
@@ -19,6 +20,12 @@ typedef struct {
 	uint32_t size;
 
 	union {
+		struct {
+			uint32_t start;
+			uint32_t end;
+			char cmdline[1];
+		} __attribute__((packed)) module;
+
 		struct {
 			uint32_t lower;
 			uint32_t upper;

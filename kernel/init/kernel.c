@@ -1,5 +1,6 @@
 #include <driver/keyboard.h>
 #include <driver/uart.h>
+#include <fs/initrd.h>
 #include <gfx/gfx.h>
 #include <int/idt.h>
 #include <int/pic.h>
@@ -39,6 +40,8 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	pit_init();
 	keyboard_init();
+
+	initrd_init(multiboot);
 
 	asm volatile ("sti");
 

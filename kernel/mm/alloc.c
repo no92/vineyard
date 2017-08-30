@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <errno.h>
-#include <stdbool.h>
 #include <string.h>
 #include <sys/mman.h>
 
@@ -147,13 +146,15 @@ static void mm_alloc_free(void *ptr) {
 	}
 }
 
-static void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
+void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
 	size_t size = ALIGN_UP(s, 0x1000);
 	node_t *node = mm_alloc_find(size);
 
 	if(!node) {
 		return NULL;
 	}
+
+	node->state = RESERVED;
 
 	if(allocate) {
 		node->state = ALLOCATED;
