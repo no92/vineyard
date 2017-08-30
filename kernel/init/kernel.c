@@ -8,6 +8,7 @@
 #include <mm/map.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
+#include <proc/tss.h>
 #include <time/pit.h>
 #include <util/trace.h>
 
@@ -23,6 +24,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	assert(magic == MB2_MAGIC);
 
+	tss_init();
 	gdt_init();
 	idt_init();
 	pic_init();

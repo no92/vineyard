@@ -1,2 +1,4 @@
 *.h linguist-language=C
 kernel/gfx/font.c linguist-generated=true
+kernel/mm/dlmalloc.c linguist-generated=true
+include/mm/dlmalloc.h linguist-generated=true

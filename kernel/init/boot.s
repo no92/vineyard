@@ -62,6 +62,7 @@ _start:
 	add ebx, 0xC0000000
 	push ebx ; holds the physical address of the multiboot struct
 	push eax ; holds the magic number
+	cli
 
 	call _init
 
@@ -74,6 +75,7 @@ _start:
 
 [section .bss]
 [align 16]
+[global stack_top]
 stack_bottom:
 	resb 16384
 stack_top:
