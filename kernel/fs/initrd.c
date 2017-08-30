@@ -2,10 +2,13 @@
 #include <fs/initrd.h>
 #include <mm/alloc.h>
 #include <mm/virtual.h>
+#include <util/list.h>
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-/* TODO: maintain a linked list of all files in ramdisk */
+static list_t *files;
 static uintptr_t initrd_start;
 static size_t initrd_size;
 
@@ -22,6 +25,7 @@ __attribute__((unused)) static uint32_t initrd_file_size(const char *in) {
 
 void initrd_init(multiboot2_t *multiboot) {
 	multiboot2_tag_t *tag = multiboot2_get_tag(multiboot, MB2_TYPE_MODULE);
+	files = malloc(sizeof(*files));
 
 	initrd_start = tag->module.start;
 	initrd_size = tag->module.end - initrd_start;
@@ -33,4 +37,11 @@ void initrd_init(multiboot2_t *multiboot) {
 	}
 
 	initrd_start = (uintptr_t) area;
+
+	for(initrd_file_t *file = (initrd_file_t *) area; strcmp(file->filename, ""); file = (initrd_file_t *) ALIGN_UP((uintptr_t) file + 0x200 + initrd_file_size(file->size), 0x200)) {
+		list_node_t *node = (list_node_t *) malloc(sizeof(list_node_t));
+		node->data = file;
+
+		list_append(files, node);
+	}
 }
