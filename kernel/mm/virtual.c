@@ -1,7 +1,9 @@
 #include <_/vineyard.h>
 #include <gfx/gfx.h>
+#include <int/handler.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
+#include <util/trace.h>
 
 #include <assert.h>
 #include <string.h>
@@ -74,7 +76,20 @@ uint16_t mm_virtual_get_flags(uintptr_t virt) {
 	return page_tables[virt >> 12] & 0xFFF;
 }
 
+static void mm_virtual_page_fault(frame_t *frame) {
+	uint32_t cr2;
+	asm volatile ("mov %%cr2, %0" : "=r" (cr2));
+
+	const char *present = (frame->error & 0x01) ? "present" : "non-present";
+	const char *access = (frame->error & 0x02) ? "write to" : "read from";
+	const char *mode = (frame->error & 0x04) ? "user" : "kernel";
+
+	printf("Page Fault at %#08x <%s>: %s address %#08x by %s to %s page\n", frame->eip, trace_lookup_addr(frame->eip), access, cr2, mode, present);
+}
+
 void mm_virtual_init(void) {
+	handler_set(0x0E, mm_virtual_page_fault);
+
 	for(size_t i = 0; i < gfx_framebuffer_size; i += 0x1000) {
 		mm_virtual_map_page((uintptr_t) gfx_framebuffer + i, (uintptr_t) gfx_framebuffer + i, PAGE_PRESENT | PAGE_WRITE);
 	}

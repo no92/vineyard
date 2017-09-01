@@ -1,8 +1,11 @@
 #include <init/panic.h>
+#include <util/trace.h>
 
 #include <stdio.h>
 
 noreturn void panic(const char * restrict format, ...) {
+	trace(20);
+
 	va_list args;
 	va_start(args, format);
 
