@@ -13,3 +13,12 @@ char *strdup(const char *s1) {
 
 	return ret;
 }
+
+#ifdef UNIT
+#include <_libk_test.h>
+
+int main(void) {
+	return EXIT_SUCCESS;
+}
+
+#endif
