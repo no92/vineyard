@@ -10,6 +10,8 @@
 #include <mm/physical.h>
 #include <mm/virtual.h>
 #include <proc/tss.h>
+#include <proc/proc.h>
+#include <proc/syscall.h>
 #include <time/pit.h>
 #include <util/trace.h>
 
@@ -42,6 +44,8 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	keyboard_init();
 
 	initrd_init(multiboot);
+	syscall_init();
+	proc_init();
 
 	asm volatile ("sti");
 

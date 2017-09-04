@@ -23,9 +23,9 @@ static void mm_virtual_invlpg(uintptr_t addr) {
 }
 
 A("bitwise operator in conditional")
-static void mm_virtual_page_touch(uintptr_t page) {
+static void mm_virtual_page_touch(uintptr_t page, uintptr_t flags) {
 	if(!(page_directory[page >> 22] & PAGE_PRESENT)) {
-		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | PAGE_PRESENT | PAGE_WRITE;
+		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | flags;
 		mm_virtual_invlpg((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000);
 		memset((void *) ((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000), 0, 0x1000);
 	}
@@ -35,7 +35,7 @@ A("bitwise operator in conditional")
 uintptr_t mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
 	assert(!(virt & 0x3FF));
 
-	mm_virtual_page_touch(virt);
+	mm_virtual_page_touch(virt, flags);
 	page_tables[virt >> 12] = phys | flags;
 	mm_virtual_invlpg(virt);
 
@@ -83,8 +83,10 @@ static void mm_virtual_page_fault(frame_t *frame) {
 	const char *present = (frame->error & 0x01) ? "present" : "non-present";
 	const char *access = (frame->error & 0x02) ? "write to" : "read from";
 	const char *mode = (frame->error & 0x04) ? "user" : "kernel";
+	const char *reserved = (frame->error & 0x08) ? ", writing to a reserved field" : "";
+	const char *instruction = (frame->error & 0x10) ? " caused by instruction fetch" : "";
 
-	printf("Page Fault at %#08x <%s>: %s address %#08x by %s to %s page\n", frame->eip, trace_lookup_addr(frame->eip), access, cr2, mode, present);
+	panic("Page Fault at %#08x <%s>: %s address %#08x by %s to %s page%s%s", frame->eip, trace_lookup_addr(frame->eip), access, cr2, mode, present, instruction, reserved);
 }
 
 void mm_virtual_init(void) {

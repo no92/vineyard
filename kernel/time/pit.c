@@ -1,9 +1,10 @@
 #include <cpu/ports.h>
 #include <int/handler.h>
 #include <time/pit.h>
+#include <proc/proc.h>
 
 static void pit_tick(frame_t *state) {
-	(void) state;
+	proc_switch(state);
 }
 
 void pit_init(void) {

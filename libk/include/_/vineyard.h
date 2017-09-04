@@ -9,3 +9,6 @@
 #endif
 
 #define ALIGN_UP(addr, alignment)	((addr + (alignment - 1U)) & ~(alignment - 1U))
+
+#define container_of(ptr, type, member) \
+                      ((type *) ((char *)(ptr) - offsetof(type, member)))

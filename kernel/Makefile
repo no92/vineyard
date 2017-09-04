@@ -52,8 +52,9 @@ $(KERNEL): $(KERNEL_OBJ)
 	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
-$(INITRD): initrd/*
+$(INITRD): initrd/* init/init
 	@$(INFO) "INITRD" $@
+	@cp init/init initrd/init
 	@cd initrd; tar -cf ../bin/initrd *
 
 $(ISO): $(KERNEL) $(PXE_BUILD) $(INITRD)
@@ -86,6 +87,10 @@ clean-disk:
 	@$(INFO) "CLEAN" "cleaning hard drive image"
 	@$(RM) -r $(HDD)/boot $(PXE_BUILD)
 
+clean-initrd:
+	@$(INFO) "CLEAN" "cleaning initrd"
+	@rm -f $(INITRD)
+
 test: test-qemu
 
 test-qemu: all
@@ -104,6 +109,7 @@ test-vmware: all
 	@if ! command -v vmrun &> /dev/null; then $(ERROR) "VMWARE" "VMWare Workstation is not installed"; fi
 	@$(INFO) "VMWARE" "running emulator"
 	@$(VMWARE) $(VMWARE_CONFIG)
+	@rm -f conf/vineyard.vmxf conf/vineyard.vmsd
 
 test-bochs: all
 	@$(INFO) "BOCHS" "running emulator"
@@ -121,4 +127,4 @@ test-kernel:
 
 -include $(KERNEL_DEP)
 
-.PHONY: clean-kernel clean-font clean-disk test test-qemu test-debug test-virtualbox test-vmware test-real test-kernel
+.PHONY: clean-kernel clean-font clean-disk clean-initrd test test-qemu test-debug test-virtualbox test-vmware test-real test-kernel

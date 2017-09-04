@@ -4,7 +4,6 @@
 #include <stdint.h>
 
 typedef struct {
-	uint32_t ds;
 	uint32_t edi;
 	uint32_t esi;
 	uint32_t ebp;
@@ -13,6 +12,10 @@ typedef struct {
 	uint32_t edx;
 	uint32_t ecx;
 	uint32_t eax;
+	uint32_t gs;
+	uint32_t fs;
+	uint32_t es;
+	uint32_t ds;
 	uint32_t interrupt;
 	uint32_t error;
 	uint32_t eip;

@@ -26,8 +26,8 @@ typedef struct node {
 static node_t *mm_alloc_areas;
 
 void mm_alloc_init(void) {
-	uintptr_t start = 0x4000000;
-	uintptr_t end = 0x7FFFFFF;
+	uintptr_t start = 0xD0000000;
+	uintptr_t end = 0xEFFFFFFF;
 
 	uintptr_t root = (uintptr_t) (uintptr_t *) mm_physical_alloc();
 
@@ -96,7 +96,7 @@ static bool mm_alloc_free_area(uintptr_t virt, size_t length) {
 }
 
 A("bitwise operator in conditional")
-static void mm_alloc_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
+static void mm_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
 	assert(!(length & 0x3FF));
 
 	for(size_t i = 0; i < length; i += 0x1000) {
@@ -146,6 +146,10 @@ static void mm_alloc_free(void *ptr) {
 	}
 }
 
+void mm_alloc_reserve(uintptr_t addr, size_t s, uint16_t flags) {
+	mm_alloc_area(addr, s, flags);
+}
+
 void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
 	size_t size = ALIGN_UP(s, 0x1000);
 	node_t *node = mm_alloc_find(size);
@@ -160,7 +164,7 @@ void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
 		node->state = ALLOCATED;
 		node->flags = flags;
 
-		mm_alloc_alloc_area(node->start, size, flags);
+		mm_alloc_area(node->start, size, flags);
 	}
 
 	return (void *) ((uintptr_t) node + 0x1000);
@@ -175,8 +179,7 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 	(void) offset;
 
 	void *ptr = mm_alloc(length, PAGE_PRESENT | PAGE_WRITE, true);
-
-	memset(ptr, 0x00, 0x1000);
+	memset(ptr, 0x00, length);
 
 	return ptr;
 }

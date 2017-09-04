@@ -36,7 +36,7 @@ CFLAGS		?= -ggdb3 -pipe -O3
 CFLAGS		+= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
 CFLAGS		+= -Ilibk/include -Iinclude -MD -nostdinc -std=gnu11
 CFLAGS		+= -Wall -Wbad-function-cast -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline -Wmissing-braces
-CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpedantic -Wpointer-arith
+CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code
 CFLAGS		+= -Wunused -Wwrite-strings
 CFLAGS_GCC	:= -Wformat-signedness -Wlogical-op -Wrestrict -Wsuggest-attribute=format -Wsuggest-attribute=noreturn -Wsuggest-attribute=pure
@@ -46,13 +46,14 @@ EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga st
 
 include libk/Makefile
 include kernel/Makefile
+include init/Makefile
 
 todo:
 	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
 
 clean: clean-kernel
 
-distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test
+distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test clean-init clean-initrd
 
 .PHONY: all clean test test-debug test-virtualbox
 .SECONDARY:

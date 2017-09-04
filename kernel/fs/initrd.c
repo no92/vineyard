@@ -12,7 +12,7 @@ static list_t *files;
 static uintptr_t initrd_start;
 static size_t initrd_size;
 
-__attribute__((unused)) static uint32_t initrd_file_size(const char *in) {
+uint32_t initrd_file_size(const char *in) {
 	uint32_t size = 0;
 	uint32_t count = 1;
 
@@ -21,6 +21,17 @@ __attribute__((unused)) static uint32_t initrd_file_size(const char *in) {
 	}
 
 	return size;
+}
+
+initrd_file_t *initrd_open(const char *file) {
+	for(list_node_t *f = files->head; f; f = f->next) {
+		initrd_file_t *fd = f->data;
+		if(!strcmp(fd->filename, file)) {
+			return fd;
+		}
+	}
+
+	return NULL;
 }
 
 void initrd_init(multiboot2_t *multiboot) {

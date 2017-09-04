@@ -11,6 +11,8 @@ hdd/*
 
 # generated files
 build/pxe.cfg
+initrd/init
+init/init
 kernel/gfx/font.c
 
 # configuration

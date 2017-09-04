@@ -52,9 +52,11 @@ typedef __uint64_t __uintmax_t;
 #ifdef __i386__
 	typedef __int32_t __ptrdiff_t;
 	typedef __uint32_t __size_t;
+	typedef __int32_t __ssize_t;
 #elif __x86_64__
 	typedef __int64_t __ptrdiff_t;
 	typedef __uint64_t __size_t;
+	typedef __int64_t __ssize_t;
 #else
 	#error Building for an unsupported arch. How did you do that?
 #endif

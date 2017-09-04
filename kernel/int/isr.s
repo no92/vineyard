@@ -21,13 +21,22 @@
 		jmp handler_setup
 %endmacro
 
+[global handle_syscall]
+handle_syscall:
+	push 0
+	push 0x80
+	jmp handler_setup
+
 [extern handler]
 [global handler_setup]
 handler_setup:
-	pusha
+	cli
+	push ds
+	push es
+	push fs
+	push gs
 
-	mov ax, ds
-	push eax
+	pusha
 
 	mov ax, 0x10
 	mov ds, ax
@@ -41,14 +50,13 @@ handler_setup:
 	call handler
 	add esp, 4
 
-	pop ebx
-	mov ds, bx
-	mov es, bx
-	mov fs, bx
-	mov gs, bx
-	mov ss, bx
-
 	popa
+
+	pop gs
+	pop fs
+	pop es
+	pop ds
+
 	add esp, 8
 	iret
 

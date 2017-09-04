@@ -1,13 +1,16 @@
 #include <int/idt.h>
 #include <int/handler.h>
+#include <init/panic.h>
 #include <util/trace.h>
 
 #include <_/vineyard.h>
 #include <stdio.h>
+#include <stdnoreturn.h>
 #include <string.h>
 
 #define IDT_PRESENT		0x80
 #define IDT_INTERRUPT	0x0E
+#define IDT_USER		0x60
 
 idt_entry_t idt[IDT_ENTRIES];
 idtr_t idtr;
@@ -20,18 +23,16 @@ static void idt_set(size_t interrupt, void (*function)(void), uint16_t selector,
 	idt[interrupt].flags = flags;
 }
 
-static void idt_handler_gpf(frame_t *frame) {
+static noreturn void idt_handler_gpf(frame_t *frame) {
 	char buf[0x20];
 
 	if(frame->error != 0) {
-		snprintf(buf, 0x20, "with offending segment %#02x\n", (frame->error >> 3));
+		const char *table = (frame->error & 0x01) ? "IDT entry" : "GDT entry";
+
+		snprintf(buf, 0x20, " with offending %s %#02x", table, (frame->error >> 3));
 	}
 
-	printf("General Protection Fault at address %#08x <%s>%s", frame->eip, trace_lookup_addr(frame->eip), buf);
-
-	if(frame->error != 0) {
-		printf("offending segment selector: %#08x\n", (frame->error >> 3) & 0x1FFF);
-	}
+	panic("General Protection Fault at address %#08x <%s>%s", frame->eip, trace_lookup_addr(frame->eip), buf);
 }
 
 A("high ncss method")
@@ -90,7 +91,7 @@ void idt_init(void) {
 	idt_set(46, &irq14, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 	idt_set(47, &irq15, 0x08, IDT_PRESENT | IDT_INTERRUPT);
 
-	idt_set(0x80, &handle_syscall, 0x08, IDT_PRESENT | IDT_INTERRUPT);
+	idt_set(0x80, &handle_syscall, 0x08, IDT_PRESENT | IDT_INTERRUPT | IDT_USER);
 
 	/* set up the IDT pointer */
 	idtr.limit = sizeof(idt) - 1;

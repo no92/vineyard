@@ -14,3 +14,5 @@ typedef struct {
 } initrd_file_t;
 
 void initrd_init(multiboot2_t *multiboot);
+uint32_t initrd_file_size(const char *in);
+initrd_file_t *initrd_open(const char *file);
