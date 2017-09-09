@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/mman.h>
 
 #include <_/vineyard.h>
@@ -8,22 +9,7 @@
 #include <mm/physical.h>
 #include <mm/virtual.h>
 
-enum state {
-	FREE,
-	RESERVED,
-	ALLOCATED,
-};
-
-typedef struct node {
-	struct node *next;
-	struct node *prev;
-	uintptr_t start;
-	uintptr_t end;
-	uint16_t flags;
-	enum state state;
-} node_t;
-
-static node_t *mm_alloc_areas;
+static alloc_node_t *mm_alloc_areas;
 
 void mm_alloc_init(void) {
 	uintptr_t start = 0xD0000000;
@@ -31,7 +17,7 @@ void mm_alloc_init(void) {
 
 	uintptr_t root = (uintptr_t) (uintptr_t *) mm_physical_alloc();
 
-	mm_alloc_areas = (node_t *) start;
+	mm_alloc_areas = (alloc_node_t *) start;
 
 	mm_virtual_map_page(start, root, PAGE_PRESENT | PAGE_WRITE);
 
@@ -42,8 +28,8 @@ void mm_alloc_init(void) {
 	mm_alloc_areas->end = end;
 }
 
-static node_t *mm_alloc_find(size_t size) {
-	for(node_t *node = mm_alloc_areas; node; node = node->next) {
+static alloc_node_t *mm_alloc_find(alloc_node_t *root, size_t size) {
+	for(alloc_node_t *node = root; node; node = node->next) {
     	if(node->state != FREE) {
 			continue;
 		}
@@ -58,7 +44,7 @@ static node_t *mm_alloc_find(size_t size) {
 			uintptr_t phys = (uintptr_t) (uintptr_t *) mm_physical_alloc();
 
 			if(phys) {
-				node_t *next = (node_t *) ((uintptr_t) node + size + 0x1000);
+				alloc_node_t *next = (alloc_node_t *) ((uintptr_t) node + size + 0x1000);
 				mm_virtual_map_page((uintptr_t) next, phys, PAGE_PRESENT | PAGE_WRITE);
 
 				next->start = (uintptr_t) node + size + 0x2000;
@@ -108,7 +94,7 @@ static void mm_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
 
 A("bitwise operator in conditional")
 static void mm_alloc_free(void *ptr) {
-	node_t *node = (node_t *) ((uintptr_t) ptr - 0x1000);
+	alloc_node_t *node = (alloc_node_t *) ((uintptr_t) ptr - 0x1000);
 	size_t size = node->end - node->start + 1;
 
 	if(node->state == ALLOCATED) {
@@ -117,7 +103,7 @@ static void mm_alloc_free(void *ptr) {
 
 	node->state = FREE;
 
-	node_t *next = node->next;
+	alloc_node_t *next = node->next;
 
 	if(next && next->state == FREE) {
 		node->next = next->next;
@@ -131,7 +117,7 @@ static void mm_alloc_free(void *ptr) {
 		mm_physical_free(mm_virtual_unmap_page((uintptr_t) next));
 	}
 
-	node_t *prev = node->prev;
+	alloc_node_t *prev = node->prev;
 
 	if(prev && prev->state == FREE) {
 		prev->next = node->next;
@@ -150,11 +136,12 @@ void mm_alloc_reserve(uintptr_t addr, size_t s, uint16_t flags) {
 	mm_alloc_area(addr, s, flags);
 }
 
-void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
+void *mm_alloc_proc(alloc_node_t *root, size_t s, uint16_t flags, bool allocate) {
 	size_t size = ALIGN_UP(s, 0x1000);
-	node_t *node = mm_alloc_find(size);
+	alloc_node_t *node = mm_alloc_find(root, size);
 
 	if(!node) {
+		panic("[alloc]	out of kernel heap");
 		return NULL;
 	}
 
@@ -168,6 +155,10 @@ void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
 	}
 
 	return (void *) ((uintptr_t) node + 0x1000);
+}
+
+void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
+	return mm_alloc_proc(mm_alloc_areas, s, flags, allocate);
 }
 
 A("bitwise operator in conditional")

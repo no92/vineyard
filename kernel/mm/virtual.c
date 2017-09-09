@@ -25,7 +25,7 @@ static void mm_virtual_invlpg(uintptr_t addr) {
 A("bitwise operator in conditional")
 static void mm_virtual_page_touch(uintptr_t page, uintptr_t flags) {
 	if(!(page_directory[page >> 22] & PAGE_PRESENT)) {
-		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | flags;
+		page_directory[page >> 22] = (uintptr_t) (uintptr_t *) mm_physical_alloc() | flags | PAGE_USER;
 		mm_virtual_invlpg((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000);
 		memset((void *) ((uintptr_t) &page_tables[page >> 12] & 0xFFFFF000), 0, 0x1000);
 	}
@@ -69,6 +69,10 @@ void mm_virtual_unmap(uintptr_t virt, size_t length) {
 }
 
 uintptr_t mm_virtual_get_physical(uintptr_t virt) {
+	if(!page_directory[virt >> 22] & PAGE_PRESENT) {
+		return 0;
+	}
+
 	return page_tables[virt >> 12] & 0xFFFFF000;
 }
 

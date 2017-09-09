@@ -1,12 +1,21 @@
 #include <proc/proc.h>
 #include <proc/syscall.h>
 #include <int/handler.h>
+#include <fs/vfs.h>
 
 #include <stdio.h>
 #include <string.h>
 
+#define SYSCALLS 3
+
+static syscall_t syscall_list[SYSCALLS] = {
+	[SYSCALL_EXIT] proc_exit,
+	[SYSCALL_WRITE] sys_write,
+	[SYSCALL_GETPID] sys_getpid,
+};
+
 static void syscall_handler(frame_t *frame) {
-	syscall_t data;
+	syscall_args_t data;
 
 	data.arg1 = frame->ebx;
 	data.arg2 = frame->ecx;
@@ -14,11 +23,13 @@ static void syscall_handler(frame_t *frame) {
 	data.arg4 = frame->esi;
 	data.arg5 = frame->edi;
 
-	if(frame->eax == 1) {
-		printf("%s", (char *) frame->ebx);
-	} else if(frame->eax == 2) {
-		proc_exit(&data);
+	if(frame->eax >= SYSCALLS) {
+		return;
 	}
+
+	syscall_t func = syscall_list[frame->eax];
+
+	func(&data);
 }
 
 void syscall_init(void) {

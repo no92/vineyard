@@ -45,6 +45,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	initrd_init(multiboot);
 	syscall_init();
+
 	proc_init();
 
 	asm volatile ("sti");

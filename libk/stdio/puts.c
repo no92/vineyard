@@ -1,6 +1,8 @@
 #ifdef __libk
 	#include <driver/uart.h>
 	#include <gfx/gfx.h>
+#else
+	#include <_/syscall.h>
 #endif
 
 #include <stdio.h>
@@ -14,7 +16,8 @@ int puts(const char *str) {
 
 	gfx_putc((char *) "\n");
 #else
-	(void) str;
+	size_t len = strlen(str);
+	SYSCALL3(0x01, 1, str, len);
 #endif
 
 	return 1;

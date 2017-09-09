@@ -1,6 +1,7 @@
 #include <_/vineyard.h>
 #include <fs/initrd.h>
 #include <mm/alloc.h>
+#include <mm/physical.h>
 #include <mm/virtual.h>
 #include <proc/elf32.h>
 #include <proc/proc.h>
@@ -15,6 +16,7 @@
 static pid_t pid = 1;
 static list_t *queue;
 static proc_t *current;
+static uintptr_t kernel_pd;
 
 extern uintptr_t stack_top;
 
@@ -42,6 +44,7 @@ void proc_init(void) {
 	proc->name = "idle";
 	proc->state = PROC_RUNNING;
 	proc->cr3 = mm_virtual_get_physical(0xFFFFF000);
+	kernel_pd = proc->cr3;
 	current = proc;
 
 	proc_create("init", false);
@@ -54,12 +57,13 @@ void proc_create(const char *path, bool kernel) {
 	proc_t *proc = malloc(sizeof(proc_t));
 
 	uintptr_t *pd = mm_alloc(0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true);
-	uintptr_t *pd_kernel = (uintptr_t *) 0xFFFFF000;
+	uintptr_t pd_phys = mm_virtual_get_physical((uintptr_t) pd);
+	uintptr_t *pd_k = (uintptr_t *) 0xFFFFF000;
 
 	memset(pd, 0x00, 0x1000);
 
-	for(size_t i = 0x300; i < 0x400; i++) {
-		pd[i] = pd_kernel[i];
+	for(size_t i = 0x00; i < 0x400; i++) {
+		pd[i] = pd_k[i];
 	}
 
 	pd[0x3FF] = mm_virtual_get_physical((uintptr_t) pd) | PAGE_PRESENT | PAGE_WRITE | PAGE_USER;
@@ -68,7 +72,7 @@ void proc_create(const char *path, bool kernel) {
 		panic("process \"%s\" not found!", path);
 	}
 
-	mm_virtual_switch(mm_virtual_get_physical((uintptr_t) pd));
+	mm_virtual_switch(pd_phys);
 
 	elf32_header_t *header = (elf32_header_t *) malloc(initrd_file_size(file->size));
 	uintptr_t file_start = ALIGN_UP((uintptr_t) file + sizeof(*file), 0x200);
@@ -83,32 +87,47 @@ void proc_create(const char *path, bool kernel) {
 			continue;
 		}
 
-		mm_alloc_reserve(shdr->sh_addr & 0xFFFFF000, ALIGN_UP(shdr->sh_size, 0x1000), PAGE_PRESENT | PAGE_WRITE | PAGE_USER);
+		if(!(mm_virtual_get_physical(shdr->sh_addr) & 0xFFFFF000)) {
+			uintptr_t phys = (uintptr_t) (uintptr_t *) mm_physical_alloc();
+			mm_virtual_map_page(shdr->sh_addr & 0xFFFFF000, phys, PAGE_PRESENT | PAGE_WRITE | PAGE_USER);
+		}
+
 		memcpy((void *) (shdr->sh_addr), (void *) ((uintptr_t) header + shdr->sh_offset), shdr->sh_size);
 	}
 
-	proc->stack = ((uintptr_t) (uintptr_t *) mm_alloc(0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 1;
+	mm_virtual_map_page(0x80000000, (uintptr_t) (uintptr_t *) mm_physical_alloc(), PAGE_PRESENT | PAGE_WRITE);
+	proc->heap = (void *) 0x80000000;
+	alloc_node_t *alloc = (alloc_node_t *) 0x80000000;
+	alloc->next = 0;
+	alloc->prev = 0;
+	alloc->state = FREE;
+	alloc->start = (uintptr_t) alloc + 0x1000;
+	alloc->end = 0xBFFFFFFF;
+
+	proc->esp = ((uintptr_t) (uintptr_t *) mm_alloc_proc(proc->heap, 0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 4;
+	proc->ebp = proc->esp;
 	proc->eip = header->e_entry;
-	proc->esp = 0x1FFF;
 	proc->pid = pid++;
 	proc->name = path;
 	proc->kernel = kernel;
 	proc->cs = 0x1B;
 	proc->ds = 0x23;
 	proc->state = PROC_SUSPENDED;
-	proc->cr3 = mm_virtual_get_physical((uintptr_t) pd);
+	proc->cr3 = pd_phys;
 
 	list_node_t *node = malloc(sizeof(list_node_t));
 	node->data = proc;
 	list_append(queue, node);
 
-	mm_virtual_switch(mm_virtual_get_physical((uintptr_t) pd_kernel));
+	mm_virtual_switch(kernel_pd);
 }
 
-void proc_exit(syscall_t *data) {
+uintptr_t proc_exit(syscall_args_t *data) {
 	printf("[proc]	process %s (%u) exited with status %u\n", current->name, current->pid, data->arg1);
 
 	current->state = PROC_DEAD;
+
+	return 0;
 }
 
 void proc_switch(frame_t *frame) {
@@ -155,4 +174,10 @@ void proc_switch(frame_t *frame) {
 	frame->eflags |= 0x200;
 
 	mm_virtual_switch(current->cr3);
+}
+
+uintptr_t sys_getpid(syscall_args_t *data) {
+	(void) data;
+
+	return current->pid;
 }

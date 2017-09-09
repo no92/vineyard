@@ -202,7 +202,7 @@ width:
 				case 'p': {
 					flags |= FLAG_HASH;
 					length = 0;
-					FALLTHROUGH
+					__attribute__ ((fallthrough));
 				}
 				case 'X':
 				case 'x': {

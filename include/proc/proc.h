@@ -17,6 +17,7 @@ typedef struct {
 	uintptr_t ds;
 	uintptr_t stack;
 	uintptr_t cr3;
+	void *heap;
 	bool kernel;
 	enum {
 		PROC_RUNNING,
@@ -29,4 +30,5 @@ void proc_init(void);
 void proc_create(const char *path, bool kernel);
 void proc_switch(frame_t *frame);
 __attribute__((pure)) proc_t *proc_get(void);
-void proc_exit(syscall_t *data);
+uintptr_t proc_exit(syscall_args_t *data);
+uintptr_t sys_getpid(syscall_args_t *data);
