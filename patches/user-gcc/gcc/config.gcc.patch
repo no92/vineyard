@@ -1,0 +1,24 @@
+--- gcc/gcc/config.gcc	2017-07-31 13:33:18.182361000 +0200
++++ gcc/gcc/config.gcc	2017-09-04 20:26:05.402036600 +0200
+@@ -615,6 +615,11 @@
+ 
+ # Common parts for widely ported systems.
+ case ${target} in
++*-*-vineyard*)
++  gas=yes
++  gnu_ld=yes
++  default_use_cxa_atexit=yes
++  ;;
+ *-*-darwin*)
+   tmake_file="t-darwin ${cpu_type}/t-darwin"
+   tm_file="${tm_file} darwin.h"
+@@ -918,6 +923,9 @@
+ esac
+ 
+ case ${target} in
++i[34567]86-*-vineyard*)
++    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h vineyard.h"
++    ;;
+ aarch64*-*-elf | aarch64*-*-fuchsia* | aarch64*-*-rtems*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h newlib-stdint.h"
+ 	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-elf-raw.h"

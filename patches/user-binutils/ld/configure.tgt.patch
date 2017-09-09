@@ -1,0 +1,18 @@
+--- binutils/ld/configure.tgt	2017-07-04 10:43:21.000000000 +0200
++++ binutils/ld/configure.tgt	2017-09-04 18:09:13.831819400 +0200
+@@ -259,6 +259,15 @@
+ i[3-7]86-*-bsd)		targ_emul=i386bsd ;;
+ i[3-7]86-*-bsd386)	targ_emul=i386bsd ;;
+ i[3-7]86-*-bsdi*)	targ_emul=i386bsd ;;
++i[3-7]86-*-vineyard*)
++			targ_emul=elf_i386_vineyard
++			targ_extra_emuls=elf_i386
++			targ64_extra_emuls="elf_x86_64_vineyard elf_x86_64"
++			;;
++x86_64-*-vineyard*)
++			targ_emul=elf_x86_64_vineyard
++			targ_extra_emuls="elf_i386_vineyard elf_x86_64 elf_i386"
++			;;
+ i[3-7]86-*-aout)	targ_emul=i386aout ;;
+ i[3-7]86-*-linux*aout*)	targ_emul=i386linux
+ 			targ_extra_emuls="elf_i386 elf_iamcu"

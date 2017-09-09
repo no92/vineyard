@@ -1,44 +1,54 @@
-QEMU_URL		:= http://download.qemu-project.org/qemu-2.9.0.tar.xz
-QEMU_DIR		:= third-party/qemu
-QEMU_PATCHES	:= patches/qemu
-QEMU			:= $(QEMU_DIR)/i386-softmmu/qemu-system-i386
+QEMU_URL			:= http://download.qemu-project.org/qemu-2.9.0.tar.xz
+QEMU_DIR			:= third-party/qemu
+QEMU_PATCHES		:= patches/qemu
+QEMU				:= $(QEMU_DIR)/i386-softmmu/qemu-system-i386
 
-YASM_URL		:= https://github.com/yasm/yasm
-YASM_DIR		:= $(shell pwd)/third-party/yasm
-YASM			:= $(YASM_DIR)/yasm
+YASM_URL			:= https://github.com/yasm/yasm
+YASM_DIR			:= $(shell pwd)/third-party/yasm
+YASM				:= $(YASM_DIR)/yasm
 
-GCC_DIR			:= $(shell pwd)/third-party/gcc
-GCC_TARGET		:= i686-elf
-GCC_VER			:= 7.2.0
-BINUTILS_VER	:= 2.29
-GCC_SCRIPT		:= third-party/scripts/gcc
-CROSS_GCC		:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
-CROSS_LD		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ld
-CROSS_AR		:= $(GCC_DIR)/bin/$(GCC_TARGET)-ar
+GCC_DIR				:= $(shell pwd)/third-party/gcc
+GCC_TARGET			:= i686-elf
+GCC_VER				:= 7.2.0
+BINUTILS_VER		:= 2.29
+GCC_SCRIPT			:= third-party/scripts/gcc
+CROSS_GCC			:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
+CROSS_LD			:= $(GCC_DIR)/bin/$(GCC_TARGET)-ld
+CROSS_AR			:= $(GCC_DIR)/bin/$(GCC_TARGET)-ar
 
-GRUB_URL		:= http://alpha.gnu.org/gnu/grub/grub-2.02~rc2.tar.gz
-GRUB_DIR		:= $(shell pwd)/third-party/grub
-GRUB			:= $(GRUB_DIR)/bin/grub-mkrescue
+SYSROOT				:= $(shell pwd)/hdd
+USER_GCC_DIR		:= $(shell pwd)/third-party/user-gcc
+USER_GCC_TARGET		:= i686-vineyard
+USER_GCC_VER		:= 7.2.0
+USER_BINUTILS_VER	:= 2.29
+USER_GCC_SCRIPT		:= third-party/scripts/user-gcc
+USER_GCC			:= $(USER_GCC_DIR)/bin/$(USER_GCC_TARGET)-gcc
+USER_LD				:= $(USER_GCC_DIR)/bin/$(USER_GCC_TARGET)-ld
+USER_AR				:= $(USER_GCC_DIR)/bin/$(USER_GCC_TARGET)-ar
 
-UNI-VGA_URL		:= http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz
-UNI-VGA_DIR		:= third-party/uni-vga
-UNI-VGA			:= $(UNI-VGA_DIR)/u_vga16.bdf
+GRUB_URL			:= http://alpha.gnu.org/gnu/grub/grub-2.02~rc2.tar.gz
+GRUB_DIR			:= $(shell pwd)/third-party/grub
+GRUB				:= $(GRUB_DIR)/bin/grub-mkrescue
 
-OCLINT_URL		:= https://github.com/oclint/oclint
-OCLINT_DIR		:= third-party/oclint
-OCLINT			:= $(OCLINT_DIR)/build/oclint-release/bin/oclint
+UNI-VGA_URL			:= http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz
+UNI-VGA_DIR			:= third-party/uni-vga
+UNI-VGA				:= $(UNI-VGA_DIR)/u_vga16.bdf
 
-BOCHS_URL		:= https://sourceforge.net/projects/bochs/files/bochs/2.6.9/bochs-2.6.9.tar.gz
-BOCHS_DIR		:= $(shell pwd)/third-party/bochs
-BOCHS_CONFIG	:= --enable-debugger --enable-debugger-gui --enable-readline --enable-disasm --enable-logging
-BOCHS_CONFIG	+= --enable-cpu-level=6 --enable-smp --enable-fpu --enable-3dnow --enable-x86-64 --enable-avx --enable-x86-debugger --enable-all-optimizations
-BOCHS_CONFIG	+= --enable-sb16=default --enable-ne2000 --enable-e1000 --enable-iodebug --enable-pci --enable-usb --enable-usb-ohci --enable-usb-ehci --enable-usb-xhci
-BOCHS_CONFIG	+= --disable-plugins --disable-docbook
-BOCHS_CONFIG	+= --with-sdl2
-BOCHS			:= $(BOCHS_DIR)/bochs
+OCLINT_URL			:= https://github.com/oclint/oclint
+OCLINT_DIR			:= third-party/oclint
+OCLINT				:= $(OCLINT_DIR)/build/oclint-release/bin/oclint
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS)
-third-party-clean: qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
+BOCHS_URL			:= https://sourceforge.net/projects/bochs/files/bochs/2.6.9/bochs-2.6.9.tar.gz
+BOCHS_DIR			:= $(shell pwd)/third-party/bochs
+BOCHS_CONFIG		:= --enable-debugger --enable-debugger-gui --enable-readline --enable-disasm --enable-logging
+BOCHS_CONFIG		+= --enable-cpu-level=6 --enable-smp --enable-fpu --enable-3dnow --enable-x86-64 --enable-avx --enable-x86-debugger --enable-all-optimizations
+BOCHS_CONFIG		+= --enable-sb16=default --enable-ne2000 --enable-e1000 --enable-iodebug --enable-pci --enable-usb --enable-usb-ohci --enable-usb-ehci --enable-usb-xhci
+BOCHS_CONFIG		+= --disable-plugins --disable-docbook
+BOCHS_CONFIG		+= --with-sdl2
+BOCHS				:= $(BOCHS_DIR)/bochs
+
+third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS)
+third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
 
 $(QEMU):
 	@$(INFO) "MAKE" "downloading QEMU"
@@ -68,6 +78,12 @@ $(CROSS_GCC):
 
 gcc-clean:
 	@$(RM) -R $(GCC_DIR)
+
+$(USER_GCC):
+	@$(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
+
+user-gcc-clean:
+	@$(RM) -R $(USER_GCC_DIR)
 
 $(GRUB):
 	@$(INFO) "MAKE" "downloading GRUB"
@@ -112,4 +128,4 @@ $(BOCHS):
 bochs-clean:
 	@$(RM) -R $(BOCHS_DIR)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean

@@ -1,0 +1,20 @@
+--- binutils/bfd/config.bfd	2017-07-04 10:43:20.000000000 +0200
++++ binutils/bfd/config.bfd	2017-09-04 18:08:31.379009900 +0200
+@@ -754,7 +754,17 @@
+     targ_selvecs=
+     targ64_selvecs=x86_64_elf64_vec
+     ;;
++  i[3-7]86-*-vineyard*)
++    targ_defvec=i386_elf32_vec
++    targ_selvecs=
++    targ64_selvecs=x86_64_elf64_vec
++    ;;
+ #ifdef BFD64
++  x86_64-*-vineyard*)
++    targ_defvec=x86_64_elf64_vec
++    targ_selvecs=i386_elf32_vec
++    want64=true
++    ;;
+   x86_64-*-cloudabi*)
+     targ_defvec=x86_64_elf64_cloudabi_vec
+     want64=true

@@ -1,0 +1,40 @@
+--- binutils/ld/Makefile.am	2017-07-24 11:53:52.000000000 +0200
++++ binutils/ld/Makefile.am	2017-09-04 20:08:46.054563500 +0200
+@@ -288,6 +288,7 @@
+ 	eelf32xstormy16.c \
+ 	eelf32xtensa.c \
+ 	eelf_i386.c \
++	eelf_i386_vineyard.c \
+ 	eelf_i386_be.c \
+ 	eelf_i386_chaos.c \
+ 	eelf_i386_fbsd.c \
+@@ -506,6 +507,7 @@
+ 	eelf_k1om.c \
+ 	eelf_k1om_fbsd.c \
+ 	eelf_x86_64.c \
++	eelf_x86_64_vineyard.c \
+ 	eelf_x86_64_cloudabi.c \
+ 	eelf_x86_64_fbsd.c \
+ 	eelf_x86_64_nacl.c \
+@@ -1344,6 +1346,10 @@
+ eelf_i386.c: $(srcdir)/emulparams/elf_i386.sh \
+   $(ELF_X86_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_i386_vineyard.c: $(srcdir)/emulparams/elf_i386_vineyard.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_i386_vineyard "$(tdir_elf_i386_vineyard)"
++
+ eelf_i386_be.c: $(srcdir)/emulparams/elf_i386_be.sh \
+   $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
+@@ -2051,6 +2057,10 @@
+ eelf_x86_64.c: $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_X86_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
+ 
++eelf_x86_64_vineyard.c: $(srcdir)/emulparams/elf_x86_64_vineyard.sh \
++  $(ELF_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}
++	${GENSCRIPTS} elf_x86_64_vineyard "$(tdir_elf_x86_64_vineyard)"
++
+ eelf_x86_64_cloudabi.c: $(srcdir)/emulparams/elf_x86_64_cloudabi.sh \
+   $(srcdir)/emulparams/elf_x86_64.sh \
+   $(ELF_X86_DEPS) $(srcdir)/scripttempl/elf.sc ${GEN_DEPENDS}

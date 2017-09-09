@@ -1,0 +1,15 @@
+--- gcc/libstdc++-v3/crossconfig.m4	2017-01-18 00:36:12.846709000 +0100
++++ gcc/libstdc++-v3/crossconfig.m4	2017-09-04 17:54:42.193506800 +0200
+@@ -5,6 +5,12 @@
+ AC_DEFUN([GLIBCXX_CROSSCONFIG],[
+ # Base decisions on target environment.
+ case "${host}" in
++  *-vineyard*)
++    GLIBCXX_CHECK_COMPILER_FEATURES
++    GLIBCXX_CHECK_LINKER_FEATURES
++    GLIBCXX_CHECK_MATH_SUPPORT
++    GLIBCXX_CHECK_STDLIB_SUPPORT
++    ;;
+   arm*-*-symbianelf*)
+     # This is a freestanding configuration; there is nothing to do here.
+     ;;

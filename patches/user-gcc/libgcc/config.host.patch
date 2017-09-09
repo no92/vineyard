@@ -1,0 +1,13 @@
+--- gcc/libgcc/config.host	2017-05-10 22:42:58.366374000 +0200
++++ gcc/libgcc/config.host	2017-09-04 17:58:06.658861700 +0200
+@@ -329,6 +329,10 @@
+ esac
+ 
+ case ${host} in
++i[34567]86-*-vineyard*)
++	extra_parts="$extra_parts crti.o crtbegin.o crtend.o crtn.o"
++	tmake_file="$tmake_file i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"
++	;;
+ aarch64*-*-elf | aarch64*-*-rtems*)
+ 	extra_parts="$extra_parts crtbegin.o crtend.o crti.o crtn.o"
+ 	extra_parts="$extra_parts crtfastmath.o"

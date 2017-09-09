@@ -1,0 +1,10 @@
+--- gcc/fixincludes/mkfixinc.sh	2016-06-21 23:57:20.986088000 +0200
++++ gcc/fixincludes/mkfixinc.sh	2017-09-04 17:59:21.114206300 +0200
+@@ -11,6 +11,7 @@
+ 
+ # Check for special fix rules for particular targets
+ case $machine in
++    *-vineyard* | \
+     i?86-*-cygwin* | \
+     i?86-*-mingw32* | \
+     x86_64-*-mingw32* | \
