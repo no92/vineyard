@@ -1,3 +1,4 @@
+#include <driver/uart.h>
 #include <util/bitmap.h>
 #include <stdio.h>
 
@@ -34,13 +35,13 @@ ssize_t bitmap_first_unset(bitmap_t *b) {
 	}
 
 	while(res < 0x20000) {
-		if(*bitmap == ~0U) {
+		if(*bitmap == 0xFFFFFFFF) {
 			bitmap++;
 			res++;
 			continue;
 		}
 
-		return __builtin_ctz(~(*bitmap)) + res;
+		return __builtin_ctzll(~(*bitmap)) + (res << 5);
 	}
 
 	return -1;
