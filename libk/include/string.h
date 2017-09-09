@@ -25,7 +25,7 @@ __attribute__((pure, nonnull(1))) char *strchr(const char *s, int c);
 /* char *strpbrk(const char *s1, const char *s2); */
 /* char *strrchr(const char *s, int c); */
 
-__attribute__((nonnull(1, 2))) size_t strspn(const char *s1, const char *s2);
+__attribute__((pure, nonnull(1, 2))) size_t strspn(const char *s1, const char *s2);
 
 /* char *strstr(const char *s1, const char *s2) */
 /* char *strtok(char * restrict s1, const char *restrict s2) */
