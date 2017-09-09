@@ -1,6 +1,6 @@
 LIBK		:= bin/libk.a
-LIBC		:= bin/libc.a
-LIBK_SRC	:= $(shell find libk -name '*.[sc]' -type f)
+LIBC		:= hdd/usr/lib/libc.a
+LIBK_SRC	:= $(shell find libk -name '*.[c]' -type f)
 LIBK_OBJ	:= $(LIBK_SRC:.c=.libk.c.o)
 LIBC_OBJ	:= $(LIBK_SRC:.c=.libc.c.o)
 LIBK_DEP	:= $(LIBK_SRC:.c=.libk.c.d)
@@ -10,23 +10,29 @@ LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
 CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
 
+libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
+
 %.libk.c.o: %.c
 	@$(INFO) "CC" $<
 	@$(CC) $(CFLAGS_LIBK) -c -o $@ $< -D__libk
 
 %.libc.c.o: %.c
 	@$(INFO) "CC" $<
-	@gcc $(filter-out -Wrestrict,$(CFLAGS_LIBK)) -c -o $@ $<
+	@$(USER_GCC) $(filter-out -fsanitize=undefined, $(filter-out -fstack-protector-all, $(filter-out -Wrestrict,$(CFLAGS_LIBK)))) -c -o $@ $<
+
+hdd/usr/lib/crt%.o: libk/crt%.s
+	@$(INFO) "AS" $<
+	@$(AS) -o $@ $< -f elf32
 
 $(LIBK): $(LIBK_OBJ)
 	@$(INFO) "AR" $@
 	@$(MKDIR) $(dir $@)
 	@$(AR) rcs $@ $^
 
-$(LIBC): $(LIBC_OBJ)
+$(LIBC): $(LIBC_OBJ) libc-crt
 	@$(INFO) "AR" $@
 	@$(MKDIR) $(dir $@)
-	@$(AR) rcs $@ $^
+	@$(USER_AR) rcs $@ $(LIBC_OBJ)
 
 %.test: %.c
 	@$(INFO) "CC" $<
@@ -38,7 +44,7 @@ clean-libk:
 
 clean-libc:
 	@$(INFO) "CLEAN" "cleaning libc"
-	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP)
+	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o
 
 clean-libc-test:
 	@$(INFO) "CLEAN" "cleaning libc tests"
@@ -54,4 +60,4 @@ test-libk-static:
 	@$(INFO) "OCLINT" "running static analysis on libk"
 	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c -target i386-pc-none-elf -Wno-language-extension-token
 
-.PHONY: clean-libk clean-libc clean-libc-test test-libc
+.PHONY: libc-crt clean-libk clean-libc clean-libc-test test-libc

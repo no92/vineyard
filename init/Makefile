@@ -1,7 +1,6 @@
-init/init: init/init.s
+init/init: $(LIBC) init/init.c
 	@$(INFO) "INIT" "building $@"
-	@$(YASM) -f elf32 -o $@.o $^
-	@$(LD) -o $@ $@.o -ffreestanding -nostdlib
+	@$(USER_GCC) -o $@ init/init.c
 
 clean-init:
 	@$(INFO) "CLEAN" "cleaning init"
