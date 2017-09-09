@@ -6,7 +6,7 @@ SHELL		:= /bin/bash
 ISO			:= bin/vineyard.iso
 
 # define 'all' as the default target
-all: third-party $(ISO)
+all: third-party headers $(ISO)
 
 include third-party/Makefile
 
@@ -47,6 +47,10 @@ EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga st
 include libk/Makefile
 include kernel/Makefile
 include init/Makefile
+
+headers:
+	@mkdir -p hdd/usr/include
+	@cp -RT libk/include hdd/usr/include
 
 todo:
 	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
