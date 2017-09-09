@@ -62,3 +62,7 @@ typedef __uint64_t __uintmax_t;
 #endif
 
 typedef __size_t __pid_t;
+
+typedef struct {
+	int fd;
+} __FILE;

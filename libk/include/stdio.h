@@ -1,7 +1,19 @@
 #pragma once
 
+#include <_/types.h>
 #include <stdarg.h>
 #include <stddef.h>
+
+typedef __FILE FILE;
+
+extern FILE * const stdin;
+extern FILE * const stdout;
+extern FILE * const stderr;
+
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+
 
 int puts(const char *str);
 
