@@ -11,7 +11,7 @@ ssize_t vfs_write(int fd, const void *buf, size_t count) {
 	if(fd == 1 || fd == 2) {
 		char *b = malloc(count + 1);
 		snprintf(b, count + 1, "%s", (char *) buf);
-		puts(b);
+		printf("%s", b);
 
 		return (ssize_t) count;
 	} else {

@@ -1,8 +1,11 @@
 #ifdef __libk
 	#include <gfx/gfx.h>
+#else
+	#include <_/syscall.h>
 #endif
 
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
 
@@ -24,6 +27,8 @@ int printf(const char * restrict format, ...) {
 	while(buf[off]) {
 		off += gfx_putc(&buf[off]);
 	}
+#else
+	SYSCALL3(0x01, 1, buf, min(ret, PRINTF_BUF_SIZE));
 #endif
 
 	return ret;

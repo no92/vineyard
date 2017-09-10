@@ -16,8 +16,7 @@ int puts(const char *str) {
 
 	gfx_putc((char *) "\n");
 #else
-	size_t len = strlen(str);
-	SYSCALL3(0x01, 1, str, len);
+	printf("%s\n", str);
 #endif
 
 	return 1;

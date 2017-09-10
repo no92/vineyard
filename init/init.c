@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <unistd.h>
 
 int main(void) {
-	puts("init launched");
-	return 1337;
+	printf("[init]	pid = %u\n", getpid());
+	return 0;
 }
