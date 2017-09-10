@@ -10,5 +10,6 @@
 
 #define ALIGN_UP(addr, alignment)	((addr + (alignment - 1U)) & ~(alignment - 1U))
 
-#define container_of(ptr, type, member) \
-                      ((type *) ((char *)(ptr) - offsetof(type, member)))
+#define container_of(ptr, type, member) ({                      \
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+        (type *)( (char *)__mptr - offsetof(type,member) );})

@@ -12,6 +12,9 @@ thread_t *thread_create(proc_t *proc, uintptr_t start) {
 	thread->eip = start;
 	thread->esp = ((uintptr_t) (uintptr_t *) mm_alloc_proc(proc->heap, 0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 4;
 	thread->ebp = thread->esp;
+	thread->state = THREAD_SUSPENDED;
+
+	proc->alive++;
 
 	return thread;
 }

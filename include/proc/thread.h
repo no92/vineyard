@@ -10,14 +10,20 @@ typedef struct {
 	tid_t tid;
 	proc_t *proc;
 	uintptr_t esp;
+	uintptr_t ebp;
 	uintptr_t eip;
 	uintptr_t edi;
 	uintptr_t esi;
-	uintptr_t ebp;
 	uintptr_t ebx;
 	uintptr_t edx;
 	uintptr_t ecx;
 	uintptr_t eax;
+
+	enum {
+		THREAD_RUNNING,
+		THREAD_SUSPENDED,
+		THREAD_DEAD,
+	} state;
 } thread_t;
 
 thread_t *thread_create(proc_t *proc, uintptr_t start);

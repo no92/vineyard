@@ -18,7 +18,7 @@ libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
 
 %.libc.c.o: %.c
 	@$(INFO) "CC" $<
-	@$(USER_GCC) $(filter-out -fsanitize=undefined, $(filter-out -fstack-protector-all, $(filter-out -Wrestrict,$(CFLAGS_LIBK)))) -c -o $@ $<
+	@$(USER_GCC) $(filter-out -fsanitize=undefined, $(filter-out -fstack-protector-all, $(CFLAGS_LIBK))) -c -o $@ $<
 
 hdd/usr/lib/crt%.o: libk/crt%.s
 	@$(INFO) "AS" $<

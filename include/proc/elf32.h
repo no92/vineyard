@@ -61,3 +61,5 @@ typedef struct {
 	uint8_t st_other;
 	uint16_t st_shndx;
 } elf32_sym_t;
+
+uintptr_t elf32_load(const char *path);

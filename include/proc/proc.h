@@ -11,6 +11,7 @@
 typedef struct {
 	pid_t pid;
 	size_t threads;
+	size_t alive;
 	const char *name;
 	uintptr_t cs;
 	uintptr_t ds;
@@ -18,12 +19,6 @@ typedef struct {
 	void *heap;
 	bool kernel;
 	list_t *thread_list;
-
-	enum {
-		PROC_RUNNING,
-		PROC_SUSPENDED,
-		PROC_DEAD,
-	} state;
 } proc_t;
 
 void proc_init(void);
