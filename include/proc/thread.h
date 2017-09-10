@@ -1,0 +1,23 @@
+#pragma once
+
+#include <stdint.h>
+
+typedef uintptr_t tid_t;
+
+#include <proc/proc.h>
+
+typedef struct {
+	tid_t tid;
+	proc_t *proc;
+	uintptr_t esp;
+	uintptr_t eip;
+	uintptr_t edi;
+	uintptr_t esi;
+	uintptr_t ebp;
+	uintptr_t ebx;
+	uintptr_t edx;
+	uintptr_t ecx;
+	uintptr_t eax;
+} thread_t;
+
+thread_t *thread_create(proc_t *proc, uintptr_t start);

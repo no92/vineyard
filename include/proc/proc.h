@@ -6,19 +6,19 @@
 
 #include <int/handler.h>
 #include <proc/syscall.h>
+#include <util/list.h>
 
 typedef struct {
 	pid_t pid;
+	size_t threads;
 	const char *name;
-	uintptr_t esp;
-	uintptr_t ebp;
-	uintptr_t eip;
 	uintptr_t cs;
 	uintptr_t ds;
-	uintptr_t stack;
 	uintptr_t cr3;
 	void *heap;
 	bool kernel;
+	list_t *thread_list;
+
 	enum {
 		PROC_RUNNING,
 		PROC_SUSPENDED,

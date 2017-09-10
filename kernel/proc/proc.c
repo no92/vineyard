@@ -5,6 +5,7 @@
 #include <mm/virtual.h>
 #include <proc/elf32.h>
 #include <proc/proc.h>
+#include <proc/thread.h>
 #include <init/panic.h>
 #include <util/list.h>
 
@@ -15,7 +16,7 @@
 
 static pid_t pid = 1;
 static list_t *queue;
-static proc_t *current;
+static thread_t *current;
 static uintptr_t kernel_pd;
 
 extern uintptr_t stack_top;
@@ -25,7 +26,7 @@ static noreturn void proc_idle(void) {
 }
 
 proc_t *proc_get(void) {
-	return current;
+	return (proc_t *) current->proc;
 }
 
 void proc_init(void) {
@@ -33,11 +34,17 @@ void proc_init(void) {
 
 	proc_t *proc = malloc(sizeof(proc_t));
 	proc->pid = pid++;
-	proc->esp = 0;
-	proc->ebp = 0;
-	proc->eip = 0;
-	proc->stack = (uintptr_t) &stack_top;
-	proc->eip = (uintptr_t) proc_idle;
+	proc->heap = mm_alloc_areas;
+	proc->thread_list = malloc(sizeof(list_t));
+
+	thread_t *thread = thread_create(proc, (uintptr_t) proc_idle);
+	list_node_t *tnode = malloc(sizeof(list_node_t));
+	thread->esp = 0;
+	thread->ebp = 0;
+	thread->eip = (uintptr_t) proc_idle;
+	tnode->data = thread;
+	list_append(proc->thread_list, tnode);
+
 	proc->cs = 0x08;
 	proc->ds = 0x10;
 	proc->kernel = true;
@@ -45,7 +52,8 @@ void proc_init(void) {
 	proc->state = PROC_RUNNING;
 	proc->cr3 = mm_virtual_get_physical(0xFFFFF000);
 	kernel_pd = proc->cr3;
-	current = proc;
+
+	current = thread;
 
 	proc_create("init", false);
 
@@ -104,9 +112,15 @@ void proc_create(const char *path, bool kernel) {
 	alloc->start = (uintptr_t) alloc + 0x1000;
 	alloc->end = 0xBFFFFFFF;
 
-	proc->esp = ((uintptr_t) (uintptr_t *) mm_alloc_proc(proc->heap, 0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 4;
-	proc->ebp = proc->esp;
-	proc->eip = header->e_entry;
+	proc->thread_list = malloc(sizeof(list_t));
+	thread_t *thread = thread_create(proc, (uintptr_t) proc_idle);
+	list_node_t *tnode = malloc(sizeof(tnode));
+	thread->esp = ((uintptr_t) (uintptr_t *) mm_alloc_proc(proc->heap, 0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 4;
+	thread->ebp = thread->esp;
+	thread->eip = header->e_entry;
+	tnode->data = thread;
+	list_append(proc->thread_list, tnode);
+
 	proc->pid = pid++;
 	proc->name = path;
 	proc->kernel = kernel;
@@ -115,17 +129,17 @@ void proc_create(const char *path, bool kernel) {
 	proc->state = PROC_SUSPENDED;
 	proc->cr3 = pd_phys;
 
-	list_node_t *node = malloc(sizeof(list_node_t));
-	node->data = proc;
-	list_append(queue, node);
+	list_append(queue, tnode);
 
 	mm_virtual_switch(kernel_pd);
 }
 
 uintptr_t proc_exit(syscall_args_t *data) {
-	printf("[proc]	process %s (%u) exited with status %u\n", current->name, current->pid, data->arg1);
+	proc_t *p = current->proc;
 
-	current->state = PROC_DEAD;
+	printf("[proc]	process %s (%u) exited with status %u\n", p->name, p->pid, data->arg1);
+
+	p->state = PROC_DEAD;
 
 	return 0;
 }
@@ -133,51 +147,52 @@ uintptr_t proc_exit(syscall_args_t *data) {
 void proc_switch(frame_t *frame) {
 	asm volatile ("sti");
 
-	if((!queue->head && current->state != PROC_DEAD) || queue->head->data == current) {
+	thread_t *next = queue->head->data;
+	proc_t *nextp = next->proc;
+	proc_t *currentp = current->proc;
+
+	if((!queue->head && currentp->state != PROC_DEAD) || queue->head->data == current) {
 		return;
 	}
-
-	proc_t *next = queue->head->data;
 
 	current->esp = frame->esp;
 	current->ebp = frame->ebp;
 	current->eip = frame->eip;
-	current->cs = frame->cs;
-	current->ds = frame->ds;
+	currentp->cs = frame->cs;
+	currentp->ds = frame->ds;
 
-	if(current->state == PROC_DEAD) {
+	if(currentp->state == PROC_DEAD) {
 		list_remove(queue, queue->head);
 		free(current);
-	} else if(next->state == PROC_SUSPENDED) {
+	} else if(nextp->state == PROC_SUSPENDED) {
 		list_node_t *node = queue->head;
 		list_remove(queue, queue->head);
 
-		current->state = PROC_SUSPENDED;
+		currentp->state = PROC_SUSPENDED;
 		node->data = current;
 		list_append(queue, node);
 	} else {
 		panic("[sched]	unknown process state");
 	}
 
-	current = next;
-	current->state = PROC_RUNNING;
+	nextp->state = PROC_RUNNING;
 
-	frame->eip = current->eip;
-	frame->esp = current->esp;
-	frame->ebp = current->ebp;
-	frame->cs = current->cs;
-	frame->ds = current->ds;
-	frame->es = current->ds;
-	frame->fs = current->ds;
-	frame->gs = current->ds;
-	frame->ss = current->ds;
+	frame->eip = next->eip;
+	frame->esp = next->esp;
+	frame->ebp = next->ebp;
+	frame->cs = nextp->cs;
+	frame->ds = nextp->ds;
+	frame->es = nextp->ds;
+	frame->fs = nextp->ds;
+	frame->gs = nextp->ds;
+	frame->ss = nextp->ds;
 	frame->eflags |= 0x200;
 
-	mm_virtual_switch(current->cr3);
+	mm_virtual_switch(nextp->cr3);
 }
 
 uintptr_t sys_getpid(syscall_args_t *data) {
 	(void) data;
 
-	return current->pid;
+	return current->proc->pid;
 }

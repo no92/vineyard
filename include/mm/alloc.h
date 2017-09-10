@@ -18,6 +18,8 @@ typedef struct node {
 	enum heap_state state;
 } alloc_node_t;
 
+extern alloc_node_t *mm_alloc_areas;
+
 void mm_alloc_init(void);
 void mm_alloc_info(void);
 

@@ -9,7 +9,7 @@
 #include <mm/physical.h>
 #include <mm/virtual.h>
 
-static alloc_node_t *mm_alloc_areas;
+alloc_node_t *mm_alloc_areas;
 
 void mm_alloc_init(void) {
 	uintptr_t start = 0xD0000000;
