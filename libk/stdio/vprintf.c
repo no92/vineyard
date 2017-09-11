@@ -1,23 +1,29 @@
 #ifdef __libk
 	#include <gfx/gfx.h>
+#else
+	#include <_/syscall.h>
+	#include <stdlib.h>
 #endif
 
 #include <stdarg.h>
 #include <stdio.h>
 
+#define PRINTF_BUF_SIZE 1024
+
 int vprintf(const char * restrict format, va_list arg) {
-	char buf[1024];
+	char buf[PRINTF_BUF_SIZE];
+
+	int ret = vsnprintf(buf, PRINTF_BUF_SIZE, format, arg);
+
+#ifdef __libk
 	size_t off = 0;
 
-	int ret = vsnprintf(buf, 1024, format, arg);
-
 	while(buf[off]) {
-#ifdef __libk
 		off += gfx_putc(&buf[off]);
-#else
-		(void) 0;
-#endif
 	}
+#else
+		SYSCALL3(0x01, 1, buf, min(ret, PRINTF_BUF_SIZE));
+#endif
 
 	return ret;
 }

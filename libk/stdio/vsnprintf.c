@@ -83,6 +83,8 @@ static char *itoa(int64_t value, char *str, uint8_t base) {
 	return str;
 }
 
+/* TODO: think of a better way to handle this mess */
+
 A("bitwise operator in conditional")
 int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list arg) {
 	int flags = 0;
