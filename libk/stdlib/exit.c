@@ -4,7 +4,9 @@
 
 extern void _fini(void);
 
-void exit(int status) {
+noreturn void exit(int status) {
 	_fini();
 	SYSCALL1(0x00, status);
+
+	__builtin_unreachable();
 }

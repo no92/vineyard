@@ -1,6 +1,7 @@
 LIBK		:= bin/libk.a
 LIBC		:= hdd/usr/lib/libc.a
-LIBK_SRC	:= $(shell find libk -name '*.[c]' -type f)
+LIBK_SRC	:= $(shell find libk -name '*.[c]' -type f -o -type l)
+LIBK_SRC	+= libk/ubsan/ubsan.c
 LIBK_OBJ	:= $(LIBK_SRC:.c=.libk.c.o)
 LIBC_OBJ	:= $(LIBK_SRC:.c=.libc.c.o)
 LIBK_DEP	:= $(LIBK_SRC:.c=.libk.c.d)
@@ -8,9 +9,19 @@ LIBC_DEP	:= $(LIBK_SRC:.c=.d)
 
 LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
+LIB			:= lib
+
 CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
 
+include lib/libubsan/Makefile
+
 libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
+
+libk/ubsan/ubsan.c: lib/libubsan/ubsan.c libk/include/ubsan.h
+	@cp $< $@
+
+libk/include/ubsan.h: lib/libubsan/include/ubsan.h
+	@cp $< $@
 
 %.libk.c.o: %.c
 	@$(INFO) "CC" $<
@@ -18,7 +29,7 @@ libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
 
 %.libc.c.o: %.c
 	@$(INFO) "CC" $<
-	@$(USER_GCC) $(filter-out -fsanitize=undefined, $(filter-out -fstack-protector-all, $(CFLAGS_LIBK))) -c -o $@ $<
+	@$(USER_GCC) $(filter-out -fstack-protector-all, $(CFLAGS_LIBK)) -c -o $@ $<
 
 hdd/usr/lib/crt%.o: libk/crt%.s
 	@$(INFO) "AS" $<
@@ -29,7 +40,7 @@ $(LIBK): $(LIBK_OBJ)
 	@$(MKDIR) $(dir $@)
 	@$(AR) rcs $@ $^
 
-$(LIBC): $(LIBC_OBJ) libc-crt
+$(LIBC): $(LIBC_OBJ) libc-crt $(LIBUBSAN)
 	@$(INFO) "AR" $@
 	@$(MKDIR) $(dir $@)
 	@$(USER_AR) rcs $@ $(LIBC_OBJ)
@@ -44,7 +55,7 @@ clean-libk:
 
 clean-libc:
 	@$(INFO) "CLEAN" "cleaning libc"
-	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o
+	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o libk/ubsan/ubsan.c libk/include/ubsan.h
 
 clean-libc-test:
 	@$(INFO) "CLEAN" "cleaning libc tests"
