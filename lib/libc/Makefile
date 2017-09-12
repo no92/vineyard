@@ -1,7 +1,8 @@
 LIBK		:= bin/libk.a
 LIBC		:= hdd/usr/lib/libc.a
-LIBK_SRC	:= $(shell find libk -name '*.[c]' -type f -o -type l)
-LIBK_SRC	+= libk/ubsan/ubsan.c
+LIBC_DIR	:= $(LIB)/libc
+LIBK_SRC	:= $(shell find $(LIBC_DIR) -name '*.[c]' -type f -o -type l)
+LIBK_SRC	+= $(LIBC_DIR)/ubsan/ubsan.c
 LIBK_OBJ	:= $(LIBK_SRC:.c=.libk.c.o)
 LIBC_OBJ	:= $(LIBK_SRC:.c=.libc.c.o)
 LIBK_DEP	:= $(LIBK_SRC:.c=.libk.c.d)
@@ -9,18 +10,14 @@ LIBC_DEP	:= $(LIBK_SRC:.c=.d)
 
 LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
-LIB			:= lib
-
 CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
-
-include lib/libubsan/Makefile
 
 libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
 
-libk/ubsan/ubsan.c: lib/libubsan/ubsan.c libk/include/ubsan.h
+$(LIBC_DIR)/ubsan/ubsan.c: lib/libubsan/ubsan.c $(LIBC_DIR)/include/ubsan.h
 	@cp $< $@
 
-libk/include/ubsan.h: lib/libubsan/include/ubsan.h
+$(LIBC_DIR)/include/ubsan.h: lib/libubsan/include/ubsan.h
 	@cp $< $@
 
 %.libk.c.o: %.c
@@ -31,7 +28,7 @@ libk/include/ubsan.h: lib/libubsan/include/ubsan.h
 	@$(INFO) "CC" $<
 	@$(USER_GCC) $(filter-out -fstack-protector-all, $(CFLAGS_LIBK)) -c -o $@ $<
 
-hdd/usr/lib/crt%.o: libk/crt%.s
+hdd/usr/lib/crt%.o: $(LIBC_DIR)/crt%.s
 	@$(INFO) "AS" $<
 	@$(AS) -o $@ $< -f elf32
 
@@ -53,9 +50,9 @@ clean-libk:
 	@$(INFO) "CLEAN" "cleaning libk"
 	@$(RM) $(LIBK_OBJ) $(LIBK) $(LIBK_DEP)
 
-clean-libc:
+clean-libc: clean-headers
 	@$(INFO) "CLEAN" "cleaning libc"
-	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o libk/ubsan/ubsan.c libk/include/ubsan.h
+	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o $(LIBC_DIR)/ubsan/ubsan.c $(LIBC_DIR)/include/ubsan.h
 
 clean-libc-test:
 	@$(INFO) "CLEAN" "cleaning libc tests"

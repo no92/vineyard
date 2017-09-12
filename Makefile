@@ -34,7 +34,7 @@ MUTE		:= 2>&1 /dev/null
 # set some flags for running the tools
 CFLAGS		?= -ggdb3 -pipe -O3
 CFLAGS		+= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
-CFLAGS		+= -Ilibk/include -Iinclude -MD -nostdinc -std=gnu11
+CFLAGS		+= -I$(LIBC_DIR)/include -Iinclude -MD -nostdinc -std=gnu11
 CFLAGS		+= -Wall -Wbad-function-cast -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code
@@ -44,21 +44,25 @@ LDFLAGS		:= -T build/kernel.ld -ffreestanding -nostdlib -lgcc
 ASFLAGS		:= -f elf32 -g dwarf2
 EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga std -k en-us -cpu max
 
-include libk/Makefile
-include kernel/Makefile
-include init/Makefile
-
 headers:
+	@$(INFO) "CP" "headers"
 	@mkdir -p hdd/usr/include
-	@cp -RT libk/include hdd/usr/include
+	@cp -RT $(LIBC_DIR)/include/ hdd/usr/include
+
+clean-headers:
+	@$(INFO) "CLEAN" "headers"
 
 todo:
 	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
 
+include lib/Makefile
+include kernel/Makefile
+include init/Makefile
+
 clean: clean-kernel
 
-distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test clean-init clean-initrd
+distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test clean-init clean-initrd clean-headers clean-libs
 
-.PHONY: all clean test test-debug test-virtualbox
+.PHONY: all clean headers test test-debug test-virtualbox
 .SECONDARY:
 .SUFFIXES:

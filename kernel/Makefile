@@ -52,9 +52,9 @@ $(KERNEL): $(KERNEL_OBJ)
 	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
-$(INITRD): initrd/* init/init
+$(INITRD): initrd/* $(INIT)
 	@$(INFO) "INITRD" $@
-	@cp init/init initrd/init
+	@cp $(INIT) initrd/init
 	@cd initrd; tar -cf ../bin/initrd *
 
 $(ISO): $(KERNEL) $(PXE_BUILD) $(INITRD)
