@@ -106,3 +106,9 @@ noreturn void __ubsan_handle_builtin_unreachable(ubsan_location_t *location) {
 
 	die("[ubsan]	called __builtin_unreachable()\n");
 }
+
+noreturn void __ubsan_handle_load_invalid_value(ubsan_invalid_value_t *data, uintptr_t value) {
+	ubsan_location(&data->location);
+
+	die("[ubsan]	load of value %#08x is not a valid value for type %s\n", value, data->type->name);
+}

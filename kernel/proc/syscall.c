@@ -1,17 +1,19 @@
+#include <fs/vfs.h>
+#include <int/handler.h>
+#include <mm/alloc.h>
 #include <proc/proc.h>
 #include <proc/syscall.h>
-#include <int/handler.h>
-#include <fs/vfs.h>
+#include <init/panic.h>
 
-#include <stdio.h>
 #include <string.h>
 
-#define SYSCALLS 3
+#define SYSCALLS 4
 
 static syscall_t syscall_list[SYSCALLS] = {
-	[SYSCALL_EXIT] proc_exit,
-	[SYSCALL_WRITE] sys_write,
-	[SYSCALL_GETPID] sys_getpid,
+	[SYSCALL_EXIT] = proc_exit,
+	[SYSCALL_WRITE] = sys_write,
+	[SYSCALL_GETPID] = sys_getpid,
+	[SYSCALL_MMAP] = sys_mmap,
 };
 
 static void syscall_handler(frame_t *frame) {
@@ -24,12 +26,13 @@ static void syscall_handler(frame_t *frame) {
 	data.arg5 = frame->edi;
 
 	if(frame->eax >= SYSCALLS) {
+		panic("invalid syscall %u", frame->eax);
 		return;
 	}
 
 	syscall_t func = syscall_list[frame->eax];
 
-	func(&data);
+	frame->eax = func(&data);
 }
 
 void syscall_init(void) {

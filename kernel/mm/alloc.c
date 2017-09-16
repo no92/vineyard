@@ -8,6 +8,7 @@
 #include <mm/alloc.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
+#include <proc/proc.h>
 
 alloc_node_t *mm_alloc_areas;
 
@@ -161,6 +162,12 @@ void *mm_alloc(size_t s, uint16_t flags, bool allocate) {
 	return mm_alloc_proc(mm_alloc_areas, s, flags, allocate);
 }
 
+uintptr_t sys_mmap(syscall_args_t *data) {
+	void *ret = mmap((void *) data->arg1, data->arg2, (int) data->arg3, (int) data->arg4, (int) data->arg5, (off_t) data->arg6);
+
+	return (uintptr_t) ret;
+}
+
 A("bitwise operator in conditional")
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset) {
 	(void) addr;
@@ -169,7 +176,15 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 	(void) fd;
 	(void) offset;
 
-	void *ptr = mm_alloc(length, PAGE_PRESENT | PAGE_WRITE, true);
+	proc_t *proc = proc_get();
+	alloc_node_t *root = (proc) ? proc->heap : mm_alloc_areas;
+	uint16_t f = PAGE_PRESENT | PAGE_WRITE;
+
+	if(proc && !proc->kernel) {
+		f = f | PAGE_USER;
+	}
+
+	void *ptr = mm_alloc_proc(root, length, f, true);
 	memset(ptr, 0x00, length);
 
 	return ptr;

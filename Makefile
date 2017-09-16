@@ -56,8 +56,8 @@ todo:
 	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
 
 include lib/Makefile
-include kernel/Makefile
 include init/Makefile
+include kernel/Makefile
 
 clean: clean-kernel
 

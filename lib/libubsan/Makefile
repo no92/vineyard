@@ -10,7 +10,7 @@ $(LIBUBSAN): $(UBSAN_OBJ)
 
 $(LIBUBSAN_DIR)/%.c.o: $(LIBUBSAN_DIR)/%.c
 	@$(INFO) "CC" $<
-	@$(USER_GCC) $(CFLAGS_LIBK) -c -o $@ $<
+	@$(USER_GCC) $(filter-out -fstack-protector-all, $(CFLAGS_LIBK)) -fno-stack-protector -c -o $@ $<
 
 clean-libubsan:
 	@$(INFO) "CLEAN" "cleaning libubsan"

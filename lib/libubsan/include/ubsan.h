@@ -36,6 +36,11 @@ typedef struct {
 	int argument;
 } ubsan_nonnull_arg_t;
 
+typedef struct {
+	ubsan_location_t location;
+	ubsan_type_t *type;
+} ubsan_invalid_value_t;
+
 noreturn void __ubsan_handle_type_mismatch(ubsan_type_mismatch_t *type_mismatch, uintptr_t pointer);
 noreturn void __ubsan_handle_out_of_bounds(ubsan_out_of_bounds_t *out_of_bounds, uintptr_t pointer);
 noreturn void __ubsan_handle_negate_overflow(ubsan_location_t *location, uintptr_t pointer);
@@ -46,3 +51,4 @@ noreturn void __ubsan_handle_divrem_overflow(ubsan_location_t *location, uintptr
 noreturn void __ubsan_handle_shift_out_of_bounds(ubsan_location_t *location, uintptr_t left, uintptr_t right);
 noreturn void __ubsan_handle_nonnull_arg(ubsan_nonnull_arg_t *data);
 noreturn void __ubsan_handle_builtin_unreachable(ubsan_location_t *location);
+noreturn void __ubsan_handle_load_invalid_value(ubsan_invalid_value_t *data, uintptr_t value);

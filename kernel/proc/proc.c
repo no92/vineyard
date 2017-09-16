@@ -30,7 +30,11 @@ static noreturn void proc_idle(void) {
 }
 
 proc_t *proc_get(void) {
-	return (proc_t *) current->proc;
+	if(current) {
+		return (proc_t *) current->proc;
+	}
+
+	return NULL;
 }
 
 void proc_init(void) {

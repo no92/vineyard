@@ -14,6 +14,8 @@ build/pxe.cfg
 initrd/init
 init/init
 kernel/gfx/font.c
+lib/libc/include/ubsan.h
+lib/libc/ubsan/ubsan.c
 
 # configuration
 conf/wol
