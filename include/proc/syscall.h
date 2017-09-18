@@ -17,5 +17,6 @@ typedef uintptr_t (*syscall_t)(syscall_args_t *);
 #define SYSCALL_WRITE 1
 #define SYSCALL_GETPID 2
 #define SYSCALL_MMAP 3
+#define SYSCALL_MUNMAP 4
 
 void syscall_init(void);

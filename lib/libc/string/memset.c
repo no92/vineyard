@@ -4,6 +4,10 @@
 
 A("bitwise operator in conditional")
 void *memset(void *s, int c, size_t n) {
+	if(!n) {
+		return s;
+	}
+
 	uint8_t *ptr8;
 	uint8_t value8;
 

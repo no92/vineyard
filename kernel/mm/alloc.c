@@ -190,6 +190,12 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
 	return ptr;
 }
 
+uintptr_t sys_munmap(syscall_args_t *data) {
+	int ret = munmap((void *) data->arg1, data->arg2);
+
+	return (uintptr_t) ret;
+}
+
 A("bitwise operator in conditional")
 int munmap(void *addr, size_t len) {
 	if(!addr || ((uintptr_t) addr & 0x3FF) || !len) {

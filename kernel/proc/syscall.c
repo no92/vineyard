@@ -7,13 +7,14 @@
 
 #include <string.h>
 
-#define SYSCALLS 4
+#define SYSCALLS 5
 
 static syscall_t syscall_list[SYSCALLS] = {
 	[SYSCALL_EXIT] = proc_exit,
 	[SYSCALL_WRITE] = sys_write,
 	[SYSCALL_GETPID] = sys_getpid,
 	[SYSCALL_MMAP] = sys_mmap,
+	[SYSCALL_MUNMAP] = sys_munmap,
 };
 
 static void syscall_handler(frame_t *frame) {

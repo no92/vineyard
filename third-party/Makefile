@@ -121,8 +121,8 @@ oclint-clean:
 $(BOCHS):
 	@$(INFO) "MAKE" "getting bochs"
 	@mkdir -p $(BOCHS_DIR)
-	# @wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
-	# @tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
+	@wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
+	@tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
 	@bash -c 'cd $(BOCHS_DIR); ./configure $(BOCHS_CONFIG) --prefix="$(BOCHS_DIR)" -q; make -s; make install -s'
 
 bochs-clean:

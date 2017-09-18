@@ -4,6 +4,8 @@
 
 #ifdef __libk
 #include <mm/malloc.h>
+#else
+#include <_/malloc.h>
 #endif
 
 #define EXIT_SUCCESS 0

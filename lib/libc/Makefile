@@ -60,11 +60,11 @@ $(LIBC): $(LIBC_OBJ) libc-crt $(LIBUBSAN)
 
 clean-libk:
 	@$(INFO) "CLEAN" "cleaning libk"
-	$(RM) $(LIBK_OBJ) $(LIBK) $(LIBK_DEP)
+	@$(RM) $(LIBK_OBJ) $(LIBK) $(LIBK_DEP)
 
 clean-libc: clean-headers
 	@$(INFO) "CLEAN" "cleaning libc"
-	$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o $(LIBC_DIR)/ubsan/ubsan.c $(LIBC_DIR)/include/ubsan.h
+	@$(RM) $(LIBC_OBJ) $(LIBC) $(LIBC_DEP) hdd/usr/lib/crt[0ni].o $(LIBC_DIR)/ubsan/ubsan.c $(LIBC_DIR)/include/ubsan.h
 
 clean-libc-test:
 	@$(INFO) "CLEAN" "cleaning libc tests"

@@ -7,7 +7,6 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <string.h>
 
 #define BITS_PAGE_OFF 12
@@ -17,6 +16,9 @@ static bitmap_t *pages;
 static size_t n;
 /* the limit of usable memory */
 static uintptr_t limit;
+
+extern uintptr_t _kernel_start;
+extern uintptr_t _kernel_end;
 
 static void mm_physical_mark_free(uintptr_t addr) {
 	bitmap_unset(pages, addr >> 12);
@@ -60,6 +62,12 @@ void mm_physical_init(multiboot2_t *multiboot) {
 
 		node = node->next;
 	}
+
+	for(uintptr_t kernel_start = 0; kernel_start < 0x400000; kernel_start += 0x1000) {
+		uintptr_t virt = kernel_start;
+
+		mm_physical_mark_reserved(virt);
+	}
 }
 
 void *mm_physical_alloc(void) {
@@ -71,7 +79,7 @@ void *mm_physical_alloc(void) {
 
 	bitmap_set(pages, (size_t) page);
 
-	return (void *) (page << 12);
+	return (void *) ((page) << 12);
 }
 
 void mm_physical_free(uintptr_t page) {

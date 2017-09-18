@@ -72,25 +72,27 @@ void proc_init(void) {
 void proc_create(const char *path, bool kernel) {
 	proc_t *proc = malloc(sizeof(proc_t));
 
-	uintptr_t *pd = mm_alloc(0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true);
+	uintptr_t *pd = mm_alloc(0x1000, PAGE_PRESENT | PAGE_WRITE, true);
 	uintptr_t pd_phys = mm_virtual_get_physical((uintptr_t) pd);
 	uintptr_t *pd_k = (uintptr_t *) 0xFFFFF000;
 
 	memset(pd, 0x00, 0x1000);
 
-	for(size_t i = 0x00; i < 0x400; i++) {
+	for(size_t i = 0x300; i < 0x3FF; i++) {
 		pd[i] = pd_k[i];
 	}
 
-	pd[0x3FF] = mm_virtual_get_physical((uintptr_t) pd) | PAGE_PRESENT | PAGE_WRITE | PAGE_USER;
+	pd[0x3FF] = pd_phys | PAGE_PRESENT | PAGE_WRITE | PAGE_USER;
 
 	mm_virtual_switch(pd_phys);
 
-	uintptr_t entry = elf32_load(path);
-
-	mm_virtual_map_page(0x80000000, (uintptr_t) (uintptr_t *) mm_physical_alloc(), PAGE_PRESENT | PAGE_WRITE);
+	void *heap_phys = mm_physical_alloc();
 	proc->heap = (void *) 0x80000000;
-	alloc_node_t *alloc = (alloc_node_t *) 0x80000000;
+
+	mm_virtual_map_page((uintptr_t) proc->heap, (uintptr_t) heap_phys, PAGE_PRESENT | PAGE_WRITE);
+
+	alloc_node_t *alloc = (alloc_node_t *) proc->heap;
+	memset(alloc, 0x00, sizeof(*alloc));
 	alloc->next = 0;
 	alloc->prev = 0;
 	alloc->state = FREE;
@@ -102,10 +104,12 @@ void proc_create(const char *path, bool kernel) {
 	list_node_t *tnode = malloc(sizeof(tnode));
 	thread->esp = ((uintptr_t) (uintptr_t *) mm_alloc_proc(proc->heap, 0x1000, PAGE_PRESENT | PAGE_WRITE | PAGE_USER, true)) + 0x1000 - 4;
 	thread->ebp = thread->esp;
-	thread->eip = entry;
 	tnode->data = thread;
 	list_append(proc->thread_list, tnode);
 
+	uintptr_t entry = elf32_load(path);
+
+	thread->eip = entry;
 	proc->pid = pid++;
 	proc->name = path;
 	proc->kernel = kernel;

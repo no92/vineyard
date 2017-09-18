@@ -30,3 +30,4 @@ void *mm_alloc(size_t s, uint16_t flags, bool allocate);
 void mm_alloc_reserve(uintptr_t addr, size_t s, uint16_t flags);
 
 uintptr_t sys_mmap(syscall_args_t *data);
+uintptr_t sys_munmap(syscall_args_t *data);

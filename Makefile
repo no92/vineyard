@@ -50,7 +50,7 @@ headers:
 	@cp -RT $(LIBC_DIR)/include/ hdd/usr/include
 
 clean-headers:
-	@$(INFO) "CLEAN" "headers"
+	@$(INFO) "CLEAN" "cleaning headers"
 
 todo:
 	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
@@ -63,6 +63,6 @@ clean: clean-kernel
 
 distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test clean-init clean-initrd clean-headers clean-libs
 
-.PHONY: all clean headers test test-debug test-virtualbox
+.PHONY: all clean distclean headers test test-debug test-virtualbox
 .SECONDARY:
 .SUFFIXES:
