@@ -62,7 +62,6 @@ _start:
 	add ebx, 0xC0000000
 	push ebx ; holds the physical address of the multiboot struct
 	push eax ; holds the magic number
-	cli
 
 	call _init
 
@@ -83,13 +82,21 @@ stack_top:
 [section .data]
 [align 0x1000]
 boot_pagedir:
-	dd (boot_pagetab - 0xC0000000) + 0x03
-	times ((0xC0000000 >> 22) - 1) dd 0x00
-	dd (boot_pagetab - 0xC0000000) + 0x03
-	times (1022 - (0xC0000000 >> 22)) dd 0x00
+	dd (boot_pagetab_low - 0xC0000000) + 0x03
+	dd (boot_pagetab_high - 0xC0000000) + 0x03
+	times ((0xC0000000 >> 22) - 2) dd 0x00
+	dd (boot_pagetab_low - 0xC0000000) + 0x03
+	dd (boot_pagetab_high - 0xC0000000) + 0x03
+	times (1021 - (0xC0000000 >> 22)) dd 0x00
 	dd (boot_pagedir - 0xC0000000) + 0x03
-boot_pagetab:
+boot_pagetab_low:
 	%assign i 0
+	%rep 1024
+		dd (i << 12) | 0x03
+		%assign i i+1
+	%endrep
+boot_pagetab_high:
+	%assign i 1024
 	%rep 1024
 		dd (i << 12) | 0x03
 		%assign i i+1

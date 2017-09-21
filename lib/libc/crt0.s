@@ -6,9 +6,11 @@
 [extern exit]
 _start:
 	mov ebp, 0
-	push ebp
-	push ebp
 	mov ebp, esp
+
+	pop eax
+	pop eax
+	xor eax, eax
 
 	call _init
 	call main

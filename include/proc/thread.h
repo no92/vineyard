@@ -7,6 +7,7 @@ typedef uintptr_t tid_t;
 #include <proc/proc.h>
 
 typedef struct {
+	uintptr_t kernel_stack;
 	tid_t tid;
 	proc_t *proc;
 	uintptr_t esp;
@@ -27,3 +28,4 @@ typedef struct {
 } thread_t;
 
 thread_t *thread_create(proc_t *proc, uintptr_t start);
+__attribute__((pure)) thread_t *thread_get(void);

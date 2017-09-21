@@ -2,3 +2,5 @@
 kernel/gfx/font.c linguist-generated=true
 kernel/mm/dlmalloc.c linguist-generated=true
 include/mm/dlmalloc.h linguist-generated=true
+lib/libc/stdlib/dlmalloc.c linguist-generated=true
+lib/libc/include/_/dlmalloc.h linguist-generated=true

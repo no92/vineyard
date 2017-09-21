@@ -42,6 +42,24 @@ vineyard is licensed under the terms of the MIT (Expat) License. For details, se
 > comments, complaints, performance data, etc to dl@cs.oswego.edu
 >
 > * Version 2.8.6 Wed Aug 29 06:57:58 2012  Doug Lea
->  Note: There may be an updated version of this malloc obtainable at
->		 ftp://gee.cs.oswego.edu/pub/misc/malloc.c
->	   Check before installing!
+>  Note: There may be an updated version of this malloc obtainable at<br>
+> ftp://gee.cs.oswego.edu/pub/misc/malloc.c<br>
+> Check before installing!
+
+### sortix ###
+
+[sortix](http://sortix.org/) is another hobby OS by a very talented developer. Some code from sortix is used in `kernel/int/isr.s` in modified from, specifically the `handler_stack_relocate` and `handler_stack_restore` routines. These portions of code, as most of sortix, are licensed under the ISC licence:
+
+> Copyright 2011-2016 Jonas 'Sortie' Termansen and contributors.
+>
+> Permission to use, copy, modify, and distribute this software for any
+> purpose with or without fee is hereby granted, provided that the above
+> copyright notice and this permission notice appear in all copies.
+>
+> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+> OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

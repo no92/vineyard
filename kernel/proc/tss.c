@@ -23,3 +23,7 @@ void tss_init(void) {
 	tss.gs = 0x13;
 	tss.iomap_base = sizeof(tss);
 }
+
+void tss_set_esp(uintptr_t esp) {
+	tss.esp0 = esp;
+}

@@ -34,7 +34,7 @@ MUTE		:= 2>&1 /dev/null
 # set some flags for running the tools
 CFLAGS		?= -ggdb3 -pipe -O3
 CFLAGS		+= -ffreestanding -finline-functions -fno-omit-frame-pointer -fsanitize=undefined -fstack-protector-all
-CFLAGS		+= -I$(LIBC_DIR)/include -Iinclude -MD -nostdinc -std=gnu11
+CFLAGS		+= -I$(LIBC_DIR)/include -Iinclude -MD -nostdinc -std=gnu11 -D__VINEYARD__
 CFLAGS		+= -Wall -Wbad-function-cast -Wconversion -Werror -Wextra -Wformat=2 -Winit-self -Wparentheses -Winline -Wmissing-braces
 CFLAGS		+= -Wmissing-declarations -Wmissing-field-initializers -Wmissing-prototypes -Wnested-externs -Wpointer-arith
 CFLAGS		+= -Wredundant-decls -Wshadow -Wstrict-prototypes -Wswitch-default -Wswitch-enum -Wuninitialized -Wunreachable-code
@@ -53,7 +53,7 @@ clean-headers:
 	@$(INFO) "CLEAN" "cleaning headers"
 
 todo:
-	@for file in $(shell find kernel libk -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
+	@for file in $(shell find kernel lib -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
 
 include lib/Makefile
 include init/Makefile

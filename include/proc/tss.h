@@ -35,4 +35,5 @@ typedef struct {
 extern tss_t tss;
 
 void tss_init(void);
+void tss_set_esp(uintptr_t esp);
 extern void tss_ltr(void);

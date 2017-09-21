@@ -21,9 +21,14 @@ typedef struct {
 	list_t *thread_list;
 } proc_t;
 
+typedef void (*proc_worker_t)(void *);
+
 void proc_init(void);
-void proc_create(const char *path, bool kernel);
+void proc_create(const char *path, bool kernel, int argc, char **argv, int envc, char **envp);
+list_node_t *proc_create_worker(proc_worker_t worker, void *arg);
 void proc_switch(frame_t *frame);
+
 __attribute__((pure)) proc_t *proc_get(void);
+
 uintptr_t proc_exit(syscall_args_t *data);
 uintptr_t sys_getpid(syscall_args_t *data);
