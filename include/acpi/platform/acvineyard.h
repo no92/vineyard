@@ -9,7 +9,7 @@
 #include <string.h>
 
 #define ACPI_SINGLE_THREADED
-#define ACPI_DEBUGGER
+#define ACPI_DEBUG_OUTPUT
 #define ACPI_USE_SYSTEM_CLIBRARY
 
 #define ACPI_CACHE_T                ACPI_MEMORY_LIST

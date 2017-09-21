@@ -5,10 +5,12 @@
 #include <mm/physical.h>
 #include <mm/virtual.h>
 #include <lock/mutex.h>
+#include <lock/semaphore.h>
 #include <time/pit.h>
 #include <proc/thread.h>
 
 #include <assert.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -87,7 +89,8 @@ void *AcpiOsMapMemory(ACPI_PHYSICAL_ADDRESS addr, ACPI_SIZE length) {
 }
 
 void AcpiOsUnmapMemory(void *ptr, ACPI_SIZE length) {
-	mm_alloc_free(ptr);
+	uintptr_t addr = (uintptr_t) ptr & 0xFFFFF000;
+	mm_alloc_free((void *) addr);
 
 	uintptr_t p = (uintptr_t) ptr;
 
@@ -132,7 +135,7 @@ BOOLEAN AcpiOsWritable(void *memory __unused, ACPI_SIZE length __unused) {
 ACPI_THREAD_ID AcpiOsGetThreadId(void) {
 	thread_t *t = thread_get();
 
-	return t->tid;
+	return t->tid + 1;
 }
 
 ACPI_STATUS AcpiOsExecute(ACPI_EXECUTE_TYPE type __unused, ACPI_OSD_EXEC_CALLBACK func, void *context) {
@@ -171,7 +174,9 @@ ACPI_STATUS AcpiOsCreateMutex(ACPI_MUTEX *mutex) {
 }
 
 void AcpiOsDeleteMutex(ACPI_MUTEX mutex) {
-	mutex_remove(mutex);
+	if(mutex) {
+		mutex_remove(mutex);
+	}
 }
 
 ACPI_STATUS AcpiOsAcquireMutex(ACPI_MUTEX mutex, uint16_t timeout) {
@@ -186,26 +191,45 @@ void AcpiOsReleaseMutex(ACPI_MUTEX mutex) {
 	mutex_release(mutex);
 }
 
-ACPI_STATUS AcpiOsCreateSemaphore(uint32_t max_units __unused, uint32_t initial_units __unused, ACPI_SEMAPHORE *s __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+ACPI_STATUS AcpiOsCreateSemaphore(uint32_t max_units __unused, uint32_t initial_units, ACPI_SEMAPHORE *s) {
+	assert(initial_units <= INT_MAX);
+
+	semaphore_t *m = semaphore_create_init((int) initial_units);
+
+	if(!m) {
+		return AE_NO_MEMORY;
+	}
+
+	*s = m;
+
+	return AE_OK;
 
 	return AE_OK;
 }
 
 ACPI_STATUS AcpiOsDeleteSemaphore(ACPI_SEMAPHORE s) {
-	free(s);
+	if(!s) {
+		return AE_BAD_PARAMETER;
+	}
+
+	semaphore_remove(s);
 
 	return AE_OK;
 }
 
-ACPI_STATUS AcpiOsWaitSemaphore(ACPI_SEMAPHORE s __unused, uint32_t units __unused, uint16_t timeout __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+ACPI_STATUS AcpiOsWaitSemaphore(ACPI_SEMAPHORE s, uint32_t units, uint16_t timeout) {
+	assert(timeout == 0xFFFF);
+	assert(units <= INT_MAX);
+
+	semaphore_wait(s, (int) units);
 
 	return AE_OK;
 }
 
-ACPI_STATUS AcpiOsSignalSemaphore(ACPI_SEMAPHORE s __unused, uint32_t units __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+ACPI_STATUS AcpiOsSignalSemaphore(ACPI_SEMAPHORE s, uint32_t units) {
+	assert(units <= INT_MAX);
+
+	semaphore_signal(s, (int) units);
 
 	return AE_OK;
 }
