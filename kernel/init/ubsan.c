@@ -32,7 +32,7 @@ noreturn void __ubsan_handle_type_mismatch(ubsan_type_mismatch_t *type_mismatch,
 	} else if(type_mismatch->alignment != 0 && is_aligned(pointer, type_mismatch->alignment)) {
 		panic("[ubsan]	unaligned memory access");
 	} else {
-		panic("[ubsan]	%s address %p with insufficient space for object of type %s\n",
+		panic("[ubsan]	%s address %p with insufficient space for object of type %s",
 			type_check_kinds[type_mismatch->type_check_kind], (void *) pointer, type_mismatch->type->name);
 	}
 
@@ -111,5 +111,5 @@ noreturn void __ubsan_handle_builtin_unreachable(ubsan_location_t *location) {
 noreturn void __ubsan_handle_load_invalid_value(ubsan_invalid_value_t *data, uintptr_t value) {
 	ubsan_location(&data->location);
 
-	panic("[ubsan]	load of value %#08x is not a valid value for type %s\n", value, data->type->name);
+	panic("[ubsan]	load of value %#08x is not a valid value for type %s", value, data->type->name);
 }

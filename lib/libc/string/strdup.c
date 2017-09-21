@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 char *strdup(const char *s1) {
-#ifdef __libk
 	size_t s = strlen(s1);
 	char *ret = (char *) malloc(s + 1);
 
@@ -13,11 +12,6 @@ char *strdup(const char *s1) {
 	memcpy(ret, s1, s + 1);
 
 	return ret;
-#else
-	(void) s1;
-
-	return NULL;
-#endif
 }
 
 #ifdef UNIT
