@@ -1,7 +1,7 @@
 INIT		:= init/init
 INIT_SRC	:= $(shell find init -name *.c)
 INIT_OBJ	:= $(addsuffix .o,$(INIT_SRC))
-INIT_DEP	:= $(addsuffix .d,$(INIT_SRC))
+INIT_DEP	:= $(subst .c,.d,$(INIT_SRC))
 
 $(INIT): $(LIBC) init/init.c
 	@$(INFO) "INIT" "building $@"

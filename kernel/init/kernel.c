@@ -48,7 +48,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	syscall_init();
 
 	proc_init();
-	// acpi_init();
+	acpi_init();
 
 	asm volatile ("sti");
 

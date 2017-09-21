@@ -23,6 +23,7 @@ typedef struct {
 	enum {
 		THREAD_RUNNING,
 		THREAD_SUSPENDED,
+		THREAD_WAITING,
 		THREAD_DEAD,
 	} state;
 } thread_t;

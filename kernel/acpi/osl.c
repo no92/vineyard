@@ -8,6 +8,7 @@
 #include <time/pit.h>
 #include <proc/thread.h>
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -158,7 +159,7 @@ void AcpiOsWaitEventsComplete(void) {
 
 /* 9.4 Mutual Exclusion and Synchronization */
 ACPI_STATUS AcpiOsCreateMutex(ACPI_MUTEX *mutex) {
-	mutex_t *m = malloc(sizeof(*m));
+	mutex_t *m = mutex_create();
 
 	if(!m) {
 		return AE_NO_MEMORY;
@@ -170,17 +171,19 @@ ACPI_STATUS AcpiOsCreateMutex(ACPI_MUTEX *mutex) {
 }
 
 void AcpiOsDeleteMutex(ACPI_MUTEX mutex) {
-	free(mutex);
+	mutex_remove(mutex);
 }
 
-ACPI_STATUS AcpiOsAcquireMutex(ACPI_MUTEX mutex __unused, uint16_t timeout __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+ACPI_STATUS AcpiOsAcquireMutex(ACPI_MUTEX mutex, uint16_t timeout) {
+	assert(timeout == 0xFFFF);
+
+	mutex_acquire(mutex);
 
 	return 0;
 }
 
-void AcpiOsReleaseMutex(ACPI_MUTEX mutex __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+void AcpiOsReleaseMutex(ACPI_MUTEX mutex) {
+	mutex_release(mutex);
 }
 
 ACPI_STATUS AcpiOsCreateSemaphore(uint32_t max_units __unused, uint32_t initial_units __unused, ACPI_SEMAPHORE *s __unused) {
@@ -446,23 +449,23 @@ ACPI_STATUS AcpiOsEnterSleep(uint8_t state __unused, uint32_t a __unused, uint32
 
 /* Debugging stubs */
 ACPI_STATUS AcpiDbSingleStep(void *state __unused, void *op __unused, uint32_t optype __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+       panic("[acpi]   %s unimplemented", __FUNCTION__);
 
-	return AE_OK;
+       return AE_OK;
 }
 
 void AcpiDbSignalBreakPoint(void *state __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+       panic("[acpi]   %s unimplemented", __FUNCTION__);
 }
 
 void AcpiDbDumpMethodInfo(ACPI_STATUS status __unused, void *state __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+       panic("[acpi]   %s unimplemented", __FUNCTION__);
 }
 
 void AcpiDbDisplayArgumentObject(void *desc __unused, void *state __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+       panic("[acpi]   %s unimplemented", __FUNCTION__);
 }
 
 void AcpiDbDisplayResultObject(void *desc __unused, void *walk __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
+       panic("[acpi]   %s unimplemented", __FUNCTION__);
 }

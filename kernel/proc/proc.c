@@ -79,6 +79,10 @@ list_node_t *proc_create_worker(proc_worker_t worker, void *arg) {
 	return tnode;
 }
 
+static void proc_yield(frame_t *frame) {
+	proc_switch(frame);
+}
+
 void proc_init(void) {
 	queue = malloc(sizeof(*queue));
 
@@ -97,6 +101,8 @@ void proc_init(void) {
 	list_node_t *tnode = proc_create_worker(proc_idle, (void *) 0xDEADBEEF);
 	list_remove(queue, tnode);
 	current = tnode->data;
+
+	handler_set(0x81, proc_yield);
 
 	char *argv[] = {(char *) "init", 0};
 	char *envp[] = {0};
@@ -200,12 +206,29 @@ noreturn uintptr_t proc_exit(syscall_args_t *data) {
 	for(;;);
 }
 
+static thread_t *proc_get_next(void) {
+	list_node_t *node = queue->head;
+
+	for(; node; node = node->next) {
+		thread_t *t = node->data;
+
+		if(t->state == THREAD_WAITING) {
+			list_remove(queue, node);
+			list_append(queue, node);
+		} else if(t->state == THREAD_SUSPENDED || t->state == THREAD_DEAD) {
+			return t;
+		}
+	}
+
+	return NULL;
+}
+
 void proc_switch(frame_t *frame) {
 	if(!queue->head) {
 		return;
 	}
 
-	thread_t *next = queue->head->data;
+	thread_t *next = proc_get_next();
 	proc_t *nextp = next->proc;
 	proc_t *currentp = current->proc;
 
@@ -240,7 +263,9 @@ void proc_switch(frame_t *frame) {
 		list_append(queue, node);
 
 		/* mark it as suspended */
-		current->state = THREAD_SUSPENDED;
+		if(current->state == THREAD_RUNNING) {
+			current->state = THREAD_SUSPENDED;
+		}
 	} else {
 		currentp->alive--;
 		/* clean up the dead thread */

@@ -17,9 +17,10 @@ MB2_HEIGHT		?= 720
 
 CFLAGS_KERN		:= $(CFLAGS) $(CFLAGS_GCC)
 CFLAGS_LINT		:= -c -D__libk -target i386-pc-none-elf -Wno-language-extension-token -Wno-unreachable-code
-CFLAGS_ACPI		:= $(CFLAGS)
+CFLAGS_ACPI		:= $(filter-out -fsanitize=undefined,$(CFLAGS))
 CFLAGS_ACPI		+= -Wno-unused-parameter -Wno-discarded-qualifiers -Wno-nested-externs -Wno-conversion -Wno-format
-CFLAGS_ACPI		+= -Wno-missing-prototypes -Wno-missing-declarations -Wno-implicit-fallthrough -Wno-suggest-attribute
+CFLAGS_ACPI		+= -Wno-missing-prototypes -Wno-missing-declarations -Wno-implicit-fallthrough -Wno-suggest-attribute=noreturn
+CFLAGS_ACPI		+= -Wno-unused-but-set-variable -Wno-unused-function
 
 # find the kernel sources that we compile
 KERNEL_SRC		:= $(shell find kernel -name '*.[sc]' -type f -not -name 'crt[in].s')
@@ -51,7 +52,7 @@ kernel/gfx/font.c: $(UNI-VGA)
 	@$(INFO) "BDF-TO-C" "$@"
 	@util/bdf-to-c $< > $@
 
-$(KERNEL): $(KERNEL_OBJ)
+$(KERNEL): $(ACPICA) $(KERNEL_OBJ)
 	@$(INFO) "LD" $@
 	@$(MKDIR) -p $(dir $@)
 	@$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)

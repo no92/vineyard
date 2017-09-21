@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 noreturn void panic(const char * restrict format, ...) {
+	asm volatile ("cli");
+
 	trace(20);
 
 	va_list args;
@@ -14,7 +16,7 @@ noreturn void panic(const char * restrict format, ...) {
 
 	va_end(args);
 
-	asm volatile ("cli; hlt;");
+	asm volatile ("hlt;");
 	for(;;);
 
 	__builtin_unreachable();
