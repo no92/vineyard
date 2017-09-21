@@ -29,3 +29,5 @@ typedef void (*isr_handler_t)(frame_t *);
 
 void handler(frame_t *state);
 void handler_set(size_t n, isr_handler_t addr);
+isr_handler_t handler_get(size_t n);
+void handler_delete(size_t n);

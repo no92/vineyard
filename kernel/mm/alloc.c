@@ -94,7 +94,7 @@ static void mm_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
 }
 
 A("bitwise operator in conditional")
-static void mm_alloc_free(void *ptr) {
+void mm_alloc_free(void *ptr) {
 	alloc_node_t *node = (alloc_node_t *) ((uintptr_t) ptr - 0x1000);
 	size_t size = node->end - node->start + 1;
 

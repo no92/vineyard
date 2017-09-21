@@ -17,6 +17,9 @@ MB2_HEIGHT		?= 720
 
 CFLAGS_KERN		:= $(CFLAGS) $(CFLAGS_GCC)
 CFLAGS_LINT		:= -c -D__libk -target i386-pc-none-elf -Wno-language-extension-token -Wno-unreachable-code
+CFLAGS_ACPI		:= $(CFLAGS)
+CFLAGS_ACPI		+= -Wno-unused-parameter -Wno-discarded-qualifiers -Wno-nested-externs -Wno-conversion -Wno-format
+CFLAGS_ACPI		+= -Wno-missing-prototypes -Wno-missing-declarations -Wno-implicit-fallthrough -Wno-suggest-attribute
 
 # find the kernel sources that we compile
 KERNEL_SRC		:= $(shell find kernel -name '*.[sc]' -type f -not -name 'crt[in].s')
@@ -42,6 +45,7 @@ LOCAL_IP		?= $(shell hostname -I | head -n1 | cut -d " " -f1)
 
 kernel/init/boot.s.o: ASFLAGS += -DMB2_WIDTH=$(MB2_WIDTH) -DMB2_HEIGHT=$(MB2_HEIGHT)
 kernel/init/ssp.c.o: CFLAGS_KERN := $(filter-out -fstack-protector-all,$(CFLAGS_KERN)) -fno-stack-protector
+kernel/acpi/%.c.o: CFLAGS_KERN := $(CFLAGS_ACPI)
 
 kernel/gfx/font.c: $(UNI-VGA)
 	@$(INFO) "BDF-TO-C" "$@"
@@ -123,7 +127,7 @@ test-real: $(PXE_BUILD) all
 
 test-kernel:
 	@$(INFO) "OCLINT" "running static analysis on kernel"
-	@$(OCLINT) $(filter-out kernel/gfx/font.c,$(filter-out %.s,$(KERNEL_SRC))) -- $(CFLAGS) $(CFLAGS_LINT)
+	$(OCLINT) $(filter-out %/dlmalloc.c %/dlmalloc.h kernel/acpi/%.c kernel/gfx/font.c %.s,$(KERNEL_SRC)) -- $(CFLAGS) $(CFLAGS_LINT)
 
 -include $(KERNEL_DEP)
 

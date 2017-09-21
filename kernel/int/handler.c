@@ -59,3 +59,19 @@ void handler(frame_t *state) {
 void handler_set(size_t n, isr_handler_t addr) {
 	handlers[n] = addr;
 }
+
+isr_handler_t handler_get(size_t n) {
+	if(n > 255) {
+		return NULL;
+	}
+
+	return handlers[n];
+}
+
+void handler_delete(size_t n) {
+	if(n > 255) {
+		return;
+	}
+
+	handlers[n] = NULL;
+}

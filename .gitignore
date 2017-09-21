@@ -20,7 +20,11 @@ lib/libc/ubsan/ubsan.c
 # configuration
 conf/wol
 
-# huge dependency directory
+# huge dependency directories
+kernel/acpi/*/*.c
+include/acpi/platform/*.h
+include/acpi/*.h
+!include/acpi/platform/acvineyard.h
 third-party/*
 
 # exceptions

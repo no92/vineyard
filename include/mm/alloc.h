@@ -28,6 +28,7 @@ void mm_alloc_info(void);
 void *mm_alloc_proc(alloc_node_t *root, size_t s, uint16_t flags, bool allocate);
 void *mm_alloc(size_t s, uint16_t flags, bool allocate);
 void mm_alloc_reserve(uintptr_t addr, size_t s, uint16_t flags);
+void mm_alloc_free(void *ptr);
 
 uintptr_t sys_mmap(syscall_args_t *data);
 uintptr_t sys_munmap(syscall_args_t *data);

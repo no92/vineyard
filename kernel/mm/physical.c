@@ -20,11 +20,11 @@ static uintptr_t limit;
 extern uintptr_t _kernel_start;
 extern uintptr_t _kernel_end;
 
-static void mm_physical_mark_free(uintptr_t addr) {
+void mm_physical_mark_free(uintptr_t addr) {
 	bitmap_unset(pages, addr >> 12);
 }
 
-__attribute__((used)) static void mm_physical_mark_reserved(uintptr_t addr) {
+void mm_physical_mark_reserved(uintptr_t addr) {
 	bitmap_set(pages, addr >> 12);
 }
 

@@ -71,8 +71,9 @@ void mm_virtual_unmap(uintptr_t virt, size_t length) {
 	}
 }
 
+A("bitwise operator in conditional")
 uintptr_t mm_virtual_get_physical(uintptr_t virt) {
-	if(!page_directory[virt >> 22] & PAGE_PRESENT) {
+	if(!(page_directory[virt >> 22] & PAGE_PRESENT)) {
 		return 0;
 	}
 
@@ -83,6 +84,7 @@ uint16_t mm_virtual_get_flags(uintptr_t virt) {
 	return page_tables[virt >> 12] & 0xFFF;
 }
 
+A("bitwise operator in conditional")
 static void mm_virtual_page_fault(frame_t *frame) {
 	uint32_t cr2;
 	asm volatile ("mov %%cr2, %0" : "=r" (cr2));

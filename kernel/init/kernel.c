@@ -1,3 +1,4 @@
+#include <acpi/acpi.h>
 #include <driver/keyboard.h>
 #include <driver/uart.h>
 #include <fs/initrd.h>
@@ -47,6 +48,7 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 	syscall_init();
 
 	proc_init();
+	// acpi_init();
 
 	asm volatile ("sti");
 

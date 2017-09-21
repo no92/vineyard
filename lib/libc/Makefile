@@ -19,6 +19,7 @@ CFLAGS_LIBK	:= $(CFLAGS) $(CFLAGS_GCC)
 libc-crt: hdd/usr/lib/crt0.o hdd/usr/lib/crti.o hdd/usr/lib/crtn.o
 
 $(LIBC_DIR)/ubsan/ubsan.c: lib/libubsan/ubsan.c $(LIBC_DIR)/include/ubsan.h
+	@mkdir -p $(dir $@)
 	@cp $< $@
 
 $(LIBC_DIR)/include/ubsan.h: lib/libubsan/include/ubsan.h

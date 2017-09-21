@@ -1,0 +1,2953 @@
+diff -Naur acpi/dispatcher/dsargs.c kernel/acpi/dispatcher/dsargs.c
+--- kernel/acpi/dispatcher/dsargs.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsargs.c	2017-09-19 13:20:37.589776100 +0200
+@@ -150,12 +150,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dsargs")
+diff -Naur acpi/dispatcher/dscontrol.c kernel/acpi/dispatcher/dscontrol.c
+--- kernel/acpi/dispatcher/dscontrol.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dscontrol.c	2017-09-19 13:20:37.590504600 +0200
+@@ -150,12 +150,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acdebug.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dscontrol")
+diff -Naur acpi/dispatcher/dsdebug.c kernel/acpi/dispatcher/dsdebug.c
+--- kernel/acpi/dispatcher/dsdebug.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsdebug.c	2017-09-19 13:20:37.591164700 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
+-#include "acdisasm.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdisasm.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dsfield.c kernel/acpi/dispatcher/dsfield.c
+--- kernel/acpi/dispatcher/dsfield.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsfield.c	2017-09-19 13:20:37.592219800 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acparser.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acparser.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+@@ -164,7 +164,7 @@
+ /* Local prototypes */
+ 
+ #ifdef ACPI_ASL_COMPILER
+-#include "acdisasm.h"
++#include "acpi/acdisasm.h"
+ 
+ static ACPI_STATUS
+ AcpiDsCreateExternalRegion (
+diff -Naur acpi/dispatcher/dsinit.c kernel/acpi/dispatcher/dsinit.c
+--- kernel/acpi/dispatcher/dsinit.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsinit.c	2017-09-19 13:20:37.592793500 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
+-#include "actables.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
++#include "acpi/actables.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dsinit")
+diff -Naur acpi/dispatcher/dsmethod.c kernel/acpi/dispatcher/dsmethod.c
+--- kernel/acpi/dispatcher/dsmethod.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsmethod.c	2017-09-19 13:20:37.593526900 +0200
+@@ -149,14 +149,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdebug.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dsmthdat.c kernel/acpi/dispatcher/dsmthdat.c
+--- kernel/acpi/dispatcher/dsmthdat.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsmthdat.c	2017-09-19 13:20:37.594207600 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dsobject.c kernel/acpi/dispatcher/dsobject.c
+--- kernel/acpi/dispatcher/dsobject.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsobject.c	2017-09-19 13:20:37.594898700 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dsobject")
+diff -Naur acpi/dispatcher/dsopcode.c kernel/acpi/dispatcher/dsopcode.c
+--- kernel/acpi/dispatcher/dsopcode.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsopcode.c	2017-09-19 13:20:37.595610500 +0200
+@@ -149,15 +149,15 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dsopcode")
+diff -Naur acpi/dispatcher/dspkginit.c kernel/acpi/dispatcher/dspkginit.c
+--- kernel/acpi/dispatcher/dspkginit.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dspkginit.c	2017-09-19 13:20:37.596324400 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/dispatcher/dsutils.c kernel/acpi/dispatcher/dsutils.c
+--- kernel/acpi/dispatcher/dsutils.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dsutils.c	2017-09-19 13:20:37.597149300 +0200
+@@ -149,14 +149,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdebug.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dsutils")
+diff -Naur acpi/dispatcher/dswexec.c kernel/acpi/dispatcher/dswexec.c
+--- kernel/acpi/dispatcher/dswexec.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dswexec.c	2017-09-19 13:20:37.597862800 +0200
+@@ -150,14 +150,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdebug.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dswload2.c kernel/acpi/dispatcher/dswload2.c
+--- kernel/acpi/dispatcher/dswload2.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dswload2.c	2017-09-19 13:20:37.599276000 +0200
+@@ -149,14 +149,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dswload2")
+diff -Naur acpi/dispatcher/dswload.c kernel/acpi/dispatcher/dswload.c
+--- kernel/acpi/dispatcher/dswload.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dswload.c	2017-09-19 13:20:37.598566700 +0200
+@@ -149,16 +149,16 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ #ifdef ACPI_ASL_COMPILER
+-#include "acdisasm.h"
++#include "acpi/acdisasm.h"
+ #endif
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dswscope.c kernel/acpi/dispatcher/dswscope.c
+--- kernel/acpi/dispatcher/dswscope.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dswscope.c	2017-09-19 13:20:37.599845600 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
+ 
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+diff -Naur acpi/dispatcher/dswstate.c kernel/acpi/dispatcher/dswstate.c
+--- kernel/acpi/dispatcher/dswstate.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/dispatcher/dswstate.c	2017-09-19 13:20:37.600538600 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_DISPATCHER
+         ACPI_MODULE_NAME    ("dswstate")
+diff -Naur acpi/events/evevent.c kernel/acpi/events/evevent.c
+--- kernel/acpi/events/evevent.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evevent.c	2017-09-19 13:20:37.601220000 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evevent")
+diff -Naur acpi/events/evglock.c kernel/acpi/events/evglock.c
+--- kernel/acpi/events/evglock.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evglock.c	2017-09-19 13:20:37.601824700 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evglock")
+diff -Naur acpi/events/evgpeblk.c kernel/acpi/events/evgpeblk.c
+--- kernel/acpi/events/evgpeblk.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evgpeblk.c	2017-09-19 13:20:37.603216400 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evgpeblk")
+diff -Naur acpi/events/evgpe.c kernel/acpi/events/evgpe.c
+--- kernel/acpi/events/evgpe.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evgpe.c	2017-09-19 13:20:37.602603500 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evgpe")
+diff -Naur acpi/events/evgpeinit.c kernel/acpi/events/evgpeinit.c
+--- kernel/acpi/events/evgpeinit.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evgpeinit.c	2017-09-19 13:20:37.603861800 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evgpeinit")
+diff -Naur acpi/events/evgpeutil.c kernel/acpi/events/evgpeutil.c
+--- kernel/acpi/events/evgpeutil.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evgpeutil.c	2017-09-19 13:20:37.604479800 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evgpeutil")
+diff -Naur acpi/events/evhandler.c kernel/acpi/events/evhandler.c
+--- kernel/acpi/events/evhandler.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evhandler.c	2017-09-19 13:20:37.605128500 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evhandler")
+diff -Naur acpi/events/evmisc.c kernel/acpi/events/evmisc.c
+--- kernel/acpi/events/evmisc.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evmisc.c	2017-09-19 13:20:37.605668400 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evmisc")
+diff -Naur acpi/events/evregion.c kernel/acpi/events/evregion.c
+--- kernel/acpi/events/evregion.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evregion.c	2017-09-19 13:20:37.606531200 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evregion")
+diff -Naur acpi/events/evrgnini.c kernel/acpi/events/evrgnini.c
+--- kernel/acpi/events/evrgnini.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evrgnini.c	2017-09-19 13:20:37.607222700 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evrgnini")
+diff -Naur acpi/events/evsci.c kernel/acpi/events/evsci.c
+--- kernel/acpi/events/evsci.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evsci.c	2017-09-19 13:20:37.607749500 +0200
+@@ -151,9 +151,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EVENTS
+diff -Naur acpi/events/evxface.c kernel/acpi/events/evxface.c
+--- kernel/acpi/events/evxface.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evxface.c	2017-09-19 13:20:37.608566700 +0200
+@@ -151,11 +151,11 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evxface")
+diff -Naur acpi/events/evxfevnt.c kernel/acpi/events/evxfevnt.c
+--- kernel/acpi/events/evxfevnt.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evxfevnt.c	2017-09-19 13:20:37.609341700 +0200
+@@ -151,9 +151,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evxfevnt")
+diff -Naur acpi/events/evxfgpe.c kernel/acpi/events/evxfgpe.c
+--- kernel/acpi/events/evxfgpe.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evxfgpe.c	2017-09-19 13:20:37.610129700 +0200
+@@ -151,10 +151,10 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evxfgpe")
+diff -Naur acpi/events/evxfregn.c kernel/acpi/events/evxfregn.c
+--- kernel/acpi/events/evxfregn.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/events/evxfregn.c	2017-09-19 13:20:37.610684700 +0200
+@@ -152,10 +152,10 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_EVENTS
+         ACPI_MODULE_NAME    ("evxfregn")
+diff -Naur acpi/executer/exconcat.c kernel/acpi/executer/exconcat.c
+--- kernel/acpi/executer/exconcat.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exconcat.c	2017-09-19 13:20:37.611433300 +0200
+@@ -150,10 +150,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlresrc.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exconfig.c kernel/acpi/executer/exconfig.c
+--- kernel/acpi/executer/exconfig.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exconfig.c	2017-09-19 13:20:37.612091800 +0200
+@@ -150,14 +150,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "actables.h"
+-#include "acdispat.h"
+-#include "acevents.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/actables.h"
++#include "acpi/acdispat.h"
++#include "acpi/acevents.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exconvrt.c kernel/acpi/executer/exconvrt.c
+--- kernel/acpi/executer/exconvrt.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exconvrt.c	2017-09-19 13:20:37.612750900 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/excreate.c kernel/acpi/executer/excreate.c
+--- kernel/acpi/executer/excreate.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/excreate.c	2017-09-19 13:20:37.613351800 +0200
+@@ -150,11 +150,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exdebug.c kernel/acpi/executer/exdebug.c
+--- kernel/acpi/executer/exdebug.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exdebug.c	2017-09-19 13:20:37.613948300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exdump.c kernel/acpi/executer/exdump.c
+--- kernel/acpi/executer/exdump.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exdump.c	2017-09-19 13:20:37.614834500 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exfield.c kernel/acpi/executer/exfield.c
+--- kernel/acpi/executer/exfield.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exfield.c	2017-09-19 13:20:37.615488700 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exfldio.c kernel/acpi/executer/exfldio.c
+--- kernel/acpi/executer/exfldio.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exfldio.c	2017-09-19 13:20:37.616295500 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acevents.h"
+-#include "acdispat.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acevents.h"
++#include "acpi/acdispat.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exmisc.c kernel/acpi/executer/exmisc.c
+--- kernel/acpi/executer/exmisc.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exmisc.c	2017-09-19 13:20:37.616912400 +0200
+@@ -150,10 +150,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exmutex.c kernel/acpi/executer/exmutex.c
+--- kernel/acpi/executer/exmutex.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exmutex.c	2017-09-19 13:20:37.617537500 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+         ACPI_MODULE_NAME    ("exmutex")
+diff -Naur acpi/executer/exnames.c kernel/acpi/executer/exnames.c
+--- kernel/acpi/executer/exnames.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exnames.c	2017-09-19 13:20:37.618124600 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+         ACPI_MODULE_NAME    ("exnames")
+diff -Naur acpi/executer/exoparg1.c kernel/acpi/executer/exoparg1.c
+--- kernel/acpi/executer/exoparg1.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exoparg1.c	2017-09-19 13:20:37.618982000 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exoparg2.c kernel/acpi/executer/exoparg2.c
+--- kernel/acpi/executer/exoparg2.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exoparg2.c	2017-09-19 13:20:37.619620200 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acinterp.h"
+-#include "acevents.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acinterp.h"
++#include "acpi/acevents.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exoparg3.c kernel/acpi/executer/exoparg3.c
+--- kernel/acpi/executer/exoparg3.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exoparg3.c	2017-09-19 13:20:37.620164800 +0200
+@@ -150,11 +150,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acparser.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exoparg6.c kernel/acpi/executer/exoparg6.c
+--- kernel/acpi/executer/exoparg6.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exoparg6.c	2017-09-19 13:20:37.620737300 +0200
+@@ -150,11 +150,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acparser.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exprep.c kernel/acpi/executer/exprep.c
+--- kernel/acpi/executer/exprep.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exprep.c	2017-09-19 13:20:37.621425900 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
+-#include "acdispat.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdispat.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exregion.c kernel/acpi/executer/exregion.c
+--- kernel/acpi/executer/exregion.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exregion.c	2017-09-19 13:20:37.622067900 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exresnte.c kernel/acpi/executer/exresnte.c
+--- kernel/acpi/executer/exresnte.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exresnte.c	2017-09-19 13:20:37.622653300 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exresolv.c kernel/acpi/executer/exresolv.c
+--- kernel/acpi/executer/exresolv.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exresolv.c	2017-09-19 13:20:37.623286700 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exresop.c kernel/acpi/executer/exresop.c
+--- kernel/acpi/executer/exresop.c	2017-08-31 17:57:58.000000000 +0200
++++ kernel/acpi/executer/exresop.c	2017-09-19 13:20:37.623954800 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acparser.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acparser.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exstore.c kernel/acpi/executer/exstore.c
+--- kernel/acpi/executer/exstore.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/exstore.c	2017-09-19 13:20:37.624730100 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exstoren.c kernel/acpi/executer/exstoren.c
+--- kernel/acpi/executer/exstoren.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/exstoren.c	2017-09-19 13:20:37.625475100 +0200
+@@ -150,10 +150,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exstorob.c kernel/acpi/executer/exstorob.c
+--- kernel/acpi/executer/exstorob.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/exstorob.c	2017-09-19 13:20:37.626103900 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exsystem.c kernel/acpi/executer/exsystem.c
+--- kernel/acpi/executer/exsystem.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/exsystem.c	2017-09-19 13:20:37.626909000 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+         ACPI_MODULE_NAME    ("exsystem")
+diff -Naur acpi/executer/extrace.c kernel/acpi/executer/extrace.c
+--- kernel/acpi/executer/extrace.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/extrace.c	2017-09-19 13:20:37.627657300 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+diff -Naur acpi/executer/exutils.c kernel/acpi/executer/exutils.c
+--- kernel/acpi/executer/exutils.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/executer/exutils.c	2017-09-19 13:20:37.628561500 +0200
+@@ -165,10 +165,10 @@
+ 
+ #define DEFINE_AML_GLOBALS
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/amlcode.h"
+ 
+ #define _COMPONENT          ACPI_EXECUTER
+         ACPI_MODULE_NAME    ("exutils")
+diff -Naur acpi/hardware/hwacpi.c kernel/acpi/hardware/hwacpi.c
+--- kernel/acpi/hardware/hwacpi.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwacpi.c	2017-09-19 13:20:37.629519200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+diff -Naur acpi/hardware/hwesleep.c kernel/acpi/hardware/hwesleep.c
+--- kernel/acpi/hardware/hwesleep.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwesleep.c	2017-09-19 13:20:37.630223200 +0200
+@@ -150,8 +150,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwesleep")
+diff -Naur acpi/hardware/hwgpe.c kernel/acpi/hardware/hwgpe.c
+--- kernel/acpi/hardware/hwgpe.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwgpe.c	2017-09-19 13:20:37.630916100 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwgpe")
+diff -Naur acpi/hardware/hwpci.c kernel/acpi/hardware/hwpci.c
+--- kernel/acpi/hardware/hwpci.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwpci.c	2017-09-19 13:20:37.631597300 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/hardware/hwregs.c kernel/acpi/hardware/hwregs.c
+--- kernel/acpi/hardware/hwregs.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwregs.c	2017-09-19 13:20:37.632267100 +0200
+@@ -150,9 +150,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwregs")
+diff -Naur acpi/hardware/hwsleep.c kernel/acpi/hardware/hwsleep.c
+--- kernel/acpi/hardware/hwsleep.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwsleep.c	2017-09-19 13:20:37.632776400 +0200
+@@ -150,8 +150,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwsleep")
+diff -Naur acpi/hardware/hwtimer.c kernel/acpi/hardware/hwtimer.c
+--- kernel/acpi/hardware/hwtimer.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwtimer.c	2017-09-19 13:20:37.633286100 +0200
+@@ -151,8 +151,8 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwtimer")
+diff -Naur acpi/hardware/hwvalid.c kernel/acpi/hardware/hwvalid.c
+--- kernel/acpi/hardware/hwvalid.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwvalid.c	2017-09-19 13:20:37.633929200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwvalid")
+diff -Naur acpi/hardware/hwxface.c kernel/acpi/hardware/hwxface.c
+--- kernel/acpi/hardware/hwxface.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwxface.c	2017-09-19 13:20:37.634569800 +0200
+@@ -151,9 +151,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwxface")
+diff -Naur acpi/hardware/hwxfsleep.c kernel/acpi/hardware/hwxfsleep.c
+--- kernel/acpi/hardware/hwxfsleep.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/hardware/hwxfsleep.c	2017-09-19 13:20:37.635179900 +0200
+@@ -151,8 +151,8 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_HARDWARE
+         ACPI_MODULE_NAME    ("hwxfsleep")
+diff -Naur acpi/namespace/nsaccess.c kernel/acpi/namespace/nsaccess.c
+--- kernel/acpi/namespace/nsaccess.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsaccess.c	2017-09-19 13:20:37.636088400 +0200
+@@ -149,14 +149,14 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
+-#include "acdispat.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdispat.h"
+ 
+ #ifdef ACPI_ASL_COMPILER
+-    #include "acdisasm.h"
++    #include "acpi/acdisasm.h"
+ #endif
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsalloc.c kernel/acpi/namespace/nsalloc.c
+--- kernel/acpi/namespace/nsalloc.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsalloc.c	2017-09-19 13:20:37.636724500 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsarguments.c kernel/acpi/namespace/nsarguments.c
+--- kernel/acpi/namespace/nsarguments.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsarguments.c	2017-09-19 13:20:37.637281400 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acpredef.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acpredef.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsconvert.c kernel/acpi/namespace/nsconvert.c
+--- kernel/acpi/namespace/nsconvert.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsconvert.c	2017-09-19 13:20:37.637879900 +0200
+@@ -150,12 +150,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
+-#include "acpredef.h"
+-#include "amlresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
++#include "acpi/acpredef.h"
++#include "acpi/amlresrc.h"
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+         ACPI_MODULE_NAME    ("nsconvert")
+diff -Naur acpi/namespace/nsdump.c kernel/acpi/namespace/nsdump.c
+--- kernel/acpi/namespace/nsdump.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsdump.c	2017-09-19 13:20:37.638677900 +0200
+@@ -150,10 +150,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acoutput.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acoutput.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsdumpdv.c kernel/acpi/namespace/nsdumpdv.c
+--- kernel/acpi/namespace/nsdumpdv.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsdumpdv.c	2017-09-19 13:20:37.639178500 +0200
+@@ -150,7 +150,7 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
++#include "acpi/acpi.h"
+ 
+ 
+ /* TBD: This entire module is apparently obsolete and should be removed */
+@@ -161,7 +161,7 @@
+ #ifdef ACPI_OBSOLETE_FUNCTIONS
+ #if defined(ACPI_DEBUG_OUTPUT) || defined(ACPI_DEBUGGER)
+ 
+-#include "acnamesp.h"
++#include "acpi/acnamesp.h"
+ 
+ /*******************************************************************************
+  *
+diff -Naur acpi/namespace/nseval.c kernel/acpi/namespace/nseval.c
+--- kernel/acpi/namespace/nseval.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nseval.c	2017-09-19 13:20:37.639813700 +0200
+@@ -150,11 +150,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsinit.c kernel/acpi/namespace/nsinit.c
+--- kernel/acpi/namespace/nsinit.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsinit.c	2017-09-19 13:20:37.640546300 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+         ACPI_MODULE_NAME    ("nsinit")
+diff -Naur acpi/namespace/nsload.c kernel/acpi/namespace/nsload.c
+--- kernel/acpi/namespace/nsload.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsload.c	2017-09-19 13:20:37.641159900 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acdispat.h"
+-#include "actables.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdispat.h"
++#include "acpi/actables.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsnames.c kernel/acpi/namespace/nsnames.c
+--- kernel/acpi/namespace/nsnames.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsnames.c	2017-09-19 13:20:37.641749400 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsobject.c kernel/acpi/namespace/nsobject.c
+--- kernel/acpi/namespace/nsobject.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsobject.c	2017-09-19 13:20:37.642355900 +0200
+@@ -150,9 +150,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsparse.c kernel/acpi/namespace/nsparse.c
+--- kernel/acpi/namespace/nsparse.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsparse.c	2017-09-19 13:20:37.642993400 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "actables.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/actables.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nspredef.c kernel/acpi/namespace/nspredef.c
+--- kernel/acpi/namespace/nspredef.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nspredef.c	2017-09-19 13:20:37.643636800 +0200
+@@ -151,10 +151,10 @@
+ 
+ #define ACPI_CREATE_PREDEFINED_TABLE
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acpredef.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acpredef.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsprepkg.c kernel/acpi/namespace/nsprepkg.c
+--- kernel/acpi/namespace/nsprepkg.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsprepkg.c	2017-09-19 13:20:37.644458800 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acpredef.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acpredef.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsrepair2.c kernel/acpi/namespace/nsrepair2.c
+--- kernel/acpi/namespace/nsrepair2.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsrepair2.c	2017-09-19 13:20:37.646322600 +0200
+@@ -150,9 +150,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+         ACPI_MODULE_NAME    ("nsrepair2")
+diff -Naur acpi/namespace/nsrepair.c kernel/acpi/namespace/nsrepair.c
+--- kernel/acpi/namespace/nsrepair.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsrepair.c	2017-09-19 13:20:37.645360500 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
+-#include "acpredef.h"
+-#include "amlresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
++#include "acpi/acpredef.h"
++#include "acpi/amlresrc.h"
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+         ACPI_MODULE_NAME    ("nsrepair")
+diff -Naur acpi/namespace/nssearch.c kernel/acpi/namespace/nssearch.c
+--- kernel/acpi/namespace/nssearch.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nssearch.c	2017-09-19 13:20:37.647074900 +0200
+@@ -149,12 +149,12 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ #ifdef ACPI_ASL_COMPILER
+-#include "amlcode.h"
++#include "acpi/amlcode.h"
+ #endif
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsutils.c kernel/acpi/namespace/nsutils.c
+--- kernel/acpi/namespace/nsutils.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsutils.c	2017-09-19 13:20:37.647836300 +0200
+@@ -150,10 +150,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/amlcode.h"
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+         ACPI_MODULE_NAME    ("nsutils")
+diff -Naur acpi/namespace/nswalk.c kernel/acpi/namespace/nswalk.c
+--- kernel/acpi/namespace/nswalk.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nswalk.c	2017-09-19 13:20:37.648381200 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsxfeval.c kernel/acpi/namespace/nsxfeval.c
+--- kernel/acpi/namespace/nsxfeval.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsxfeval.c	2017-09-19 13:20:37.649138500 +0200
+@@ -152,10 +152,10 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsxfname.c kernel/acpi/namespace/nsxfname.c
+--- kernel/acpi/namespace/nsxfname.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsxfname.c	2017-09-19 13:20:37.649822400 +0200
+@@ -152,11 +152,11 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acparser.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/namespace/nsxfobj.c kernel/acpi/namespace/nsxfobj.c
+--- kernel/acpi/namespace/nsxfobj.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/namespace/nsxfobj.c	2017-09-19 13:20:37.650356400 +0200
+@@ -152,9 +152,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_NAMESPACE
+diff -Naur acpi/parser/psargs.c kernel/acpi/parser/psargs.c
+--- kernel/acpi/parser/psargs.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psargs.c	2017-09-19 13:20:37.651759300 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acnamesp.h"
+-#include "acdispat.h"
+-#include "acconvert.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdispat.h"
++#include "acpi/acconvert.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psargs")
+diff -Naur acpi/parser/psloop.c kernel/acpi/parser/psloop.c
+--- kernel/acpi/parser/psloop.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psloop.c	2017-09-19 13:20:37.652467200 +0200
+@@ -157,13 +157,13 @@
+  * opcode templates in AmlOpInfo[].
+  */
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "amlcode.h"
+-#include "acconvert.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/amlcode.h"
++#include "acpi/acconvert.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psloop")
+diff -Naur acpi/parser/psobject.c kernel/acpi/parser/psobject.c
+--- kernel/acpi/parser/psobject.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psobject.c	2017-09-19 13:20:37.653152600 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acconvert.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acconvert.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psobject")
+diff -Naur acpi/parser/psopcode.c kernel/acpi/parser/psopcode.c
+--- kernel/acpi/parser/psopcode.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psopcode.c	2017-09-19 13:20:37.653892300 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acopcode.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acopcode.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_PARSER
+diff -Naur acpi/parser/psopinfo.c kernel/acpi/parser/psopinfo.c
+--- kernel/acpi/parser/psopinfo.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psopinfo.c	2017-09-19 13:20:37.654497300 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acopcode.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acopcode.h"
++#include "acpi/amlcode.h"
+ 
+ 
+ #define _COMPONENT          ACPI_PARSER
+@@ -206,7 +206,7 @@
+     }
+ 
+ #if defined ACPI_ASL_COMPILER && defined ACPI_DEBUG_OUTPUT
+-#include "asldefine.h"
++#include "acpi/asldefine.h"
+ 
+     switch (Opcode)
+     {
+diff -Naur acpi/parser/psparse.c kernel/acpi/parser/psparse.c
+--- kernel/acpi/parser/psparse.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psparse.c	2017-09-19 13:20:37.655216500 +0200
+@@ -158,13 +158,13 @@
+  * templates in AmlOpInfo[]
+  */
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "amlcode.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/amlcode.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psparse")
+diff -Naur acpi/parser/psscope.c kernel/acpi/parser/psscope.c
+--- kernel/acpi/parser/psscope.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psscope.c	2017-09-19 13:20:37.655744700 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psscope")
+diff -Naur acpi/parser/pstree.c kernel/acpi/parser/pstree.c
+--- kernel/acpi/parser/pstree.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/pstree.c	2017-09-19 13:20:37.656271800 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acconvert.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acconvert.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("pstree")
+diff -Naur acpi/parser/psutils.c kernel/acpi/parser/psutils.c
+--- kernel/acpi/parser/psutils.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psutils.c	2017-09-19 13:20:37.656865200 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "amlcode.h"
+-#include "acconvert.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/amlcode.h"
++#include "acpi/acconvert.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("psutils")
+diff -Naur acpi/parser/pswalk.c kernel/acpi/parser/pswalk.c
+--- kernel/acpi/parser/pswalk.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/pswalk.c	2017-09-19 13:20:37.657350700 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
+ 
+ #define _COMPONENT          ACPI_PARSER
+         ACPI_MODULE_NAME    ("pswalk")
+diff -Naur acpi/parser/psxface.c kernel/acpi/parser/psxface.c
+--- kernel/acpi/parser/psxface.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/parser/psxface.c	2017-09-19 13:20:37.657928100 +0200
+@@ -149,13 +149,13 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acparser.h"
+-#include "acdispat.h"
+-#include "acinterp.h"
+-#include "actables.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acparser.h"
++#include "acpi/acdispat.h"
++#include "acpi/acinterp.h"
++#include "acpi/actables.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_PARSER
+diff -Naur acpi/resources/rsaddr.c kernel/acpi/resources/rsaddr.c
+--- kernel/acpi/resources/rsaddr.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsaddr.c	2017-09-19 13:20:37.658672500 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsaddr")
+diff -Naur acpi/resources/rscalc.c kernel/acpi/resources/rscalc.c
+--- kernel/acpi/resources/rscalc.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rscalc.c	2017-09-19 13:20:37.659441200 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+diff -Naur acpi/resources/rscreate.c kernel/acpi/resources/rscreate.c
+--- kernel/acpi/resources/rscreate.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rscreate.c	2017-09-19 13:20:37.660059800 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rscreate")
+diff -Naur acpi/resources/rsdump.c kernel/acpi/resources/rsdump.c
+--- kernel/acpi/resources/rsdump.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsdump.c	2017-09-19 13:20:37.660680300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsdump")
+diff -Naur acpi/resources/rsdumpinfo.c kernel/acpi/resources/rsdumpinfo.c
+--- kernel/acpi/resources/rsdumpinfo.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsdumpinfo.c	2017-09-19 13:20:37.661428200 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsdumpinfo")
+diff -Naur acpi/resources/rsinfo.c kernel/acpi/resources/rsinfo.c
+--- kernel/acpi/resources/rsinfo.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsinfo.c	2017-09-19 13:20:37.662005600 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsinfo")
+diff -Naur acpi/resources/rsio.c kernel/acpi/resources/rsio.c
+--- kernel/acpi/resources/rsio.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsio.c	2017-09-19 13:20:37.662573600 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsio")
+diff -Naur acpi/resources/rsirq.c kernel/acpi/resources/rsirq.c
+--- kernel/acpi/resources/rsirq.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsirq.c	2017-09-19 13:20:37.663140400 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsirq")
+diff -Naur acpi/resources/rslist.c kernel/acpi/resources/rslist.c
+--- kernel/acpi/resources/rslist.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rslist.c	2017-09-19 13:20:37.663675900 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rslist")
+diff -Naur acpi/resources/rsmemory.c kernel/acpi/resources/rsmemory.c
+--- kernel/acpi/resources/rsmemory.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsmemory.c	2017-09-19 13:20:37.664193600 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsmemory")
+diff -Naur acpi/resources/rsmisc.c kernel/acpi/resources/rsmisc.c
+--- kernel/acpi/resources/rsmisc.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsmisc.c	2017-09-19 13:20:37.664879300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsmisc")
+diff -Naur acpi/resources/rsserial.c kernel/acpi/resources/rsserial.c
+--- kernel/acpi/resources/rsserial.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsserial.c	2017-09-19 13:20:37.665612800 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsserial")
+diff -Naur acpi/resources/rsutils.c kernel/acpi/resources/rsutils.c
+--- kernel/acpi/resources/rsutils.c	2017-08-31 17:57:59.000000000 +0200
++++ kernel/acpi/resources/rsutils.c	2017-09-19 13:20:37.666313200 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acresrc.h"
+ 
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+diff -Naur acpi/resources/rsxface.c kernel/acpi/resources/rsxface.c
+--- kernel/acpi/resources/rsxface.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/resources/rsxface.c	2017-09-19 13:20:37.667023000 +0200
+@@ -151,10 +151,10 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
++#include "acpi/acnamesp.h"
+ 
+ #define _COMPONENT          ACPI_RESOURCES
+         ACPI_MODULE_NAME    ("rsxface")
+diff -Naur acpi/tables/tbdata.c kernel/acpi/tables/tbdata.c
+--- kernel/acpi/tables/tbdata.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbdata.c	2017-09-19 13:20:37.667944500 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "actables.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/actables.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbdata")
+diff -Naur acpi/tables/tbfadt.c kernel/acpi/tables/tbfadt.c
+--- kernel/acpi/tables/tbfadt.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbfadt.c	2017-09-19 13:20:37.668721200 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbfadt")
+diff -Naur acpi/tables/tbfind.c kernel/acpi/tables/tbfind.c
+--- kernel/acpi/tables/tbfind.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbfind.c	2017-09-19 13:20:37.669199700 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbfind")
+diff -Naur acpi/tables/tbinstal.c kernel/acpi/tables/tbinstal.c
+--- kernel/acpi/tables/tbinstal.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbinstal.c	2017-09-19 13:20:37.669803800 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbinstal")
+diff -Naur acpi/tables/tbprint.c kernel/acpi/tables/tbprint.c
+--- kernel/acpi/tables/tbprint.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbprint.c	2017-09-19 13:20:37.670338400 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbprint")
+diff -Naur acpi/tables/tbutils.c kernel/acpi/tables/tbutils.c
+--- kernel/acpi/tables/tbutils.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbutils.c	2017-09-19 13:20:37.671018100 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbutils")
+diff -Naur acpi/tables/tbxface.c kernel/acpi/tables/tbxface.c
+--- kernel/acpi/tables/tbxface.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbxface.c	2017-09-19 13:20:37.671710400 +0200
+@@ -151,9 +151,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbxface")
+diff -Naur acpi/tables/tbxfload.c kernel/acpi/tables/tbxfload.c
+--- kernel/acpi/tables/tbxfload.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbxfload.c	2017-09-19 13:20:37.672339200 +0200
+@@ -151,11 +151,11 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "actables.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/actables.h"
++#include "acpi/acevents.h"
+ 
+ #define _COMPONENT          ACPI_TABLES
+         ACPI_MODULE_NAME    ("tbxfload")
+diff -Naur acpi/tables/tbxfroot.c kernel/acpi/tables/tbxfroot.c
+--- kernel/acpi/tables/tbxfroot.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/tables/tbxfroot.c	2017-09-19 13:20:37.672872200 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/actables.h"
+ 
+ 
+ #define _COMPONENT          ACPI_TABLES
+diff -Naur acpi/utilities/utaddress.c kernel/acpi/utilities/utaddress.c
+--- kernel/acpi/utilities/utaddress.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utaddress.c	2017-09-19 13:20:37.673599100 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utalloc.c kernel/acpi/utilities/utalloc.c
+--- kernel/acpi/utilities/utalloc.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utalloc.c	2017-09-19 13:20:37.674193300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdebug.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utalloc")
+diff -Naur acpi/utilities/utascii.c kernel/acpi/utilities/utascii.c
+--- kernel/acpi/utilities/utascii.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utascii.c	2017-09-19 13:20:37.674687800 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ /*******************************************************************************
+diff -Naur acpi/utilities/utbuffer.c kernel/acpi/utilities/utbuffer.c
+--- kernel/acpi/utilities/utbuffer.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utbuffer.c	2017-09-19 13:20:37.675226200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utbuffer")
+diff -Naur acpi/utilities/utcache.c kernel/acpi/utilities/utcache.c
+--- kernel/acpi/utilities/utcache.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utcache.c	2017-09-19 13:20:37.675754200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utcache")
+diff -Naur acpi/utilities/utclib.c kernel/acpi/utilities/utclib.c
+--- kernel/acpi/utilities/utclib.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utclib.c	2017-09-19 13:20:37.676621100 +0200
+@@ -150,8 +150,8 @@
+  *****************************************************************************/
+ 
+ #define ACPI_CLIBRARY
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ /*
+  * This module contains implementations of the standard C library functions
+diff -Naur acpi/utilities/utcopy.c kernel/acpi/utilities/utcopy.c
+--- kernel/acpi/utilities/utcopy.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utcopy.c	2017-09-19 13:20:37.677541000 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utdebug.c kernel/acpi/utilities/utdebug.c
+--- kernel/acpi/utilities/utdebug.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utdebug.c	2017-09-19 13:20:37.678154200 +0200
+@@ -151,9 +151,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utdebug")
+diff -Naur acpi/utilities/utdecode.c kernel/acpi/utilities/utdecode.c
+--- kernel/acpi/utilities/utdecode.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utdecode.c	2017-09-19 13:20:37.678848400 +0200
+@@ -149,10 +149,10 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "amlcode.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/amlcode.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utdecode")
+diff -Naur acpi/utilities/utdelete.c kernel/acpi/utilities/utdelete.c
+--- kernel/acpi/utilities/utdelete.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utdelete.c	2017-09-19 13:20:37.679564900 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/uterror.c kernel/acpi/utilities/uterror.c
+--- kernel/acpi/utilities/uterror.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/uterror.c	2017-09-19 13:20:37.680135800 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/uteval.c kernel/acpi/utilities/uteval.c
+--- kernel/acpi/utilities/uteval.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/uteval.c	2017-09-19 13:20:37.680710300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utexcep.c kernel/acpi/utilities/utexcep.c
+--- kernel/acpi/utilities/utexcep.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utexcep.c	2017-09-19 13:20:37.681203400 +0200
+@@ -152,8 +152,8 @@
+ #define EXPORT_ACPI_INTERFACES
+ 
+ #define ACPI_DEFINE_EXCEPTION_TABLE
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utglobal.c kernel/acpi/utilities/utglobal.c
+--- kernel/acpi/utilities/utglobal.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utglobal.c	2017-09-19 13:20:37.681742500 +0200
+@@ -152,8 +152,8 @@
+ #define EXPORT_ACPI_INTERFACES
+ #define DEFINE_ACPI_GLOBALS
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utglobal")
+diff -Naur acpi/utilities/uthex.c kernel/acpi/utilities/uthex.c
+--- kernel/acpi/utilities/uthex.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/uthex.c	2017-09-19 13:20:37.682234300 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_COMPILER
+         ACPI_MODULE_NAME    ("uthex")
+diff -Naur acpi/utilities/utids.c kernel/acpi/utilities/utids.c
+--- kernel/acpi/utilities/utids.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utids.c	2017-09-19 13:20:37.682855000 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acinterp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acinterp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utinit.c kernel/acpi/utilities/utinit.c
+--- kernel/acpi/utilities/utinit.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utinit.c	2017-09-19 13:20:37.683392600 +0200
+@@ -149,11 +149,11 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
+-#include "acevents.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acevents.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utinit")
+diff -Naur acpi/utilities/utlock.c kernel/acpi/utilities/utlock.c
+--- kernel/acpi/utilities/utlock.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utlock.c	2017-09-19 13:20:37.683879000 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utmath.c kernel/acpi/utilities/utmath.c
+--- kernel/acpi/utilities/utmath.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utmath.c	2017-09-19 13:20:37.684569000 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utmisc.c kernel/acpi/utilities/utmisc.c
+--- kernel/acpi/utilities/utmisc.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utmisc.c	2017-09-19 13:20:37.685165200 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utmutex.c kernel/acpi/utilities/utmutex.c
+--- kernel/acpi/utilities/utmutex.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utmutex.c	2017-09-19 13:20:37.685743400 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utmutex")
+diff -Naur acpi/utilities/utnonansi.c kernel/acpi/utilities/utnonansi.c
+--- kernel/acpi/utilities/utnonansi.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utnonansi.c	2017-09-19 13:20:37.686260200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utobject.c kernel/acpi/utilities/utobject.c
+--- kernel/acpi/utilities/utobject.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utobject.c	2017-09-19 13:20:37.686961900 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utosi.c kernel/acpi/utilities/utosi.c
+--- kernel/acpi/utilities/utosi.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utosi.c	2017-09-19 13:20:37.687629400 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utownerid.c kernel/acpi/utilities/utownerid.c
+--- kernel/acpi/utilities/utownerid.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utownerid.c	2017-09-19 13:20:37.688153100 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utpredef.c kernel/acpi/utilities/utpredef.c
+--- kernel/acpi/utilities/utpredef.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utpredef.c	2017-09-19 13:20:37.688745700 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acpredef.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acpredef.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utprint.c kernel/acpi/utilities/utprint.c
+--- kernel/acpi/utilities/utprint.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utprint.c	2017-09-19 13:20:37.689433100 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utprint")
+diff -Naur acpi/utilities/utresdecode.c kernel/acpi/utilities/utresdecode.c
+--- kernel/acpi/utilities/utresdecode.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utresdecode.c	2017-09-19 13:20:37.689956700 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utresrc.c kernel/acpi/utilities/utresrc.c
+--- kernel/acpi/utilities/utresrc.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utresrc.c	2017-09-19 13:20:37.690639300 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acresrc.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acresrc.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utstate.c kernel/acpi/utilities/utstate.c
+--- kernel/acpi/utilities/utstate.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utstate.c	2017-09-19 13:20:37.691176900 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utstate")
+diff -Naur acpi/utilities/utstring.c kernel/acpi/utilities/utstring.c
+--- kernel/acpi/utilities/utstring.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utstring.c	2017-09-19 13:20:37.691748900 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utstrsuppt.c kernel/acpi/utilities/utstrsuppt.c
+--- kernel/acpi/utilities/utstrsuppt.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utstrsuppt.c	2017-09-19 13:20:37.693763300 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utstrsuppt")
+diff -Naur acpi/utilities/utstrtoul64.c kernel/acpi/utilities/utstrtoul64.c
+--- kernel/acpi/utilities/utstrtoul64.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utstrtoul64.c	2017-09-19 13:20:37.696405800 +0200
+@@ -150,8 +150,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utstrtoul64")
+diff -Naur acpi/utilities/uttrack.c kernel/acpi/utilities/uttrack.c
+--- kernel/acpi/utilities/uttrack.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/uttrack.c	2017-09-19 13:20:37.698236000 +0200
+@@ -160,8 +160,8 @@
+  * occurs in the body of AcpiUtFree.
+  */
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #ifdef ACPI_DBG_TRACK_ALLOCATIONS
+ 
+diff -Naur acpi/utilities/utuuid.c kernel/acpi/utilities/utuuid.c
+--- kernel/acpi/utilities/utuuid.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utuuid.c	2017-09-19 13:20:37.698824200 +0200
+@@ -149,8 +149,8 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ #define _COMPONENT          ACPI_COMPILER
+         ACPI_MODULE_NAME    ("utuuid")
+diff -Naur acpi/utilities/utxface.c kernel/acpi/utilities/utxface.c
+--- kernel/acpi/utilities/utxface.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utxface.c	2017-09-19 13:20:37.700262800 +0200
+@@ -151,9 +151,9 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acdebug.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acdebug.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utxface")
+diff -Naur acpi/utilities/utxferror.c kernel/acpi/utilities/utxferror.c
+--- kernel/acpi/utilities/utxferror.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utxferror.c	2017-09-19 13:20:37.700902300 +0200
+@@ -151,8 +151,8 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+diff -Naur acpi/utilities/utxfinit.c kernel/acpi/utilities/utxfinit.c
+--- kernel/acpi/utilities/utxfinit.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utxfinit.c	2017-09-19 13:20:37.701482600 +0200
+@@ -151,12 +151,12 @@
+ 
+ #define EXPORT_ACPI_INTERFACES
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acevents.h"
+-#include "acnamesp.h"
+-#include "acdebug.h"
+-#include "actables.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acevents.h"
++#include "acpi/acnamesp.h"
++#include "acpi/acdebug.h"
++#include "acpi/actables.h"
+ 
+ #define _COMPONENT          ACPI_UTILITIES
+         ACPI_MODULE_NAME    ("utxfinit")
+diff -Naur acpi/utilities/utxfmutex.c kernel/acpi/utilities/utxfmutex.c
+--- kernel/acpi/utilities/utxfmutex.c	2017-08-31 17:58:00.000000000 +0200
++++ kernel/acpi/utilities/utxfmutex.c	2017-09-19 13:20:37.701995500 +0200
+@@ -149,9 +149,9 @@
+  *
+  *****************************************************************************/
+ 
+-#include "acpi.h"
+-#include "accommon.h"
+-#include "acnamesp.h"
++#include "acpi/acpi.h"
++#include "acpi/accommon.h"
++#include "acpi/acnamesp.h"
+ 
+ 
+ #define _COMPONENT          ACPI_UTILITIES

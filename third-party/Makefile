@@ -47,8 +47,15 @@ BOCHS_CONFIG		+= --disable-plugins --disable-docbook
 BOCHS_CONFIG		+= --with-sdl2
 BOCHS				:= $(BOCHS_DIR)/bochs
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS)
-third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
+ACPICA_VERSION		:= 20170831
+ACPICA_URL			:= https://acpica.org/sites/acpica/files/acpica-unix-$(ACPICA_VERSION).tar.gz
+ACPICA_DIR			:= third-party/acpica
+ACPICA_ARCHIVE		:= $(ACPICA_DIR)/acpica.tar.gz
+ACPICA_HEADERS		:= $(shell find include/acpi -name '*.h' -not -name 'acvineyard.h')
+ACPICA				:= include/acpi/acpi.h
+
+third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS) $(ACPICA)
+third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean acpica-clean
 
 $(QEMU):
 	@$(INFO) "MAKE" "downloading QEMU"
@@ -128,4 +135,27 @@ $(BOCHS):
 bochs-clean:
 	@$(RM) -R $(BOCHS_DIR)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean
+$(ACPICA):
+	@$(INFO) "MAKE" "getting ACPICA"
+	@mkdir -p $(ACPICA_DIR)
+	@wget $(ACPICA_URL) -O $(ACPICA_ARCHIVE) -q
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/dispatcher --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/events --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/executer --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/hardware --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/namespace --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/parser --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/resources --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/tables --strip-components=3
+	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/utilities --strip-components=3
+	@patch -s -p0 < patches/acpica/components.patch
+	@tar -xzf $(ACPICA_ARCHIVE) -C include/acpi/ acpica-unix-$(ACPICA_VERSION)/source/include/ --strip-components=3
+	@patch -s -p0 < patches/acpica/headers.patch
+	@$(RM) $(ACPICA_ARCHIVE)
+
+acpica-clean:
+	@$(RM) $(ACPICA_ARCHIVE)
+	@$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
+	@$(RM) $(ACPICA_HEADERS)
+
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean acpica-clean

@@ -3,7 +3,16 @@
 #include <time/pit.h>
 #include <proc/proc.h>
 
+/* milliseconds since boot */
+static volatile uint32_t counter = 0;
+
+uint32_t pit_uptime(void) {
+	return counter;
+}
+
 static void pit_tick(frame_t *state) {
+	counter++;
+
 	proc_switch(state);
 }
 
