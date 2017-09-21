@@ -1,5 +1,6 @@
 #include <_/vineyard.h>
 #include <fs/initrd.h>
+#include <int/handler.h>
 #include <mm/alloc.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
@@ -7,6 +8,7 @@
 #include <proc/tss.h>
 #include <proc/proc.h>
 #include <proc/thread.h>
+#include <proc/scheduler.h>
 #include <init/panic.h>
 #include <util/list.h>
 
@@ -18,44 +20,41 @@
 
 /* pid counter */
 static pid_t pid = 1;
-/* scheduler queue */
-static list_t *queue;
 
 /* kernel proc */
 static proc_t *kernel_proc;
 
-static bool first_switch = true;
-
-/* currently running thread */
-thread_t *current;
 /* holds the physical address of the kernel PD */
 static uintptr_t kernel_pd;
-
-extern uintptr_t stack_top;
 
 static void proc_idle(void *data __unused) {
 	while(1) asm volatile ("hlt");
 }
 
-proc_t *proc_get(void) {
-	if(current) {
-		return (proc_t *) current->proc;
-	}
+noreturn uintptr_t proc_exit(syscall_args_t *data) {
+	proc_t *p = proc_get();
 
-	return NULL;
-}
+	printf("[proc]	process %s (%u) exited with status %u\n", p->name, p->pid, data->arg1);
 
-thread_t *thread_get(void) {
-	return current;
-}
-
-static void proc_worker_exit(void) {
-	current->state = THREAD_DEAD;
+	thread_get()->state = THREAD_DEAD;
 
 	asm volatile ("sti");
 	asm volatile ("hlt");
 
 	for(;;);
+}
+
+static void proc_worker_exit(void) {
+	thread_get()->state = THREAD_DEAD;
+
+	asm volatile ("sti");
+	asm volatile ("hlt");
+
+	for(;;);
+}
+
+static void proc_yield(frame_t *frame) {
+	scheduler_tick(frame);
 }
 
 list_node_t *proc_create_worker(proc_worker_t worker, void *arg) {
@@ -70,45 +69,13 @@ list_node_t *proc_create_worker(proc_worker_t worker, void *arg) {
 	thread->esp = (uintptr_t) stack_data;
 	thread->ebp = thread->esp;
 	thread->eip = (uintptr_t) worker;
-	thread->state = THREAD_RUNNING;
+	thread->state = THREAD_SUSPENDED;
 	tnode->data = thread;
 
 	list_append(kernel_proc->thread_list, tnode);
-	list_append(queue, tnode);
+	scheduler_queue_add(tnode);
 
 	return tnode;
-}
-
-static void proc_yield(frame_t *frame) {
-	proc_switch(frame);
-}
-
-void proc_init(void) {
-	queue = malloc(sizeof(*queue));
-
-	/* set up the kernel process */
-	kernel_proc = malloc(sizeof(proc_t));
-	kernel_proc->pid = 0;
-	kernel_proc->heap = mm_alloc_areas;
-	kernel_proc->thread_list = malloc(sizeof(list_t));
-	kernel_proc->cs = 0x08;
-	kernel_proc->ds = 0x10;
-	kernel_proc->kernel = true;
-	kernel_proc->name = "kernel";
-	kernel_proc->cr3 = mm_virtual_get_physical(0xFFFFF000);
-	kernel_pd = kernel_proc->cr3;
-
-	list_node_t *tnode = proc_create_worker(proc_idle, (void *) 0xDEADBEEF);
-	list_remove(queue, tnode);
-	current = tnode->data;
-
-	handler_set(0x81, proc_yield);
-
-	char *argv[] = {(char *) "init", 0};
-	char *envp[] = {0};
-	proc_create("init", false, 1, argv, 0, envp);
-
-	return;
 }
 
 void proc_create(const char *path, bool kernel, int argc, char *argv[], int envc, char *envp[]) {
@@ -188,127 +155,44 @@ void proc_create(const char *path, bool kernel, int argc, char *argv[], int envc
 	proc->ds = 0x23;
 	proc->cr3 = pd_phys;
 
-	list_append(queue, tnode);
+	scheduler_queue_add(tnode);
 
 	mm_virtual_switch(kernel_pd);
-}
-
-noreturn uintptr_t proc_exit(syscall_args_t *data) {
-	proc_t *p = current->proc;
-
-	printf("[proc]	process %s (%u) exited with status %u\n", p->name, p->pid, data->arg1);
-
-	current->state = THREAD_DEAD;
-
-	asm volatile ("sti");
-	asm volatile ("hlt");
-
-	for(;;);
-}
-
-static thread_t *proc_get_next(void) {
-	list_node_t *node = queue->head;
-
-	for(; node; node = node->next) {
-		thread_t *t = node->data;
-
-		if(t->state == THREAD_WAITING) {
-			list_remove(queue, node);
-			list_append(queue, node);
-		} else if(t->state == THREAD_SUSPENDED || t->state == THREAD_DEAD) {
-			return t;
-		}
-	}
-
-	return NULL;
-}
-
-void proc_switch(frame_t *frame) {
-	if(!queue->head) {
-		return;
-	}
-
-	thread_t *next = proc_get_next();
-	proc_t *nextp = next->proc;
-	proc_t *currentp = current->proc;
-
-	assert(next != current);
-	assert(current->state == THREAD_RUNNING || current->state == THREAD_DEAD);
-
-	/* save registers of preempted thread */
-	if(!first_switch) {
-		current->esp = frame->esp;
-		current->ebp = frame->ebp;
-		current->eip = frame->eip;
-		current->edi = frame->edi;
-		current->esi = frame->esi;
-		current->ebx = frame->ebx;
-		current->edx = frame->edx;
-		current->ecx = frame->ecx;
-		current->eax = frame->eax;
-
-		currentp->cs = frame->cs;
-		currentp->ds = frame->ds;
-	} else {
-		first_switch = false;
-	}
-
-	/* pop the next process off the queue */
-	list_node_t *node = queue->head;
-	list_remove(queue, queue->head);
-
-	if(current->state != THREAD_DEAD) {
-		/* queue the preemted process */
-		node->data = current;
-		list_append(queue, node);
-
-		/* mark it as suspended */
-		if(current->state == THREAD_RUNNING) {
-			current->state = THREAD_SUSPENDED;
-		}
-	} else {
-		currentp->alive--;
-		/* clean up the dead thread */
-		free(container_of((void *) current, list_node_t, data));
-		free(current);
-	}
-
-	if(!currentp->alive) {
-		free(currentp->thread_list);
-		free(currentp);
-	}
-
-	next->state = THREAD_RUNNING;
-
-	/* restore the next process' registers */
-	frame->eip = next->eip;
-	frame->esp = next->esp;
-	frame->ebp = next->ebp;
-	frame->edi = next->edi;
-	frame->esi = next->esi;
-	frame->ebx = next->ebx;
-	frame->edx = next->edx;
-	frame->ecx = next->ecx;
-	frame->eax = next->eax;
-	frame->cs = nextp->cs;
-	frame->ds = nextp->ds;
-	frame->es = nextp->ds;
-	frame->fs = nextp->ds;
-	frame->gs = nextp->ds;
-	frame->ss = nextp->ds;
-	frame->eflags |= 0x200;
-
-	if(currentp->pid != nextp->pid) {
-		mm_virtual_switch(nextp->cr3);
-	}
-
-	current = next;
-
-	tss_set_esp(next->kernel_stack);
 }
 
 uintptr_t sys_getpid(syscall_args_t *data) {
 	(void) data;
 
-	return current->proc->pid;
+	return proc_get()->pid;
+}
+
+void proc_init(void) {
+	/* set up the kernel process */
+	kernel_proc = malloc(sizeof(proc_t));
+	kernel_proc->pid = 0;
+	kernel_proc->heap = mm_alloc_areas;
+	kernel_proc->thread_list = malloc(sizeof(list_t));
+	kernel_proc->cs = 0x08;
+	kernel_proc->ds = 0x10;
+	kernel_proc->kernel = true;
+	kernel_proc->name = "kernel";
+	kernel_proc->cr3 = mm_virtual_get_physical(0xFFFFF000);
+	kernel_pd = kernel_proc->cr3;
+
+	scheduler_init();
+
+	list_node_t *tnode = proc_create_worker(proc_idle, NULL);
+	thread_t *idle = tnode->data;
+	idle->state = THREAD_RUNNING;
+
+	scheduler_queue_remove(tnode);
+	scheduler_set_idle(idle);
+
+	handler_set(0x81, proc_yield);
+
+	char *argv[] = {(char *) "init", 0};
+	char *envp[] = {0};
+	proc_create("init", false, 1, argv, 0, envp);
+
+	return;
 }

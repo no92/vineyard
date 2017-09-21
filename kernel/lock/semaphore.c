@@ -43,7 +43,7 @@ void semaphore_wait(semaphore_t *semaphore, int decrement) {
 			list_append(semaphore->queue, node);
 			spinlock_release(semaphore->lock);
 
-			asm volatile ("int $0x81");
+			thread_yield();
 		} else {
 			spinlock_release(semaphore->lock);
 			return;
@@ -55,7 +55,7 @@ void semaphore_wait(semaphore_t *semaphore, int decrement) {
 		list_append(semaphore->queue, node);
 		spinlock_release(semaphore->lock);
 
-		asm volatile ("int $0x81");
+		thread_yield();
 	}
 }
 

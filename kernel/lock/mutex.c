@@ -34,7 +34,7 @@ void mutex_acquire(mutex_t *mutex) {
 		list_append(mutex->queue, node);
 		spinlock_release(mutex->lock);
 
-		asm volatile ("int $0x81");
+		thread_yield();
 	} else {
 		mutex->holding = t;
 		spinlock_release(mutex->lock);

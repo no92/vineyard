@@ -29,4 +29,5 @@ typedef struct {
 } thread_t;
 
 thread_t *thread_create(proc_t *proc, uintptr_t start);
+void thread_yield(void);
 __attribute__((pure)) thread_t *thread_get(void);

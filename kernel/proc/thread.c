@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void thread_yield(void) {
+	asm volatile ("int $0x81");
+}
+
 thread_t *thread_create(proc_t *proc, uintptr_t start) {
 	thread_t *thread = calloc(1, sizeof(thread_t));
 

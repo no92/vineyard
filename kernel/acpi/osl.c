@@ -1,6 +1,7 @@
 #include <_/vineyard.h>
 #include <acpi/acpi.h>
 #include <cpu/ports.h>
+#include <int/handler.h>
 #include <mm/alloc.h>
 #include <mm/physical.h>
 #include <mm/virtual.h>
@@ -134,6 +135,10 @@ BOOLEAN AcpiOsWritable(void *memory __unused, ACPI_SIZE length __unused) {
 /* 9.3 Multithreading and Scheduling Services */
 ACPI_THREAD_ID AcpiOsGetThreadId(void) {
 	thread_t *t = thread_get();
+
+	if(!t) {
+		return AE_ERROR;
+	}
 
 	return t->tid + 1;
 }
@@ -407,13 +412,13 @@ void AcpiOsPrintf(const char *format, ...) {
 	va_list args;
 	va_start(args, format);
 
-	vprintf(format, args);
+	// vprintf(format, args);
 
 	va_end(args);
 }
 
-void AcpiOsVprintf(const char *format, va_list args) {
-	vprintf(format, args);
+void AcpiOsVprintf(const char *format __unused, va_list args __unused) {
+	// vprintf(format, args);
 }
 
 void AcpiOsRedirectOutput(void *destination __unused) {

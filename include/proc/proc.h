@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <sys/types.h>
 
-#include <int/handler.h>
 #include <proc/syscall.h>
 #include <util/list.h>
 
@@ -26,7 +25,6 @@ typedef void (*proc_worker_t)(void *);
 void proc_init(void);
 void proc_create(const char *path, bool kernel, int argc, char **argv, int envc, char **envp);
 list_node_t *proc_create_worker(proc_worker_t worker, void *arg);
-void proc_switch(frame_t *frame);
 
 __attribute__((pure)) proc_t *proc_get(void);
 

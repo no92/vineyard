@@ -1,7 +1,7 @@
 #include <cpu/ports.h>
 #include <int/handler.h>
 #include <time/pit.h>
-#include <proc/proc.h>
+#include <proc/scheduler.h>
 
 /* milliseconds since boot */
 static volatile uint32_t counter = 0;
@@ -13,7 +13,7 @@ uint32_t pit_uptime(void) {
 static void pit_tick(frame_t *state) {
 	counter++;
 
-	proc_switch(state);
+	scheduler_tick(state);
 }
 
 void pit_init(void) {
