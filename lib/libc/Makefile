@@ -9,8 +9,8 @@ LIBC_OBJ	:= $(LIBK_SRC:.c=.libc.c.o)
 LIBC_OBJ	:= $(LIBC_OBJ:.s=.libc.s.o)
 LIBK_DEP	:= $(LIBK_SRC:.c=.libk.c.d)
 LIBK_DEP	:= $(LIBK_DEP:.s=.libk.s.d)
-LIBC_DEP	:= $(LIBK_SRC:.c=.d)
-LIBC_DEP	:= $(LIBK_DEP:.s=.d)
+LIBC_DEP	:= $(LIBK_SRC:.c=.libc.c.d)
+LIBC_DEP	:= $(LIBC_DEP:.s=.libc.s.d)
 
 LIBC_TESTS	:= $(LIBC_OBJ:.libc.c.o=.test)
 
