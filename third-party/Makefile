@@ -7,8 +7,8 @@ YASM_URL			:= https://github.com/yasm/yasm
 YASM_DIR			:= $(shell pwd)/third-party/yasm
 YASM				:= $(YASM_DIR)/yasm
 
-GCC_DIR				:= $(shell pwd)/third-party/gcc
 GCC_TARGET			:= i686-elf
+GCC_DIR				:= $(shell pwd)/third-party/i386/$(GCC_TARGET)-gcc
 GCC_VER				:= 7.2.0
 BINUTILS_VER		:= 2.29
 GCC_SCRIPT			:= third-party/scripts/gcc
@@ -16,9 +16,9 @@ CROSS_GCC			:= $(GCC_DIR)/bin/$(GCC_TARGET)-gcc
 CROSS_LD			:= $(GCC_DIR)/bin/$(GCC_TARGET)-ld
 CROSS_AR			:= $(GCC_DIR)/bin/$(GCC_TARGET)-ar
 
-SYSROOT				:= $(shell pwd)/hdd
-USER_GCC_DIR		:= $(shell pwd)/third-party/user-gcc
 USER_GCC_TARGET		:= i686-vineyard
+SYSROOT				:= $(shell pwd)/hdd
+USER_GCC_DIR		:= $(shell pwd)/third-party/i386/$(USER_GCC_TARGET)-gcc
 USER_GCC_VER		:= 7.2.0
 USER_BINUTILS_VER	:= 2.29
 USER_GCC_SCRIPT		:= third-party/scripts/user-gcc
@@ -27,16 +27,12 @@ USER_LD				:= $(USER_GCC_DIR)/bin/$(USER_GCC_TARGET)-ld
 USER_AR				:= $(USER_GCC_DIR)/bin/$(USER_GCC_TARGET)-ar
 
 GRUB_URL			:= http://alpha.gnu.org/gnu/grub/grub-2.02~rc2.tar.gz
-GRUB_DIR			:= $(shell pwd)/third-party/grub
+GRUB_DIR			:= $(shell pwd)/third-party/i386/grub
 GRUB				:= $(GRUB_DIR)/bin/grub-mkrescue
 
 UNI-VGA_URL			:= http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz
 UNI-VGA_DIR			:= third-party/uni-vga
 UNI-VGA				:= $(UNI-VGA_DIR)/u_vga16.bdf
-
-OCLINT_URL			:= https://github.com/oclint/oclint
-OCLINT_DIR			:= third-party/oclint
-OCLINT				:= $(OCLINT_DIR)/build/oclint-release/bin/oclint
 
 BOCHS_URL			:= https://sourceforge.net/projects/bochs/files/bochs/2.6.9/bochs-2.6.9.tar.gz
 BOCHS_DIR			:= $(shell pwd)/third-party/bochs
@@ -54,8 +50,8 @@ ACPICA_ARCHIVE		:= $(ACPICA_DIR)/acpica.tar.gz
 ACPICA_HEADERS		:= $(shell find include/acpi -name '*.h' -not -name 'acvineyard.h')
 ACPICA				:= include/acpi/acpi.h
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(OCLINT) $(BOCHS) $(ACPICA)
-third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean acpica-clean
+third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(BOCHS) $(ACPICA)
+third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
 
 $(QEMU):
 	@$(INFO) "MAKE" "downloading QEMU"
@@ -115,16 +111,6 @@ $(UNI-VGA):
 uni-vga-clean:
 	@$(RM) -R $(UNI-VGA_DIR)
 
-$(OCLINT):
-	@$(INFO) "MAKE" "getting oclint"
-	@mkdir -p $(OCLINT_DIR)
-	@git clone $(OCLINT_URL) $(OCLINT_DIR) -q
-	@$(INFO) "MAKE" "building oclint"
-	@cd $(OCLINT_DIR)/oclint-scripts; ./make;
-
-oclint-clean:
-	@$(RM) -R $(OCLINT_DIR)
-
 $(BOCHS):
 	@$(INFO) "MAKE" "getting bochs"
 	@mkdir -p $(BOCHS_DIR)
@@ -158,4 +144,4 @@ acpica-clean:
 	@$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
 	@$(RM) $(ACPICA_HEADERS)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean oclint-clean bochs-clean acpica-clean
+.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
