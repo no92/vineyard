@@ -38,7 +38,7 @@ __attribute__((pure, nonnull(1))) size_t strlen(const char *s);
 
 /* POSIX extensions */
 /* void *memccpy(void *s1, const void *s2, int c, size_t n); */
-char *strdup(const char *s1);
+__attribute__((malloc)) char *strdup(const char *s1);
 /* char *strtok_r(char *s, const char *sep, char **lasts); */
 
 /* GNU extensions */

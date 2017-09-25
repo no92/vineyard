@@ -81,4 +81,6 @@ test-libk-static:
 	@$(INFO) "OCLINT" "running static analysis on libk"
 	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c -target i386-pc-none-elf -Wno-language-extension-token
 
+-include $(LIBK_DEP)
+
 .PHONY: libc-crt clean-libk clean-libc clean-libc-test test-libc
