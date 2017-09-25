@@ -63,6 +63,6 @@ clean: clean-kernel
 
 distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-test clean-init clean-initrd clean-headers clean-libs
 
-.PHONY: all clean distclean headers test test-debug test-virtualbox
+.PHONY: all clean distclean headers test test-debug test-virtualbox todo
 .SECONDARY:
 .SUFFIXES:

@@ -112,4 +112,4 @@ test-bochs: all
 
 -include $(KERNEL_DEP)
 
-.PHONY: clean-kernel clean-font clean-disk clean-initrd test test-qemu test-debug test-virtualbox test-vmware test-real test-kernel
+.PHONY: clean-kernel clean-font clean-disk clean-initrd test test-qemu test-debug test-virtualbox test-vmware test-bochs

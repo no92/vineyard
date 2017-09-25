@@ -77,10 +77,6 @@ test-libc: $(LIBC_TESTS)
 		./$$test 2> .test.log || $(ERROR) "TEST" "$$test failed"; if grep -v bash .test.log -q; then cat .test.log; rm .test.log; else rm .test.log; fi; \
 	done 2> /dev/null
 
-test-libk-static:
-	@$(INFO) "OCLINT" "running static analysis on libk"
-	@$(OCLINT) $(LIBK_SRC) -- $(CFLAGS) -c -target i386-pc-none-elf -Wno-language-extension-token
-
 -include $(LIBK_DEP)
 
 .PHONY: libc-crt clean-libk clean-libc clean-libc-test test-libc
