@@ -167,6 +167,10 @@ void AcpiOsWaitEventsComplete(void) {
 
 /* 9.4 Mutual Exclusion and Synchronization */
 ACPI_STATUS AcpiOsCreateMutex(ACPI_MUTEX *mutex) {
+	if(!mutex) {
+		return AE_BAD_PARAMETER;
+	}
+
 	mutex_t *m = mutex_create();
 
 	if(!m) {
@@ -186,6 +190,10 @@ void AcpiOsDeleteMutex(ACPI_MUTEX mutex) {
 
 ACPI_STATUS AcpiOsAcquireMutex(ACPI_MUTEX mutex, uint16_t timeout) {
 	assert(timeout == 0xFFFF);
+
+	if(!mutex) {
+		return AE_BAD_PARAMETER;
+	}
 
 	mutex_acquire(mutex);
 
@@ -223,6 +231,10 @@ ACPI_STATUS AcpiOsDeleteSemaphore(ACPI_SEMAPHORE s) {
 }
 
 ACPI_STATUS AcpiOsWaitSemaphore(ACPI_SEMAPHORE s, uint32_t units, uint16_t timeout) {
+	if(!s) {
+		return AE_BAD_PARAMETER;
+	}
+
 	assert(timeout == 0xFFFF);
 	assert(units <= INT_MAX);
 
@@ -232,6 +244,10 @@ ACPI_STATUS AcpiOsWaitSemaphore(ACPI_SEMAPHORE s, uint32_t units, uint16_t timeo
 }
 
 ACPI_STATUS AcpiOsSignalSemaphore(ACPI_SEMAPHORE s, uint32_t units) {
+	if(!s) {
+		return AE_BAD_PARAMETER;
+	}
+
 	assert(units <= INT_MAX);
 
 	semaphore_signal(s, (int) units);
@@ -240,6 +256,10 @@ ACPI_STATUS AcpiOsSignalSemaphore(ACPI_SEMAPHORE s, uint32_t units) {
 }
 
 ACPI_STATUS AcpiOsCreateLock(ACPI_SPINLOCK *lock) {
+	if(!lock) {
+		return AE_BAD_PARAMETER;
+	}
+
 	spinlock_t *s = malloc(sizeof(*s));
 
 	if(!s) {
@@ -252,6 +272,10 @@ ACPI_STATUS AcpiOsCreateLock(ACPI_SPINLOCK *lock) {
 }
 
 void AcpiOsDeleteLock(ACPI_SPINLOCK lock) {
+	if(!lock) {
+		return;
+	}
+
 	free(lock);
 }
 
@@ -427,20 +451,14 @@ void AcpiOsRedirectOutput(void *destination __unused) {
 
 /* 9.10 System ACPI Table Access */
 ACPI_STATUS AcpiOsGetTableByAddress(ACPI_PHYSICAL_ADDRESS address __unused, ACPI_TABLE_HEADER **out __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
-
 	return AE_SUPPORT;
 }
 
 ACPI_STATUS AcpiOsGetTableByIndex(uint32_t index __unused, ACPI_TABLE_HEADER **table __unused, uint32_t *instance __unused, ACPI_PHYSICAL_ADDRESS *address __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
-
 	return AE_SUPPORT;
 }
 
 ACPI_STATUS AcpiOsGetTableByName(char *signature __unused, uint32_t instance __unused, ACPI_TABLE_HEADER **table __unused, ACPI_PHYSICAL_ADDRESS *address __unused) {
-	panic("[acpi]	%s unimplemented", __FUNCTION__);
-
 	return AE_SUPPORT;
 }
 

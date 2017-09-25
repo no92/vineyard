@@ -20,11 +20,7 @@
 #define ACPI_SPINLOCK               spinlock_t *
 #define ACPI_USE_NATIVE_DIVIDE
 
-#ifdef __i386__
 #define ACPI_MACHINE_WIDTH          32
-#else
-#error TODO - 64-bit support
-#endif
 
 #define ACPI_MUTEX                  void *
 

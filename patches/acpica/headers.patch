@@ -67,11 +67,10 @@ diff -Naur acpi/acdisasm.h include/acpi/acdisasm.h
 diff -Naur acpi/acpi.h include/acpi/acpi.h
 --- include/acpi/acpi.h	2017-08-31 17:58:01.000000000 +0200
 +++ include/acpi/acpi.h	2017-09-19 21:23:57.708503900 +0200
-@@ -152,6 +152,11 @@
+@@ -152,6 +152,10 @@
  #ifndef __ACPI_H__
  #define __ACPI_H__
  
-+void acpi_init(void);
 +
 +#pragma GCC diagnostic push
 +#pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -79,7 +78,7 @@ diff -Naur acpi/acpi.h include/acpi/acpi.h
  /*
   * Public include files for use by code that will interface to ACPICA.
   *
-@@ -161,15 +166,16 @@
+@@ -161,15 +166,19 @@
   *
   * Note: The order of these include files is important.
   */
@@ -102,6 +101,9 @@ diff -Naur acpi/acpi.h include/acpi/acpi.h
 +#include "acpi/acrestyp.h"           /* Resource Descriptor structs */
 +#include "acpi/acpiosxf.h"           /* OSL interfaces (ACPICA-to-OS) */
 +#include "acpi/acpixf.h"             /* ACPI core subsystem external interfaces */
++
++void acpi_init(void);
++ACPI_STATUS acpi_walk(ACPI_HANDLE handle, UINT32 level, void *context, void **ret);
 +
 +#pragma GCC diagnostic pop
  

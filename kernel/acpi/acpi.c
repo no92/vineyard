@@ -1,3 +1,4 @@
+#include <_/vineyard.h>
 #include <assert.h>
 #include <stdio.h>
 
@@ -26,4 +27,10 @@ void acpi_init(void) {
 		AcpiTerminate();
 		assert(!ACPI_FAILURE(s));
 	}
+
+	AcpiGetDevices(NULL, acpi_walk, NULL, NULL);
+}
+
+ACPI_STATUS acpi_walk(ACPI_HANDLE handle __unused, UINT32 level __unused, void *context __unused, void **ret __unused) {
+	return AE_OK;
 }
