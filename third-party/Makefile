@@ -43,6 +43,7 @@ BOCHS_CONFIG		+= --disable-plugins --disable-docbook
 BOCHS_CONFIG		+= --with-sdl2
 BOCHS				:= $(BOCHS_DIR)/bochs
 
+ACPICA_SCRIPT		:= third-party/scripts/acpica
 ACPICA_VERSION		:= 20170831
 ACPICA_URL			:= https://acpica.org/sites/acpica/files/acpica-unix-$(ACPICA_VERSION).tar.gz
 ACPICA_DIR			:= third-party/acpica
@@ -122,22 +123,7 @@ bochs-clean:
 	@$(RM) -R $(BOCHS_DIR)
 
 $(ACPICA):
-	@$(INFO) "MAKE" "getting ACPICA"
-	@mkdir -p $(ACPICA_DIR)
-	@wget $(ACPICA_URL) -O $(ACPICA_ARCHIVE) -q
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/dispatcher --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/events --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/executer --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/hardware --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/namespace --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/parser --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/resources --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/tables --strip-components=3
-	@tar -xzf $(ACPICA_ARCHIVE) -C kernel/acpi/ acpica-unix-$(ACPICA_VERSION)/source/components/utilities --strip-components=3
-	@patch -s -p0 < patches/acpica/components.patch
-	@tar -xzf $(ACPICA_ARCHIVE) -C include/acpi/ acpica-unix-$(ACPICA_VERSION)/source/include/ --strip-components=3
-	@patch -s -p0 < patches/acpica/headers.patch
-	@$(RM) $(ACPICA_ARCHIVE)
+	@$(ACPICA_SCRIPT) $(ACPICA_DIR) $(ACPICA_URL) $(ACPICA_ARCHIVE) $(ACPICA_VERSION)
 
 acpica-clean:
 	@$(RM) $(ACPICA_ARCHIVE)

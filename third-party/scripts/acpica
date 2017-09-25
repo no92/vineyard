@@ -1,0 +1,32 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd )"
+INFO=$DIR/../../util/info
+ERROR=$DIR/../../util/error
+
+if [ "$#" -ne 4 ]; then
+	$ERROR "ACPICA" "usage: $0 <absolute prefix> <acpica-url> <archive-name> <version>"
+	$ERROR "ACPICA" "only $# arguments given"
+	exit 1;
+fi
+
+ACPICA_DIR=$1
+ACPICA_URL=$2
+ACPICA_ARCHIVE=$3
+ACPICA_VERSION=$4
+
+$INFO "MAKE" "getting ACPICA"
+mkdir -p $ACPICA_DIR
+wget $ACPICA_URL -O $ACPICA_ARCHIVE -q
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/dispatcher --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/events --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/executer --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/hardware --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/namespace --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/parser --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/resources --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/tables --strip-components=3
+tar -xzf $ACPICA_ARCHIVE -C kernel/acpi/ acpica-unix-$ACPICA_VERSION/source/components/utilities --strip-components=3
+patch -s -p0 < patches/acpica/components.patch
+tar -xzf $ACPICA_ARCHIVE -C include/acpi/ acpica-unix-$ACPICA_VERSION/source/include/ --strip-components=3
+patch -s -p0 < patches/acpica/headers.patch
+rm $ACPICA_ARCHIVE
