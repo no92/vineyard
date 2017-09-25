@@ -294,7 +294,7 @@ ACPI_STATUS AcpiOsRemoveInterruptHandler(uint32_t interrupt, ACPI_OSD_HANDLER ha
 }
 
 /* 9.6 Memory Access */
-ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS addr, uint64_t *value, uint32_t width) {
+ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS addr, UINT64 *value, UINT32 width) {
 	void *ptr;
 
 	if(addr < 0x100000) {
@@ -319,7 +319,7 @@ ACPI_STATUS AcpiOsReadMemory(ACPI_PHYSICAL_ADDRESS addr, uint64_t *value, uint32
 	return AE_OK;
 }
 
-ACPI_STATUS AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS addr, uint64_t value, uint32_t width) {
+ACPI_STATUS AcpiOsWriteMemory(ACPI_PHYSICAL_ADDRESS addr, UINT64 value, UINT32 width) {
 	void *ptr;
 
 	if(addr < 0x100000) {
