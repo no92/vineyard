@@ -2,7 +2,6 @@
 KERNEL			:= bin/vineyard
 INITRD			:= bin/initrd
 
-PXE_BUILD		:= build/pxe.cfg
 VMWARE_CONFIG	:= conf/vineyard.vmx
 
 HDD				:= hdd
@@ -34,8 +33,6 @@ KERNEL_OBJ		+= $(LIBK)
 KERNEL_OBJ		+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
 KERNEL_OBJ		+= kernel/init/crtn.s.o
 
-LOCAL_IP		?= $(shell hostname -I | head -n1 | cut -d " " -f1)
-
 %.c.o: %.c
 	@$(INFO) "CC" $<
 	@$(CC) $(CFLAGS_KERN) -c -o $@ $< -D__libk
@@ -62,7 +59,7 @@ $(INITRD): initrd/* $(INIT)
 	@cp $(INIT) initrd/init
 	@cd initrd; tar -cf ../bin/initrd *
 
-$(ISO): $(KERNEL) $(PXE_BUILD) $(INITRD)
+$(ISO): $(KERNEL) $(INITRD)
 	@$(INFO) "DISK" $@
 	@$(MKDIR) $(dir $(GRUB_CONFIG))
 	@$(CP) build/grub.cfg $(GRUB_CONFIG)
@@ -72,13 +69,6 @@ $(ISO): $(KERNEL) $(PXE_BUILD) $(INITRD)
 	@$(GRUB_DIR)/bin/grub-file --is-x86-multiboot2 $< || $(ERROR) "DISK" "$@ is not a valid multiboot2 kernel"
 	@$(GRUB_DIR)/bin/grub-mknetdir --net-directory=$(HDD)/boot --subdir grub > /dev/null
 	@cd $(HDD); ln -sf boot/grub/i386-pc/ i386-pc
-	@cp $(PXE_BUILD) $(HDD)/i386-pc/grub.cfg
-	@$(GRUB_DIR)/bin/grub-mkimage -d third-party/grub/lib/grub/i386-pc/ -O i386-pc-pxe --output $(HDD)/boot/grub/i386-pc/core.0 -c $(HDD)/i386-pc/grub.cfg -p=boot/grub  tftp pxe net configfile
-
-$(PXE_BUILD):
-	@$(INFO) "DISK" "creating PXE configuration"
-	@echo 'set root=(tftp,$(LOCAL_IP))' > $(PXE_BUILD)
-	@echo 'configfile boot/grub/grub.cfg' >> $(PXE_BUILD)
 
 clean-kernel:
 	@$(INFO) "CLEAN" "cleaning kernel tree"
@@ -90,7 +80,7 @@ clean-font:
 
 clean-disk:
 	@$(INFO) "CLEAN" "cleaning hard drive image"
-	@$(RM) -r $(HDD)/boot $(PXE_BUILD)
+	@$(RM) -r $(HDD)/boot
 
 clean-initrd:
 	@$(INFO) "CLEAN" "cleaning initrd"
@@ -119,16 +109,6 @@ test-vmware: all
 test-bochs: all
 	@$(INFO) "BOCHS" "running emulator"
 	@$(BOCHS) -f conf/bochsrc -rc conf/bochsinit -q || true
-
-test-real: $(PXE_BUILD) all
-	@$(INFO) "BOOT" "spinning up machines"
-	@mkdir -p conf
-	@touch -a conf/wol
-	@for mac in `cat conf/wol`; do $(WOL) $$mac; done
-
-test-kernel:
-	@$(INFO) "OCLINT" "running static analysis on kernel"
-	$(OCLINT) $(filter-out %/dlmalloc.c %/dlmalloc.h kernel/acpi/%.c kernel/gfx/font.c %.s,$(KERNEL_SRC)) -- $(CFLAGS) $(CFLAGS_LINT)
 
 -include $(KERNEL_DEP)
 
