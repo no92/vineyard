@@ -7,6 +7,14 @@ YASM_URL			:= https://github.com/yasm/yasm
 YASM_DIR			:= $(shell pwd)/third-party/yasm
 YASM				:= $(YASM_DIR)/yasm
 
+AUTOCONF_URL		:= https://ftp.gnu.org/gnu/autoconf/autoconf-2.64.tar.gz
+AUTOCONF_DIR		:= $(shell pwd)/third-party/autoconf
+AUTOCONF			:= $(AUTOCONF_DIR)/bin/autoconf
+
+AUTOMAKE_URL		:= https://ftp.gnu.org/gnu/automake/automake-1.11.6.tar.gz
+AUTOMAKE_DIR		:= $(shell pwd)/third-party/automake
+AUTOMAKE			:= $(AUTOMAKE_DIR)/bin/automake
+
 GCC_TARGET			:= i686-elf
 GCC_DIR				:= $(shell pwd)/third-party/i386/$(GCC_TARGET)-gcc
 GCC_VER				:= 7.2.0
@@ -51,8 +59,8 @@ ACPICA_ARCHIVE		:= $(ACPICA_DIR)/acpica.tar.gz
 ACPICA_HEADERS		:= $(shell find include/acpi -name '*.h' -not -name 'acvineyard.h')
 ACPICA				:= include/acpi/acpi.h
 
-third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(BOCHS) $(ACPICA)
-third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
+third-party: $(QEMU) $(YASM) $(AUTOCONF) $(AUTOMAKE) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(BOCHS) $(ACPICA)
+third-party-clean: qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
 
 $(QEMU):
 	$(INFO) "MAKE" "downloading QEMU"
@@ -77,16 +85,36 @@ $(YASM):
 yasm-clean:
 	$(RM) -R $(YASM_DIR)
 
-$(CROSS_GCC):
+$(AUTOCONF):
+	$(INFO) "MAKE" "downloading autoconf"
+	mkdir -p $(AUTOCONF_DIR)/src
+	$(WGET) -O $(AUTOCONF_DIR)/autoconf.tar.gz $(AUTOCONF_URL)
+	tar xzf $(AUTOCONF_DIR)/autoconf.tar.gz --strip-components=1 -C $(AUTOCONF_DIR)/src
+	bash -c 'cd $(AUTOCONF_DIR); src/configure --prefix="$(AUTOCONF_DIR)" --silent; make; make install -k'
+
+autoconf-clean:
+	$(RM) -R $(AUTOCONF_DIR)
+
+$(AUTOMAKE):
+	$(INFO) "MAKE" "downloading automake"
+	mkdir -p $(AUTOMAKE_DIR)/src
+	$(WGET) -O $(AUTOMAKE_DIR)/automake.tar.gz $(AUTOMAKE_URL)
+	tar xzf $(AUTOMAKE_DIR)/automake.tar.gz --strip-components=1 -C $(AUTOMAKE_DIR)/src
+	bash -c 'cd $(AUTOMAKE_DIR); src/configure --prefix="$(AUTOMAKE_DIR)" --silent; make; make install -k'
+
+automake-clean:
+	$(RM) -R $(AUTOMAKE_DIR)
+
+$(CROSS_GCC): $(AUTOCONF) $(AUTOMAKE)
 	chmod +x $(GCC_SCRIPT)
-	$(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
+	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:${PATH} $(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
 
 gcc-clean:
 	$(RM) -R $(GCC_DIR)
 
-$(USER_GCC):
+$(USER_GCC): $(AUTOCONF) $(AUTOMAKE)
 	chmod +x $(USER_GCC_SCRIPT)
-	$(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
+	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:${PATH} $(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
 
 user-gcc-clean:
 	$(RM) -R $(USER_GCC_DIR)
@@ -125,6 +153,7 @@ bochs-clean:
 	$(RM) -R $(BOCHS_DIR)
 
 $(ACPICA):
+	chmod +x $(ACPICA_SCRIPT)
 	$(ACPICA_SCRIPT) $(ACPICA_DIR) $(ACPICA_URL) $(ACPICA_ARCHIVE) $(ACPICA_VERSION)
 
 acpica-clean:
@@ -132,4 +161,4 @@ acpica-clean:
 	$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
 	$(RM) $(ACPICA_HEADERS)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
+.PHONY: third-party third-party-clean qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean

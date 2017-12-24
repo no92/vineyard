@@ -42,6 +42,7 @@ $(LIBC_DIR)/include/ubsan.h: lib/libubsan/include/ubsan.h
 
 hdd/usr/lib/crt%.o: $(LIBC_DIR)/crt%.s
 	$(INFO) "AS" $<
+	$(MKDIR) $(dir $@)
 	$(AS) -o $@ $< -f elf32
 
 $(LIBK): $(LIBK_OBJ) $(LIBC_CRT)

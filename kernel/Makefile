@@ -54,7 +54,7 @@ $(KERNEL): $(ACPICA) $(KERNEL_OBJ)
 	$(MKDIR) -p $(dir $@)
 	$(LD) -o $@ $(KERNEL_OBJ) $(LDFLAGS)
 
-$(INITRD): initrd/* $(INIT)
+$(INITRD): $(wildcard initrd/*) $(INIT)
 	$(INFO) "INITRD" $@
 	cp $(INIT) initrd/init
 	cd initrd; tar -cf ../bin/initrd *
