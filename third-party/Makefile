@@ -78,12 +78,14 @@ yasm-clean:
 	$(RM) -R $(YASM_DIR)
 
 $(CROSS_GCC):
+	chmod +x $(GCC_SCRIPT)
 	$(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
 
 gcc-clean:
 	$(RM) -R $(GCC_DIR)
 
 $(USER_GCC):
+	chmod +x $(USER_GCC_SCRIPT)
 	$(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
 
 user-gcc-clean:

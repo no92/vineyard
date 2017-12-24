@@ -1,4 +1,5 @@
 MAKEFLAGS	+= "-j$(shell grep -c ^processor /proc/cpuinfo 2> /dev/null || echo 1) "
+PREREQ		:= $(shell chmod +x util/*)
 
 # make sure we're running bash
 SHELL		:= /bin/bash
