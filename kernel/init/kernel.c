@@ -3,7 +3,6 @@
 #include <driver/uart.h>
 #include <fs/initrd.h>
 #include <gfx/gfx.h>
-#include <int/apic.h>
 #include <int/idt.h>
 #include <int/pic.h>
 #include <mm/alloc.h>
@@ -47,8 +46,6 @@ void kernel(uint32_t magic, multiboot2_t *multiboot) {
 
 	initrd_init(multiboot);
 	syscall_init();
-
-	apic_init();
 
 	proc_init();
 	acpi_init();

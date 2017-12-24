@@ -4,6 +4,7 @@
 
 #define MB2_MAGIC				0x36D76289
 
+#define MB2_TYPE_CMDLINE		1
 #define MB2_TYPE_MODULE			3
 #define MB2_TYPE_MEMINFO		4
 #define MB2_TYPE_MMAP			6
@@ -20,6 +21,10 @@ typedef struct {
 	uint32_t size;
 
 	union {
+		struct {
+			char string[1];
+		} __attribute__((packed)) cmdline;
+
 		struct {
 			uint32_t start;
 			uint32_t end;

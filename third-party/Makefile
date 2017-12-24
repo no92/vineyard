@@ -55,79 +55,79 @@ third-party: $(QEMU) $(YASM) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(BOCHS
 third-party-clean: qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
 
 $(QEMU):
-	@$(INFO) "MAKE" "downloading QEMU"
-	@mkdir -p $(QEMU_DIR)
-	@$(WGET) -O third-party/qemu.tar.xz $(QEMU_URL)
-	@$(INFO) "MAKE" "building QEMU"
-	@tar xJf third-party/qemu.tar.xz -C $(QEMU_DIR) --strip-components=1
-	@patch $(QEMU_DIR)/block/vvfat.c < $(QEMU_PATCHES)/vvfat.c.patch
-	@bash -c 'cd $(QEMU_DIR); ./configure --target-list=i386-softmmu,x86_64-softmmu --disable-docs --disable-curses --disable-gtk --disable-tools --disable-vnc; make V=0 -j4 -s'
-	@rm third-party/qemu.tar.xz
+	$(INFO) "MAKE" "downloading QEMU"
+	mkdir -p $(QEMU_DIR)
+	$(WGET) -O third-party/qemu.tar.xz $(QEMU_URL)
+	$(INFO) "MAKE" "building QEMU"
+	tar xJf third-party/qemu.tar.xz -C $(QEMU_DIR) --strip-components=1
+	patch $(QEMU_DIR)/block/vvfat.c < $(QEMU_PATCHES)/vvfat.c.patch
+	bash -c 'cd $(QEMU_DIR); ./configure --target-list=i386-softmmu,x86_64-softmmu --disable-docs --disable-curses --disable-gtk --disable-tools --disable-vnc; make V=0 -j4 -s'
+	rm third-party/qemu.tar.xz
 
 qemu-clean:
-	@$(RM) -R $(QEMU_DIR)
+	$(RM) -R $(QEMU_DIR)
 
 $(YASM):
-	@$(INFO) "MAKE" "downloading yasm"
-	@mkdir -p $(YASM_DIR)
-	@git clone $(YASM_URL) $(YASM_DIR) -q
-	@$(INFO) "MAKE" "building yasm"
-	@bash -c 'cd $(YASM_DIR); cmake -DCMAKE_INSTALL_MESSAGE=NEVER -DCMAKE_INSTALL_PREFIX="$(YASM_DIR)" -Wno-dev .; make -C $(YASM_DIR) -s $(MUTE); make -C $(YASM_DIR) -s install $(MUTE)'
+	$(INFO) "MAKE" "downloading yasm"
+	mkdir -p $(YASM_DIR)
+	git clone $(YASM_URL) $(YASM_DIR) -q
+	$(INFO) "MAKE" "building yasm"
+	bash -c 'cd $(YASM_DIR); cmake -DCMAKE_INSTALL_MESSAGE=NEVER -DCMAKE_INSTALL_PREFIX="$(YASM_DIR)" -Wno-dev .; make -C $(YASM_DIR) -s $(MUTE); make -C $(YASM_DIR) -s install $(MUTE)'
 
 yasm-clean:
-	@$(RM) -R $(YASM_DIR)
+	$(RM) -R $(YASM_DIR)
 
 $(CROSS_GCC):
-	@$(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
+	$(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
 
 gcc-clean:
-	@$(RM) -R $(GCC_DIR)
+	$(RM) -R $(GCC_DIR)
 
 $(USER_GCC):
-	@$(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
+	$(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
 
 user-gcc-clean:
-	@$(RM) -R $(USER_GCC_DIR)
+	$(RM) -R $(USER_GCC_DIR)
 
 $(GRUB):
-	@$(INFO) "MAKE" "downloading GRUB"
-	@mkdir -p $(GRUB_DIR)/src
-	@mkdir -p $(GRUB_DIR)/build
-	@$(WGET) -O $(GRUB_DIR)/grub.tar.gz $(GRUB_URL)
-	@$(INFO) "MAKE" "building GRUB"
-	@tar xzf $(GRUB_DIR)/grub.tar.gz --strip-components=1 -C $(GRUB_DIR)/src
-	@bash -c 'cd $(GRUB_DIR)/build; ../src/configure --prefix="$(GRUB_DIR)" --disable-nls --disable-dependency-tracking --silent --target=i386; make -j4 -s; make install -s'
-	@bash -c 'cd $(GRUB_DIR)/bin; ./grub-mkfont -o $(GRUB_DIR)/share/grub/unicode.pf2 /usr/share/fonts/truetype/unifont/unifont.ttf'
-	@mkdir $(GRUB_DIR)/share/locale
+	$(INFO) "MAKE" "downloading GRUB"
+	mkdir -p $(GRUB_DIR)/src
+	mkdir -p $(GRUB_DIR)/build
+	$(WGET) -O $(GRUB_DIR)/grub.tar.gz $(GRUB_URL)
+	$(INFO) "MAKE" "building GRUB"
+	tar xzf $(GRUB_DIR)/grub.tar.gz --strip-components=1 -C $(GRUB_DIR)/src
+	bash -c 'cd $(GRUB_DIR)/build; ../src/configure --prefix="$(GRUB_DIR)" --disable-nls --disable-dependency-tracking --silent --target=i386; make -j4 -s; make install -s'
+	bash -c 'cd $(GRUB_DIR)/bin; ./grub-mkfont -o $(GRUB_DIR)/share/grub/unicode.pf2 /usr/share/fonts/truetype/unifont/unifont.ttf'
+	mkdir $(GRUB_DIR)/share/locale
 
 grub-clean:
-	@$(RM) -R $(GRUB_DIR)
+	$(RM) -R $(GRUB_DIR)
 
 $(UNI-VGA):
-	@$(INFO) "MAKE" "getting uni-vga"
-	@mkdir -p $(UNI-VGA_DIR)
-	@$(WGET) $(UNI-VGA_URL) -O $(UNI-VGA_DIR)/uni-vga.tar.gz
-	@tar xzf $(UNI-VGA_DIR)/uni-vga.tar.gz --strip-components=1 -C $(UNI-VGA_DIR)
+	$(INFO) "MAKE" "getting uni-vga"
+	mkdir -p $(UNI-VGA_DIR)
+	$(WGET) $(UNI-VGA_URL) -O $(UNI-VGA_DIR)/uni-vga.tar.gz
+	tar xzf $(UNI-VGA_DIR)/uni-vga.tar.gz --strip-components=1 -C $(UNI-VGA_DIR)
 
 uni-vga-clean:
-	@$(RM) -R $(UNI-VGA_DIR)
+	$(RM) -R $(UNI-VGA_DIR)
 
 $(BOCHS):
-	@$(INFO) "MAKE" "getting bochs"
-	@mkdir -p $(BOCHS_DIR)
-	@wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
-	@tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
-	@bash -c 'cd $(BOCHS_DIR); ./configure $(BOCHS_CONFIG) --prefix="$(BOCHS_DIR)" -q; make -s; make install -s'
+	$(INFO) "MAKE" "getting bochs"
+	mkdir -p $(BOCHS_DIR)
+	wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
+	tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
+	bash -c 'cd $(BOCHS_DIR); ./configure $(BOCHS_CONFIG) --prefix="$(BOCHS_DIR)" -q; make -s; make install -s'
 
 bochs-clean:
-	@$(RM) -R $(BOCHS_DIR)
+	$(RM) -R $(BOCHS_DIR)
 
 $(ACPICA):
-	@$(ACPICA_SCRIPT) $(ACPICA_DIR) $(ACPICA_URL) $(ACPICA_ARCHIVE) $(ACPICA_VERSION)
+	$(ACPICA_SCRIPT) $(ACPICA_DIR) $(ACPICA_URL) $(ACPICA_ARCHIVE) $(ACPICA_VERSION)
 
 acpica-clean:
-	@$(RM) $(ACPICA_ARCHIVE)
-	@$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
-	@$(RM) $(ACPICA_HEADERS)
+	$(RM) $(ACPICA_ARCHIVE)
+	$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
+	$(RM) $(ACPICA_HEADERS)
 
 .PHONY: third-party third-party-clean qemu-clean yasm-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean

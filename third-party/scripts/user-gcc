@@ -28,22 +28,22 @@ bash -c "cd $GCC_DIR/gcc; ./contrib/download_prerequisites" 2>&1 /dev/null
 mkdir -p $GCC_DIR/binutils-build
 $INFO "PATCH" "patching user binutils"
 cd $GCC_DIR
-patch -p0 < ../../patches/user-binutils/bfd/config.bfd.patch
-patch -p0 < ../../patches/user-binutils/gas/configure.tgt.patch
-patch -p0 < ../../patches/user-binutils/ld/configure.tgt.patch
-patch -p0 < ../../patches/user-binutils/ld/Makefile.am.patch
-patch -p0 < ../../patches/user-binutils/config.sub.patch
-cp ../../patches/user-binutils/ld/emulparams/elf_*_vineyard.sh binutils/ld/emulparams/
+patch -p0 < $DIR/../../patches/user-binutils/bfd/config.bfd.patch
+patch -p0 < $DIR/../../patches/user-binutils/gas/configure.tgt.patch
+patch -p0 < $DIR/../../patches/user-binutils/ld/configure.tgt.patch
+patch -p0 < $DIR/../../patches/user-binutils/ld/Makefile.am.patch
+patch -p0 < $DIR/../../patches/user-binutils/config.sub.patch
+cp $DIR/../../patches/user-binutils/ld/emulparams/elf_*_vineyard.sh binutils/ld/emulparams/
 cd binutils/ld
 automake
 $INFO "PATCH" "patching user gcc"
 cd $GCC_DIR
-patch -p0 < ../../patches/user-gcc/config.sub.patch
-patch -p0 < ../../patches/user-gcc/fixincludes/mkfixinc.sh.patch
-patch -p0 < ../../patches/user-gcc/gcc/config.gcc.patch
-patch -p0 < ../../patches/user-gcc/libgcc/config.host.patch
-patch -p0 < ../../patches/user-gcc/libstdc++-v3/crossconfig.m4.patch
-cp ../../patches/user-gcc/gcc/config/vineyard.h gcc/gcc/config/
+patch -p0 < $DIR/../../patches/user-gcc/config.sub.patch
+patch -p0 < $DIR/../../patches/user-gcc/fixincludes/mkfixinc.sh.patch
+patch -p0 < $DIR/../../patches/user-gcc/gcc/config.gcc.patch
+patch -p0 < $DIR/../../patches/user-gcc/libgcc/config.host.patch
+patch -p0 < $DIR/../../patches/user-gcc/libstdc++-v3/crossconfig.m4.patch
+cp $DIR/../../patches/user-gcc/gcc/config/vineyard.h gcc/gcc/config/
 cd gcc/libstdc++-v3
 autoconf
 $INFO "MAKE" "building user binutils"

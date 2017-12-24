@@ -45,15 +45,15 @@ ASFLAGS		:= -f elf32 -g dwarf2
 EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga std -k en-us -cpu max
 
 headers:
-	@$(INFO) "CP" "headers"
-	@mkdir -p hdd/usr/include
-	@cp -RT $(LIBC_DIR)/include/ hdd/usr/include
+	$(INFO) "CP" "headers"
+	mkdir -p hdd/usr/include
+	cp -RT $(LIBC_DIR)/include/ hdd/usr/include
 
 clean-headers:
-	@$(INFO) "CLEAN" "cleaning headers"
+	$(INFO) "CLEAN" "cleaning headers"
 
 todo:
-	@for file in $(shell find kernel lib -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
+	for file in $(shell find kernel lib -name '*.[chs]' -type f); do fgrep -H -e TODO -e FIXME $$file | sed -e 's/:\//: \//g' | sed -e 's/[[:space:]]/ /g'; done; true
 
 include lib/Makefile
 include init/Makefile
@@ -66,3 +66,4 @@ distclean: clean-kernel clean-disk clean-font clean-libk clean-libc clean-libc-t
 .PHONY: all clean distclean headers test test-debug test-virtualbox todo
 .SECONDARY:
 .SUFFIXES:
+.SILENT:
