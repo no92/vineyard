@@ -42,15 +42,6 @@ UNI-VGA_URL			:= http://www.inp.nsk.su/~bolkhov/files/fonts/univga/uni-vga.tgz
 UNI-VGA_DIR			:= third-party/uni-vga
 UNI-VGA				:= $(UNI-VGA_DIR)/u_vga16.bdf
 
-BOCHS_URL			:= https://sourceforge.net/projects/bochs/files/bochs/2.6.9/bochs-2.6.9.tar.gz
-BOCHS_DIR			:= $(shell pwd)/third-party/bochs
-BOCHS_CONFIG		:= --enable-debugger --enable-debugger-gui --enable-readline --enable-disasm --enable-logging
-BOCHS_CONFIG		+= --enable-cpu-level=6 --enable-smp --enable-fpu --enable-3dnow --enable-x86-64 --enable-avx --enable-x86-debugger --enable-all-optimizations
-BOCHS_CONFIG		+= --enable-sb16=default --enable-ne2000 --enable-e1000 --enable-iodebug --enable-pci --enable-usb --enable-usb-ohci --enable-usb-ehci --enable-usb-xhci
-BOCHS_CONFIG		+= --disable-plugins --disable-docbook
-BOCHS_CONFIG		+= --with-sdl2
-BOCHS				:= $(BOCHS_DIR)/bochs
-
 ACPICA_SCRIPT		:= third-party/scripts/acpica
 ACPICA_VERSION		:= 20170831
 ACPICA_URL			:= https://acpica.org/sites/acpica/files/acpica-unix-$(ACPICA_VERSION).tar.gz
@@ -59,8 +50,8 @@ ACPICA_ARCHIVE		:= $(ACPICA_DIR)/acpica.tar.gz
 ACPICA_HEADERS		:= $(shell find include/acpi -name '*.h' -not -name 'acvineyard.h')
 ACPICA				:= include/acpi/acpi.h
 
-third-party: $(QEMU) $(YASM) $(AUTOCONF) $(AUTOMAKE) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(BOCHS) $(ACPICA)
-third-party-clean: qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
+third-party: $(QEMU) $(YASM) $(AUTOCONF) $(AUTOMAKE) $(CROSS_GCC) $(USER_GCC) $(GRUB) $(UNI-VGA) $(ACPICA)
+third-party-clean: qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean acpica-clean
 
 $(QEMU):
 	$(INFO) "MAKE" "downloading QEMU"
@@ -90,7 +81,7 @@ $(AUTOCONF):
 	mkdir -p $(AUTOCONF_DIR)/src
 	$(WGET) -O $(AUTOCONF_DIR)/autoconf.tar.gz $(AUTOCONF_URL)
 	tar xzf $(AUTOCONF_DIR)/autoconf.tar.gz --strip-components=1 -C $(AUTOCONF_DIR)/src
-	bash -c 'cd $(AUTOCONF_DIR); src/configure --prefix="$(AUTOCONF_DIR)" --silent; make; make install -k'
+	bash -c 'cd $(AUTOCONF_DIR); patch -p0 < $(AUTOMAKE_DIR)/../../patches/automake/automake.patch; src/configure --prefix="$(AUTOCONF_DIR)" --silent; make; make install -k || true'
 
 autoconf-clean:
 	$(RM) -R $(AUTOCONF_DIR)
@@ -100,21 +91,21 @@ $(AUTOMAKE):
 	mkdir -p $(AUTOMAKE_DIR)/src
 	$(WGET) -O $(AUTOMAKE_DIR)/automake.tar.gz $(AUTOMAKE_URL)
 	tar xzf $(AUTOMAKE_DIR)/automake.tar.gz --strip-components=1 -C $(AUTOMAKE_DIR)/src
-	bash -c 'cd $(AUTOMAKE_DIR); src/configure --prefix="$(AUTOMAKE_DIR)" --silent; make; make install -k'
+	bash -c 'cd $(AUTOMAKE_DIR); src/configure --prefix="$(AUTOMAKE_DIR)" --silent; make; make install'
 
 automake-clean:
 	$(RM) -R $(AUTOMAKE_DIR)
 
 $(CROSS_GCC): $(AUTOCONF) $(AUTOMAKE)
 	chmod +x $(GCC_SCRIPT)
-	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:${PATH} $(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
+	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:$(PERL_DIR):${PATH} $(GCC_SCRIPT) $(GCC_DIR) $(GCC_VER) $(BINUTILS_VER) $(GCC_TARGET)
 
 gcc-clean:
 	$(RM) -R $(GCC_DIR)
 
 $(USER_GCC): $(AUTOCONF) $(AUTOMAKE)
 	chmod +x $(USER_GCC_SCRIPT)
-	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:${PATH} $(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
+	PATH=$(AUTOCONF_DIR)/bin:$(AUTOMAKE_DIR)/bin:$(PERL_DIR):${PATH} $(USER_GCC_SCRIPT) $(USER_GCC_DIR) $(USER_GCC_VER) $(USER_BINUTILS_VER) $(USER_GCC_TARGET) $(SYSROOT)
 
 user-gcc-clean:
 	$(RM) -R $(USER_GCC_DIR)
@@ -126,7 +117,7 @@ $(GRUB):
 	$(WGET) -O $(GRUB_DIR)/grub.tar.gz $(GRUB_URL)
 	$(INFO) "MAKE" "building GRUB"
 	tar xzf $(GRUB_DIR)/grub.tar.gz --strip-components=1 -C $(GRUB_DIR)/src
-	bash -c 'cd $(GRUB_DIR)/build; ../src/configure --prefix="$(GRUB_DIR)" --disable-nls --disable-dependency-tracking --silent --target=i386; make -j4 -s; make install -s'
+	bash -c 'cd $(GRUB_DIR)/build; ../src/configure --prefix="$(GRUB_DIR)" --disable-nls --disable-dependency-tracking --silent --target=i386 CFLAGS="-Wimplicit-fallthrough=0 -Wno-error"; make -j4 -s; make install -s'
 	bash -c 'cd $(GRUB_DIR)/bin; ./grub-mkfont -o $(GRUB_DIR)/share/grub/unicode.pf2 /usr/share/fonts/truetype/unifont/unifont.ttf'
 	mkdir $(GRUB_DIR)/share/locale
 
@@ -142,16 +133,6 @@ $(UNI-VGA):
 uni-vga-clean:
 	$(RM) -R $(UNI-VGA_DIR)
 
-$(BOCHS):
-	$(INFO) "MAKE" "getting bochs"
-	mkdir -p $(BOCHS_DIR)
-	wget $(BOCHS_URL) -O $(BOCHS_DIR)/bochs.tar.gz -q
-	tar xzf $(BOCHS_DIR)/bochs.tar.gz --strip-components=1 -C $(BOCHS_DIR)
-	bash -c 'cd $(BOCHS_DIR); ./configure $(BOCHS_CONFIG) --prefix="$(BOCHS_DIR)" -q; make -s; make install -s'
-
-bochs-clean:
-	$(RM) -R $(BOCHS_DIR)
-
 $(ACPICA):
 	chmod +x $(ACPICA_SCRIPT)
 	$(ACPICA_SCRIPT) $(ACPICA_DIR) $(ACPICA_URL) $(ACPICA_ARCHIVE) $(ACPICA_VERSION)
@@ -161,4 +142,4 @@ acpica-clean:
 	$(RM) -R kernel/acpi/dispatcher kernel/acpi/events kernel/acpi/executer kernel/acpi/hardware kernel/acpi/namespace kernel/acpi/parser kernel/acpi/resources kernel/acpi/tables kernel/acpi/utilities
 	$(RM) $(ACPICA_HEADERS)
 
-.PHONY: third-party third-party-clean qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean bochs-clean acpica-clean
+.PHONY: third-party third-party-clean qemu-clean yasm-clean autoconf-clean automake-clean gcc-clean user-gcc-clean grub-clean uni-vga-clean acpica-clean

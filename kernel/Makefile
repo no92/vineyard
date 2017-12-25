@@ -108,7 +108,7 @@ test-vmware: all
 
 test-bochs: all
 	$(INFO) "BOCHS" "running emulator"
-	$(BOCHS) -f conf/bochsrc -rc conf/bochsinit -q || true
+	bochs -f conf/bochsrc -rc conf/bochsinit -q || true
 
 -include $(KERNEL_DEP)
 
