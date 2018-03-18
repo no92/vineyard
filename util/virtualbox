@@ -20,7 +20,7 @@ VBoxManage unregistervm "$vmname" --delete 2> /dev/null || true
 VBoxManage createvm --name "$vmname" --register > /dev/null
 
 # configure the VM
-VBoxManage modifyvm "$vmname" --memory 1024 > /dev/null
+VBoxManage modifyvm "$vmname" --memory 1024 --uart1 0x3F8 4 --uartmode1 file `pwd`/.vbox.log > /dev/null
 
 VBoxManage setextradata "$vmname" GUI/LastCloseAction PowerOff
 VBoxManage setextradata "$vmname" GUI/RestrictedRuntimeDevicesMenuActions HardDrives
