@@ -19,6 +19,7 @@ lib/libc/ubsan/ubsan.c
 
 # configuration
 conf/wol
+conf/vineyard.vmx
 
 # huge dependency directories
 kernel/acpi/*/*.c

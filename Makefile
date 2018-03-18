@@ -6,16 +6,22 @@ SHELL		:= /bin/bash
 
 ISO			:= bin/vineyard.iso
 
+SYSROOT		:= $(shell pwd)/hdd
+USER_GCC	:= i686-vineyard-gcc
+USER_LD		:= i686-vineyard-ld
+USER_AR		:= i686-vineyard-ar
+GRUB		:= grub-mkrescue
+
 # define 'all' as the default target
 all: third-party headers $(ISO)
 
 include third-party/Makefile
 
 # define various tools
-CC			:= $(CROSS_GCC)
-LD			:= $(CROSS_GCC)
-AR			:= $(CROSS_AR)
-AS			:= $(YASM)
+CC			:= i686-elf-gcc
+LD			:= $(CC)
+AR			:= i686-elf-ar
+AS			:= yasm
 EMU			:= $(QEMU)
 
 # commands
@@ -26,7 +32,6 @@ WGET		:= wget -q
 # various utilities
 INFO		:= util/info
 ERROR		:= util/error
-KEYBOARD	:= $(shell util/keyboard)
 VBOX		:= util/virtualbox
 VMWARE		:= util/vmware
 WOL			:= util/wol
@@ -47,7 +52,7 @@ EMUARGS		:= -M accel=kvm:tcg -m 2G -net none -serial stdio -rtc base=utc -vga st
 
 headers:
 	$(INFO) "CP" "headers"
-	mkdir -p hdd/usr/include
+	$(MKDIR) hdd/usr/include
 	cp -RT $(LIBC_DIR)/include/ hdd/usr/include
 
 clean-headers:

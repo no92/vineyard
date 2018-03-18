@@ -27,10 +27,14 @@ KERNEL_SRC		:= $(filter-out kernel/gfx/font.c,$(KERNEL_SRC)) kernel/gfx/font.c
 KERNEL_DEP		:= $(addsuffix .d,$(KERNEL_SRC))
 
 KERNEL_OBJ		:= kernel/init/crti.s.o
-KERNEL_OBJ		+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtbegin.o)
+ifneq ($(shell command -v $(CC)),)
+	KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtbegin.o)
+endif
 KERNEL_OBJ		+= $(addsuffix .o,$(KERNEL_SRC))
 KERNEL_OBJ		+= $(LIBK)
-KERNEL_OBJ		+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
+ifneq ($(shell command -v $(CC)),)
+	KERNEL_OBJ	+= $(shell $(CC) $(CFLAGS_KERN) -print-file-name=crtend.o)
+endif
 KERNEL_OBJ		+= kernel/init/crtn.s.o
 
 %.c.o: %.c
@@ -56,6 +60,7 @@ $(KERNEL): $(ACPICA) $(KERNEL_OBJ)
 
 $(INITRD): $(wildcard initrd/*) $(INIT)
 	$(INFO) "INITRD" $@
+	$(MKDIR) initrd
 	cp $(INIT) initrd/init
 	cd initrd; tar -cf ../bin/initrd *
 
