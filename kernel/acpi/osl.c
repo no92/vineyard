@@ -189,12 +189,13 @@ void AcpiOsDeleteMutex(ACPI_MUTEX mutex) {
 }
 
 ACPI_STATUS AcpiOsAcquireMutex(ACPI_MUTEX mutex, uint16_t timeout) {
-	assert(timeout == 0xFFFF);
+	assert(timeout == 0xFFFF || timeout == ACPI_DO_NOT_WAIT);
 
 	if(!mutex) {
 		return AE_BAD_PARAMETER;
 	}
 
+	/* TODO: handle ACPI_DO_NOT_WAIT */
 	mutex_acquire(mutex);
 
 	return 0;
