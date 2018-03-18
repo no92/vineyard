@@ -3,9 +3,21 @@
 A work-in-progress hobby OS for the PC.
 
 ## Building ##
-vineyard uses make as its build tool. In order to compile the kernel, run `make all`. This will download and compile all necessary tools on its first run, which takes about 30 minutes on my machine, as well as actually build the kernel binary.
+Start off by getting some necessary components, which will download larger portions of third-party code as well as automatically build a recent version of QEMU:
+```
+make third-party
+```
+Next, make sure docker is installed on your system and run:
+```
+docker pull no92/vineyard:test
+```
+This will download a larger image (about 2 GiB at the time of writing).
+Actually building the kernel is done by running:
+```
+docker run -v `pwd`:/code -it no92/vineyard:test -c 'make'
+```
 
-If you want to clean the tree from object files, run `make clean`.
+If you want to clean the tree from object files and binaries, run `make distclean`.
 
 ## Running ##
 The build process generates a CD image, which is used by QEMU to boot the kernel. Running the emulator is as easy as running `make test`.
