@@ -42,6 +42,7 @@ size_t gfx_draw_char(const char *c, size_t x, size_t y) {
 
 	char c0 = (char) (c[0] & 0xFF);
 
+	/* handle UTF-8 multi-byte characters correctly */
 	if((c0 & 0x80) == 0) {
 		/* single-byte */
 		ret = 1;
