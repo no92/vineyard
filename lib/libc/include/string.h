@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 
+__attribute__((nonnull(1, 2))) void *memccpy(void * restrict dest, const void * restrict src, int c, size_t n);
 __attribute__((nonnull(1, 2))) void *memcpy(void * restrict s1, const void * restrict s2, size_t n);
 __attribute__((nonnull(1, 2))) void *memmove(void *s1, const void *s2, size_t n);
 
