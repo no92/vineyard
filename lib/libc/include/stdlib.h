@@ -25,8 +25,14 @@ int abs(int j);
 long labs(long j);
 long long llabs(long long j);
 
-#ifdef __libk
+#define FALLTHROUGH ((void)0)
+
+#ifdef __GNUC__
+	#undef FALLTHROUGH
 	#define FALLTHROUGH	__attribute__((fallthrough))
-#else
-	#define FALLTHROUGH ((void)0);
+#endif
+
+#ifdef __clang__
+	#undef FALLTHROUGH
+	#define FALLTHROUGH [[fallthrough]]
 #endif

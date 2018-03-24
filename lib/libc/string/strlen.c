@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-A("empty for statement")
 size_t strlen(const char *s) {
 	const char *str;
 

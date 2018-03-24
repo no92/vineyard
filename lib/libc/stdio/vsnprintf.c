@@ -85,7 +85,7 @@ static char *itoa(int64_t value, char *str, uint8_t base) {
 
 /* TODO: think of a better way to handle this mess */
 
-A("bitwise operator in conditional")
+
 int vsnprintf(char * restrict s, size_t n, const char * restrict format, va_list arg) {
 	int flags = 0;
 	size_t width = 0;
@@ -204,7 +204,7 @@ width:
 				case 'p': {
 					flags |= FLAG_HASH;
 					length = 0;
-					__attribute__ ((fallthrough));
+					FALLTHROUGH;
 				}
 				case 'X':
 				case 'x': {

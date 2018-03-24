@@ -15,6 +15,7 @@ void list_insert_after(list_t *list, list_node_t *after, list_node_t *node) {
 	list->length++;
 }
 
+/* TODO: for some reason this trips ubsan when list is dynamically allocated */
 void list_append(list_t *list, list_node_t *node) {
 	if(!list->head) {
 		list->head = node;

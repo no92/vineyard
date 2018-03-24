@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <string.h>
 
-A("bitwise operator in conditional")
+
 void *memset(void *s, int c, size_t n) {
 	if(!n) {
 		return s;

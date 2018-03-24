@@ -48,7 +48,6 @@ static void gfx_refresh(void) {
 	}
 }
 
-A("goto statement")
 size_t gfx_putc(const char *c) {
 	if(c[0] == '\n') {
 		gfx_x = 0;

@@ -7,15 +7,6 @@
 
 list_t *memmap;
 
-static const char* types[] = {
-	[MAP_TYPE_RESERVED] = "Reserved",
-	[MAP_TYPE_USABLE] = "Usable",
-	[MAP_TYPE_ACPI_RECLAIMABLE] = "ACPI reclaimable",
-	[MAP_TYPE_ACPI_NVS] = "ACPI NVS",
-	[MAP_TYPE_UNUSABLE] = "Unusable",
-	[MAP_TYPE_DISABLED] = "Disabled",
-};
-
 static void mm_map_reserve(uintptr_t start, uintptr_t end, uint32_t type) {
 	list_node_t *node = mm_early_alloc(sizeof(list_node_t));
 	map_entry_t *data = (map_entry_t *) mm_early_alloc(sizeof(map_entry_t));
@@ -30,7 +21,6 @@ static void mm_map_reserve(uintptr_t start, uintptr_t end, uint32_t type) {
 
 extern uintptr_t _kernel_end;
 
-A("high ncss method")
 void mm_map_init(multiboot2_t *multiboot) {
 	multiboot2_tag_t *map = multiboot2_get_tag(multiboot, MB2_TYPE_MMAP);
 
@@ -78,14 +68,6 @@ void mm_map_init(multiboot2_t *multiboot) {
 	node = memmap->head;
 
 	return;
-	while(node) {
-		map_entry_t *c = node->data;
-		size_t length = (1 + c->end - c->start) >> 12;
-
-		printf("%#08x - %#08x (%#06x pages) %s (%u)\n", c->start, c->end, length, types[c->type], c->type);
-
-		node = node->next;
-	}
 }
 
 list_t *mm_map_get(void) {

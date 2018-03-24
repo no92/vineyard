@@ -12,6 +12,7 @@
 
 alloc_node_t *mm_alloc_areas;
 
+/* TODO: use an AVL tree to keep track of frame allocation? */
 void mm_alloc_init(void) {
 	uintptr_t start = 0xD0000000;
 	uintptr_t end = 0xEFFFFFFF;
@@ -71,7 +72,7 @@ static alloc_node_t *mm_alloc_find(alloc_node_t *root, size_t size) {
 	return 0;
 }
 
-A("bitwise operator in conditional")
+
 static bool mm_alloc_free_area(uintptr_t virt, size_t length) {
 	assert(!(length & 0x3FF));
 
@@ -82,7 +83,7 @@ static bool mm_alloc_free_area(uintptr_t virt, size_t length) {
 	return true;
 }
 
-A("bitwise operator in conditional")
+
 static void mm_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
 	assert(!(length & 0x3FF));
 
@@ -93,7 +94,7 @@ static void mm_alloc_area(uintptr_t addr, size_t length, uint16_t flags) {
 	}
 }
 
-A("bitwise operator in conditional")
+
 void mm_alloc_free(void *ptr) {
 	alloc_node_t *node = (alloc_node_t *) ((uintptr_t) ptr - 0x1000);
 	size_t size = node->end - node->start + 1;
@@ -168,7 +169,7 @@ uintptr_t sys_mmap(syscall_args_t *data) {
 	return (uintptr_t) ret;
 }
 
-A("bitwise operator in conditional")
+
 void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset) {
 	(void) addr;
 	(void) prot;
@@ -196,7 +197,7 @@ uintptr_t sys_munmap(syscall_args_t *data) {
 	return (uintptr_t) ret;
 }
 
-A("bitwise operator in conditional")
+
 int munmap(void *addr, size_t len) {
 	if(!addr || ((uintptr_t) addr & 0x3FF) || !len) {
 		errno = EINVAL;

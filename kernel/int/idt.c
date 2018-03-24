@@ -35,7 +35,6 @@ static noreturn void idt_handler_gpf(frame_t *frame) {
 	panic("General Protection Fault at address %#08x <%s>%s", frame->eip, trace_lookup_addr(frame->eip), buf);
 }
 
-A("high ncss method")
 void idt_init(void) {
 	memset(idt, 0, sizeof(idt));
 

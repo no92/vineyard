@@ -62,7 +62,7 @@ static bool uart_transmit_empty(void) {
 	return inb(UART0 + LSR) & 0x20;
 }
 
-A("empty while statement") void uart_putc(uint8_t c) {
+void uart_putc(uint8_t c) {
 	while(!uart_transmit_empty());
 
 	outb(UART0 + THR, c);

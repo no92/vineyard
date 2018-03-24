@@ -22,7 +22,7 @@ static void mm_virtual_invlpg(uintptr_t addr) {
 	asm volatile("invlpg (%0)" :: "r" (addr) : "memory");
 }
 
-A("bitwise operator in conditional")
+
 static void mm_virtual_page_touch(uintptr_t page, uintptr_t flags) {
 	if(!(page_directory[page >> 22] & PAGE_PRESENT)) {
 		void *phys = mm_physical_alloc();
@@ -34,7 +34,6 @@ static void mm_virtual_page_touch(uintptr_t page, uintptr_t flags) {
 	}
 }
 
-A("bitwise operator in conditional")
 uintptr_t mm_virtual_map_page(uintptr_t virt, uintptr_t phys, uintptr_t flags) {
 	assert(!(virt & 0x3FF));
 
@@ -71,7 +70,6 @@ void mm_virtual_unmap(uintptr_t virt, size_t length) {
 	}
 }
 
-A("bitwise operator in conditional")
 uintptr_t mm_virtual_get_physical(uintptr_t virt) {
 	if(!(page_directory[virt >> 22] & PAGE_PRESENT)) {
 		return 0;
@@ -84,7 +82,6 @@ uint16_t mm_virtual_get_flags(uintptr_t virt) {
 	return page_tables[virt >> 12] & 0xFFF;
 }
 
-A("bitwise operator in conditional")
 static void mm_virtual_page_fault(frame_t *frame) {
 	uint32_t cr2;
 	asm volatile ("mov %%cr2, %0" : "=r" (cr2));

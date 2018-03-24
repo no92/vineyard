@@ -34,7 +34,6 @@ void gfx_set(size_t h, size_t v, uint32_t color) {
 	*addr = color;
 }
 
-A("long method")
 size_t gfx_draw_char(const char *c, size_t x, size_t y) {
 	char *addr = (char *) gfx_framebuffer + LFB(x, y);
 	uint32_t index = 0;
